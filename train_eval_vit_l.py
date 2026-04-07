@@ -701,7 +701,4 @@ if __name__ == "__main__" and not _is_notebook():
     )
 
 elif _is_notebook():
-    # Chạy trong notebook: gọi main() trực tiếp với config mặc định.
-    # Sửa các biến bên dưới trước khi chạy cell này nếu muốn thay đổi.
-    # main(skip_pretrain=True, checkpoint_path="/kaggle/working/lejepa-vitl-last.ckpt")
-    print("Notebook mode — gọi main() thủ công trong cell tiếp theo.")
+    main()
