@@ -134,6 +134,7 @@ if SPT_PATH not in sys.path:
 
 import math
 import random
+import socket
 from pathlib import Path
 
 import lightning.pytorch as pl
@@ -142,6 +143,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torchmetrics
 from torch.utils.data import DataLoader, TensorDataset
+
+# ── Tensor Core precision (recommended for H100 / A100) ───────────────────────
+torch.set_float32_matmul_precision("high")
 
 # ── stable_pretraining ────────────────────────────────────────────────────────
 import stable_pretraining as spt
@@ -421,12 +425,31 @@ def build_pretrain_module() -> tuple[spt.Module, list]:
     return module, [inet_probe, rankme]
 
 
+def _find_free_port() -> int:
+    """Bind to port 0 (OS picks a free port), then release it immediately.
+
+    Used to avoid EADDRINUSE when a prior training run crashed without
+    releasing its DDP rendezvous port.
+    """
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        s.bind(("", 0))
+        return s.getsockname()[1]
+
+
 def run_pretraining(resume_ckpt: str = None) -> str:
     """Chạy pretraining LeJEPA ViT-L trên IN-1K.
 
     Returns:
         Path đến best checkpoint.
     """
+    # Pick a free port for DDP rendezvous to avoid EADDRINUSE
+    # from a previously crashed training session in the same kernel.
+    free_port = _find_free_port()
+    os.environ["MASTER_PORT"] = str(free_port)
+    os.environ.setdefault("MASTER_ADDR", "127.0.0.1")
+    print(f"[DDP] Using MASTER_PORT={free_port}")
+
     dm             = build_pretrain_datamodule()
     module, cbs    = build_pretrain_module()
 
@@ -440,12 +463,26 @@ def run_pretraining(resume_ckpt: str = None) -> str:
         verbose=True,
     )
 
+    # Strategy selection:
+    # - With 1 GPU (most Kaggle/Colab setups): always use 'auto', which resolves
+    #   to SingleDeviceStrategy — no subprocess spawn, no distributed init,
+    #   no EADDRINUSE risk.
+    # - With multiple GPUs in a notebook: use 'ddp_notebook' (fork-based DDP).
+    # - With multiple GPUs in a script: use full DDP.
+    n_gpus = torch.cuda.device_count()
+    if n_gpus <= 1:
+        strategy = "auto"   # SingleDeviceStrategy — avoids all distributed init
+    elif _is_notebook():
+        strategy = "ddp_notebook"
+    else:
+        strategy = "ddp_find_unused_parameters_true"
+
     trainer = pl.Trainer(
         max_epochs=MAX_EPOCHS,
         accelerator=ACCELERATOR,
         devices=DEVICES,
         precision=PRECISION,
-        strategy="ddp_notebook" if _is_notebook() else "ddp_find_unused_parameters_true",
+        strategy=strategy,
         callbacks=cbs + [
             ckpt_cb,
             spt.TrainerInfo(),
