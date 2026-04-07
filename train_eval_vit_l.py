@@ -206,9 +206,10 @@ EVAL_EPOCHS  = 50
 EVAL_BS      = 256
 
 # ── Misc ──────────────────────────────────────────────────────────────────────
-# Streaming dataset: num_workers PHẢI là 0, multiprocess + HF stream = deadlock
-NUM_WORKERS_STREAM = 0
-NUM_WORKERS  = 4   # dùng cho eval (map-style dataset)
+# streaming=False: HuggingFace download về disk trước, tránh treo giữa chừng do network.
+# Có thể dùng num_workers bình thường (không còn bị deadlock HF stream).
+NUM_WORKERS_STREAM = 4   # dùng cho pretrain dataset (non-streaming)
+NUM_WORKERS  = 4         # dùng cho eval (map-style dataset)
 PRECISION    = "bf16-mixed"
 ACCELERATOR  = "gpu"
 DEVICES      = "auto"
@@ -334,22 +335,22 @@ def build_pretrain_datamodule() -> DataModule:
         split="train",
         transform=make_train_transform(),
         trust_remote_code=True,
-        streaming=True,       # ← không cache về disk
+        streaming=False,      # ← download về disk, tránh treo do network
     )
     val_ds = HFDataset(
         PRETRAIN_DATASET,
         split="validation",
         transform=make_val_transform(),
         trust_remote_code=True,
-        streaming=True,
+        streaming=False,
     )
     return DataModule(
-        train=DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=False,
+        train=DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True,
                          num_workers=NUM_WORKERS_STREAM, drop_last=True,
-                         pin_memory=True),
+                         pin_memory=True, persistent_workers=True),
         val=DataLoader(val_ds, batch_size=BATCH_SIZE, shuffle=False,
                        num_workers=NUM_WORKERS_STREAM,
-                       pin_memory=True),
+                       pin_memory=True, persistent_workers=True),
     )
 
 
