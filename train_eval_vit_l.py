@@ -118,7 +118,7 @@ import sys
 import os
 
 # Đảm bảo stable-pretraining được tìm thấy nếu chưa install từ pip
-REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
+REPO_ROOT = os.path.dirname(os.path.abspath(__file__)) if "__file__" in dir() else CLONE_DIR
 SPT_PATH  = os.path.join(REPO_ROOT, "stable-pretraining")
 if SPT_PATH not in sys.path:
     sys.path.insert(0, SPT_PATH)
