@@ -28,6 +28,31 @@ import os
 import subprocess
 import sys
 
+# ── RAM cache cho HuggingFace datasets (/dev/shm = tmpfs, nằm trong RAM) ──────
+# Kaggle có 230 GiB RAM, ImageNet-1K ~150 GB → vừa đủ cache vào RAM.
+# Phải set TRƯỚC khi import bất kỳ thư viện HuggingFace nào.
+_SHM_CACHE = "/dev/shm/hf_cache"
+os.makedirs(_SHM_CACHE, exist_ok=True)
+os.environ["HF_DATASETS_CACHE"] = _SHM_CACHE
+os.environ["HF_HOME"]           = _SHM_CACHE   # tokenizers / hub cache cũng vào RAM
+
+# Thử mở rộng /dev/shm lên 200G (cần nếu default tmpfs nhỏ hơn 150G)
+try:
+    _r = subprocess.run(
+        ["mount", "-o", "remount,size=200G", "/dev/shm"],
+        capture_output=True, text=True,
+    )
+    if _r.returncode == 0:
+        print("[shm] ✓ /dev/shm remounted to 200G")
+    else:
+        print(f"[shm] ⚠ remount skipped (non-root?): {_r.stderr.strip()}")
+except Exception as _e:
+    print(f"[shm] ⚠ remount error: {_e}")
+
+_shm_stat = os.statvfs("/dev/shm")
+_shm_free_gb = _shm_stat.f_bfree * _shm_stat.f_frsize / 1e9
+print(f"[shm] /dev/shm free: {_shm_free_gb:.1f} GB  →  cache dir: {_SHM_CACHE}")
+
 # ── Cấu hình repo ─────────────────────────────────────────────────────────────
 GITHUB_TOKEN  = os.environ.get("GITHUB_TOKEN", "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")   # ← set bằng Kaggle Secret hoặc env var
 GITHUB_REPO   = "https://github.com/NLPQuy/lejepa-MLProject.git"
