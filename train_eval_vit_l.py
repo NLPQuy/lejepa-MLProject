@@ -13,6 +13,86 @@
 # ---
 
 # %% [markdown]
+# ## Bootstrap — Clone / Pull source từ GitHub
+#
+# Block này chạy **trước tất cả import** để đảm bảo source code (lejepa +
+# stable-pretraining) luôn được lấy về từ repo, dù chạy trên Colab, Kaggle,
+# hay bất kỳ môi trường nào khác.
+#
+# **Cách dùng**:
+# - Đặt token vào biến môi trường: `export GITHUB_TOKEN=ghp_xxxx`
+# - Hoặc điền thẳng vào `GITHUB_TOKEN` bên dưới (không commit lên git!)
+
+# %%
+import os
+import subprocess
+import sys
+
+# ── Cấu hình repo ─────────────────────────────────────────────────────────────
+GITHUB_TOKEN  = os.environ.get("GITHUB_TOKEN", "")   # ← dán token vào đây nếu cần
+GITHUB_REPO   = "https://github.com/NLPQuy/lejepa-MLProject.git"
+CLONE_DIR     = "/content/lejepa-MLProject"           # đổi thành path phù hợp nếu không dùng Colab
+
+
+def _run(cmd: str, **kwargs) -> int:
+    """Chạy shell command, in output, trả về return code."""
+    print(f"  $ {cmd}")
+    proc = subprocess.run(cmd, shell=True, text=True,
+                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT, **kwargs)
+    if proc.stdout:
+        print(proc.stdout.rstrip())
+    return proc.returncode
+
+
+def bootstrap_repo():
+    """Clone repo lần đầu hoặc pull update nếu đã có."""
+    # Tạo authenticated URL
+    if GITHUB_TOKEN:
+        # Format: https://<token>@github.com/user/repo.git
+        auth_url = GITHUB_REPO.replace("https://", f"https://{GITHUB_TOKEN}@")
+    else:
+        auth_url = GITHUB_REPO
+        print("[bootstrap] ⚠ GITHUB_TOKEN không được đặt — dùng anonymous (chỉ repo public)")
+
+    clone_path = CLONE_DIR
+
+    if os.path.isdir(os.path.join(clone_path, ".git")):
+        print(f"[bootstrap] Repo đã có tại {clone_path}, đang pull ...")
+        rc = _run(f"git -C '{clone_path}' pull origin main --ff-only")
+        if rc != 0:
+            print("[bootstrap] pull thất bại, thử reset hard ...")
+            _run(f"git -C '{clone_path}' fetch origin main")
+            _run(f"git -C '{clone_path}' reset --hard origin/main")
+    else:
+        print(f"[bootstrap] Clone repo về {clone_path} ...")
+        os.makedirs(os.path.dirname(clone_path), exist_ok=True)
+        rc = _run(f"git clone '{auth_url}' '{clone_path}'")
+        if rc != 0:
+            raise RuntimeError(f"git clone thất bại (rc={rc}). Kiểm tra lại GITHUB_TOKEN và quyền truy cập repo.")
+
+    # Thêm đường dẫn vào sys.path
+    spt_path = os.path.join(clone_path, "stable-pretraining")
+    for p in [clone_path, spt_path]:
+        if p not in sys.path:
+            sys.path.insert(0, p)
+            print(f"[bootstrap] sys.path ← {p}")
+
+    print("[bootstrap] ✓ Done\n")
+    return clone_path
+
+
+# Chỉ bootstrap khi clone_dir chưa là thư mục hiện tại
+_this_dir = os.path.dirname(os.path.abspath(__file__)) if "__file__" in dir() else os.getcwd()
+if os.path.abspath(_this_dir) != os.path.abspath(CLONE_DIR):
+    bootstrap_repo()
+else:
+    # Chạy trực tiếp từ repo đã clone — chỉ cần set sys.path
+    _spt = os.path.join(_this_dir, "stable-pretraining")
+    for _p in [_this_dir, _spt]:
+        if _p not in sys.path:
+            sys.path.insert(0, _p)
+
+# %% [markdown]
 # # LeJEPA ViT-L — Pretraining (IN-1K) + Few-Shot Linear Probe Evaluation
 #
 # Reproduces the main table in the README:
