@@ -94,6 +94,40 @@ else:
         if _p not in sys.path:
             sys.path.insert(0, _p)
 
+# ── Cài dependencies ──────────────────────────────────────────────────────────
+_PACKAGES = [
+    "lightning",
+    "torchmetrics",
+    "timm",
+    "transformers",
+    "datasets",          # huggingface datasets (dùng bởi HFDataset)
+    "huggingface_hub",
+    "loguru",
+    "hydra-core",
+    "omegaconf",
+]
+
+def _install_packages(packages: list):
+    """Cài các package chưa có, bỏ qua nếu đã install."""
+    to_install = []
+    for pkg in packages:
+        import importlib
+        # map pip name → import name
+        _import_name = {
+            "hydra-core": "hydra",
+            "huggingface_hub": "huggingface_hub",
+        }.get(pkg, pkg.replace("-", "_"))
+        if importlib.util.find_spec(_import_name) is None:
+            to_install.append(pkg)
+
+    if to_install:
+        print(f"[install] Cài: {' '.join(to_install)}")
+        _run(f"{sys.executable} -m pip install -q {' '.join(to_install)}")
+    else:
+        print("[install] Tất cả dependencies đã có sẵn ✓")
+
+_install_packages(_PACKAGES)
+
 # %% [markdown]
 # # LeJEPA ViT-L — Pretraining (IN-1K) + Few-Shot Linear Probe Evaluation
 #
