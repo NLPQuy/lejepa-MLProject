@@ -202,7 +202,9 @@ EVAL_EPOCHS  = 50
 EVAL_BS      = 256
 
 # ── Misc ──────────────────────────────────────────────────────────────────────
-NUM_WORKERS  = 8
+# Streaming dataset: num_workers PHẢI là 0, multiprocess + HF stream = deadlock
+NUM_WORKERS_STREAM = 0
+NUM_WORKERS  = 4   # dùng cho eval (map-style dataset)
 PRECISION    = "bf16-mixed"
 ACCELERATOR  = "gpu"
 DEVICES      = "auto"
@@ -338,12 +340,12 @@ def build_pretrain_datamodule() -> DataModule:
         streaming=True,
     )
     return DataModule(
-        train=DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=False,  # IterableDataset không dùng shuffle
-                         num_workers=NUM_WORKERS, drop_last=True,
-                         persistent_workers=True, pin_memory=True),
+        train=DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=False,
+                         num_workers=NUM_WORKERS_STREAM, drop_last=True,
+                         pin_memory=True),
         val=DataLoader(val_ds, batch_size=BATCH_SIZE, shuffle=False,
-                       num_workers=NUM_WORKERS,
-                       persistent_workers=True, pin_memory=True),
+                       num_workers=NUM_WORKERS_STREAM,
+                       pin_memory=True),
     )
 
 
@@ -452,7 +454,7 @@ def run_pretraining(resume_ckpt: str = None) -> str:
         ],
         log_every_n_steps=50,
         val_check_interval=1.0,
-        num_sanity_val_steps=2,
+        num_sanity_val_steps=0,   # tắt để tránh treo khi streaming
         default_root_dir=str(LOG_DIR),
     )
 
