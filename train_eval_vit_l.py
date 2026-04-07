@@ -678,7 +678,12 @@ def main(skip_pretrain: bool = False, checkpoint_path: str = None):
 
 
 # %%
-if __name__ == "__main__":
+def _is_notebook() -> bool:
+    """True nếu đang chạy trong Jupyter / Kaggle / Colab kernel."""
+    return any(s in sys.argv[0] for s in ("ipykernel", "colab_kernel", "pydev"))
+
+
+if __name__ == "__main__" and not _is_notebook():
     import argparse
 
     p = argparse.ArgumentParser(description="LeJEPA ViT-L Train + Eval")
@@ -694,3 +699,9 @@ if __name__ == "__main__":
         skip_pretrain   = args.skip_pretrain,
         checkpoint_path = args.checkpoint or args.resume,
     )
+
+elif _is_notebook():
+    # Chạy trong notebook: gọi main() trực tiếp với config mặc định.
+    # Sửa các biến bên dưới trước khi chạy cell này nếu muốn thay đổi.
+    # main(skip_pretrain=True, checkpoint_path="/kaggle/working/lejepa-vitl-last.ckpt")
+    print("Notebook mode — gọi main() thủ công trong cell tiếp theo.")
