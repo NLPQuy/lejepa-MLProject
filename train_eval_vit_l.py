@@ -167,7 +167,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchmetrics
-from torch.utils.data import DataLoader, TensorDataset
+import torchvision
+from torch.utils.data import DataLoader, Subset, TensorDataset
 
 # ── Tensor Core precision (recommended for H100 / A100) ───────────────────────
 torch.set_float32_matmul_precision("high")
@@ -230,11 +231,14 @@ EVAL_LR      = 1e-3
 EVAL_EPOCHS  = 50
 EVAL_BS      = 256
 
+# ── Kaggle local ImageNet-1K ──────────────────────────────────────────────────
+# Attach dataset "imagenet-object-localization-challenge" vào notebook trên Kaggle.
+# Val dir của ILSVRC là flat (không có class subfolders) → dùng 50k ảnh cuối
+# của train làm val proxy.
+KAGGLE_IMAGENET = "/kaggle/input/imagenet-object-localization-challenge/ILSVRC/Data/CLS-LOC"
+
 # ── Misc ──────────────────────────────────────────────────────────────────────
-# streaming=False: HuggingFace download về disk trước, tránh treo giữa chừng do network.
-# Có thể dùng num_workers bình thường (không còn bị deadlock HF stream).
-NUM_WORKERS_STREAM = 4   # dùng cho pretrain dataset (non-streaming)
-NUM_WORKERS  = 4         # dùng cho eval (map-style dataset)
+NUM_WORKERS  = 8   # local SSD → có thể tăng workers
 PRECISION    = "bf16-mixed"
 ACCELERATOR  = "gpu"
 DEVICES      = "auto"
@@ -350,32 +354,60 @@ def lejepa_forward(self, batch: dict, stage: str) -> dict:
 # ## 4. Phase 1: Pretraining
 
 # %%
-def build_pretrain_datamodule() -> DataModule:
-    """DataModule cho ImageNet-1K pretraining.
+class KaggleImageNetDataset(torch.utils.data.Dataset):
+    """Wrapper quanh torchvision.ImageFolder, output dict tương thích lejepa_forward.
 
-    streaming=True: stream trực tiếp từ HuggingFace, không download 150GB về disk.
+    Training (multi-view transform):  {"global_0": {"image": T, "label": L}, ...}
+    Eval   (single-view transform):   {"image": T, "label": L}
+
+    spt transforms nhận dict {"image": PIL, "label": int} → trả dict tương tự.
     """
-    train_ds = HFDataset(
-        PRETRAIN_DATASET,
-        split="train",
-        transform=make_train_transform(),
-        trust_remote_code=True,
-        streaming=False,      # ← download về disk, tránh treo do network
-    )
-    val_ds = HFDataset(
-        PRETRAIN_DATASET,
-        split="validation",
-        transform=make_val_transform(),
-        trust_remote_code=True,
-        streaming=False,
-    )
+    def __init__(self, root: str, transform=None):
+        self.folder    = torchvision.datasets.ImageFolder(root)
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.folder)
+
+    def __getitem__(self, idx):
+        pil_img, label = self.folder[idx]
+        item = {"image": pil_img, "label": label}
+        if self.transform is not None:
+            return self.transform(item)
+        return item
+
+
+def build_pretrain_datamodule() -> DataModule:
+    """DataModule dùng Kaggle local ImageNet-1K (không cần download).
+
+    Train dir có class subfolders (n01234567/...) → ImageFolder hoạt động tốt.
+    Val dir của ILSVRC là flat → dùng 50k ảnh cuối của train làm val proxy.
+    """
+    train_root = os.path.join(KAGGLE_IMAGENET, "train")
+    print(f"[data] ImageNet-1K train root: {train_root}")
+
+    full_train_ds = KaggleImageNetDataset(train_root, transform=make_train_transform())
+    full_val_ds   = KaggleImageNetDataset(train_root, transform=make_val_transform())
+
+    n_total  = len(full_train_ds)   # ~1_281_167
+    n_val    = 50_000
+    train_idx = list(range(n_total - n_val))
+    val_idx   = list(range(n_total - n_val, n_total))
+    print(f"[data] train={len(train_idx):,}  val={len(val_idx):,}")
+
     return DataModule(
-        train=DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True,
-                         num_workers=NUM_WORKERS_STREAM, drop_last=True,
-                         pin_memory=True, persistent_workers=True),
-        val=DataLoader(val_ds, batch_size=BATCH_SIZE, shuffle=False,
-                       num_workers=NUM_WORKERS_STREAM,
-                       pin_memory=True, persistent_workers=True),
+        train=DataLoader(
+            Subset(full_train_ds, train_idx),
+            batch_size=BATCH_SIZE, shuffle=True,
+            num_workers=NUM_WORKERS, drop_last=True,
+            pin_memory=True, persistent_workers=True,
+        ),
+        val=DataLoader(
+            Subset(full_val_ds, val_idx),
+            batch_size=BATCH_SIZE, shuffle=False,
+            num_workers=NUM_WORKERS,
+            pin_memory=True, persistent_workers=True,
+        ),
     )
 
 
