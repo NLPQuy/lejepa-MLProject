@@ -95,14 +95,11 @@ else:
             sys.path.insert(0, _p)
 
 # ── Cài stable_pretraining từ source đã có trong repo ────────────────────────
-# pip install -e sinh ra _version.py + cài tất cả deps từ pyproject.toml
+# Luôn chạy pip install -e: sinh _version.py + cài tất cả deps từ pyproject.toml
+# (pip tự bỏ qua nếu package + deps đã up-to-date)
 _spt_src = os.path.join(CLONE_DIR, "stable-pretraining")
-import importlib.util
-if importlib.util.find_spec("stable_pretraining") is None:
-    print(f"[install] pip install -e {_spt_src}")
-    _run(f"{sys.executable} -m pip install -q -e '{_spt_src}'")
-else:
-    print("[install] stable_pretraining đã install ✓")
+print(f"[install] pip install -e {_spt_src}")
+_run(f"{sys.executable} -m pip install -q -e '{_spt_src}'")
 
 # %% [markdown]
 # # LeJEPA ViT-L — Pretraining (IN-1K) + Few-Shot Linear Probe Evaluation
