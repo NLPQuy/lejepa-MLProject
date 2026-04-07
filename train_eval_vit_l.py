@@ -443,7 +443,7 @@ def run_pretraining(resume_ckpt: str = None) -> str:
         accelerator=ACCELERATOR,
         devices=DEVICES,
         precision=PRECISION,
-        strategy="ddp_find_unused_parameters_true",
+        strategy="ddp_notebook" if _is_notebook() else "ddp_find_unused_parameters_true",
         callbacks=cbs + [
             ckpt_cb,
             spt.TrainerInfo(),
