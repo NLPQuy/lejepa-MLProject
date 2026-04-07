@@ -456,8 +456,8 @@ def run_pretraining(resume_ckpt: str = None) -> str:
         default_root_dir=str(LOG_DIR),
     )
 
-    manager = spt.Manager(trainer=trainer, module=module, data=dm)
-    manager(ckpt_path=resume_ckpt)
+    manager = spt.Manager(trainer=trainer, module=module, data=dm, ckpt_path=resume_ckpt)
+    manager()
 
     best = ckpt_cb.best_model_path or ckpt_cb.last_model_path
     print(f"\n✓ Pretraining done. Best checkpoint: {best}")
