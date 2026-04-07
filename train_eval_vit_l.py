@@ -29,10 +29,12 @@ import subprocess
 import sys
 
 # ── Cấu hình repo ─────────────────────────────────────────────────────────────
-GITHUB_TOKEN  = os.environ.get("GITHUB_TOKEN", "")   # ← dán token vào đây nếu cần
+GITHUB_TOKEN  = os.environ.get("GITHUB_TOKEN", "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")   # ← set bằng Kaggle Secret hoặc env var
 GITHUB_REPO   = "https://github.com/NLPQuy/lejepa-MLProject.git"
-CLONE_DIR     = "/content/lejepa-MLProject"           # đổi thành path phù hợp nếu không dùng Colab
+CLONE_DIR     = "/kaggle/working/lejepa-MLProject"  # Kaggle write dir
 
+from huggingface_hub import login
+login(token=os.environ.get("HF_TOKEN", "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"))
 
 def _run(cmd: str, **kwargs) -> int:
     """Chạy shell command, in output, trả về return code."""
