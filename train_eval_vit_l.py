@@ -319,24 +319,29 @@ def lejepa_forward(self, batch: dict, stage: str) -> dict:
 
 # %%
 def build_pretrain_datamodule() -> DataModule:
-    """DataModule cho ImageNet-1K pretraining."""
+    """DataModule cho ImageNet-1K pretraining.
+
+    streaming=True: stream trực tiếp từ HuggingFace, không download 150GB về disk.
+    """
     train_ds = HFDataset(
         PRETRAIN_DATASET,
         split="train",
         transform=make_train_transform(),
         trust_remote_code=True,
+        streaming=True,       # ← không cache về disk
     )
     val_ds = HFDataset(
         PRETRAIN_DATASET,
         split="validation",
         transform=make_val_transform(),
         trust_remote_code=True,
+        streaming=True,
     )
     return DataModule(
-        train=DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True,
+        train=DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=False,  # IterableDataset không dùng shuffle
                          num_workers=NUM_WORKERS, drop_last=True,
                          persistent_workers=True, pin_memory=True),
-        val=DataLoader(val_ds,   batch_size=BATCH_SIZE, shuffle=False,
+        val=DataLoader(val_ds, batch_size=BATCH_SIZE, shuffle=False,
                        num_workers=NUM_WORKERS,
                        persistent_workers=True, pin_memory=True),
     )
