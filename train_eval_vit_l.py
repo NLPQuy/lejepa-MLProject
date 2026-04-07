@@ -136,7 +136,7 @@ import math
 import random
 from pathlib import Path
 
-import lightning as pl
+import lightning.pytorch as pl
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
