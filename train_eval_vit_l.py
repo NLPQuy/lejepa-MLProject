@@ -96,15 +96,16 @@ else:
 
 # ── Cài dependencies ──────────────────────────────────────────────────────────
 _PACKAGES = [
-    "lightning",
-    "torchmetrics",
-    "timm",
-    "transformers",
-    "datasets",          # huggingface datasets (dùng bởi HFDataset)
-    "huggingface_hub",
-    "loguru",
-    "hydra-core",
-    "omegaconf",
+    # stable_pretraining full deps (từ pyproject.toml)
+    "lightning", "torchmetrics", "timm", "transformers", "datasets",
+    "huggingface_hub", "loguru", "hydra-core", "omegaconf",
+    "requests-cache", "rich", "filelock",
+    "tabulate", "pandas", "prettytable", "submitit",
+    "zstandard", "typer", "wandb", "matplotlib",
+    "pyarrow", "scikit-learn", "richuru", "opt-einsum",
+    "pillow",
+    # minari optional — bỏ qua nếu không cần RL
+    # "minari[hdf5]",
 ]
 
 def _install_packages(packages: list):
