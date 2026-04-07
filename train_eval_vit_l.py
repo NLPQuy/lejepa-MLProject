@@ -99,7 +99,9 @@ else:
 # (pip tự bỏ qua nếu package + deps đã up-to-date)
 _spt_src = os.path.join(CLONE_DIR, "stable-pretraining")
 print(f"[install] pip install -e {_spt_src}")
-_run(f"{sys.executable} -m pip install -q -e '{_spt_src}'")
+# SETUPTOOLS_SCM_PRETEND_VERSION: bắt buộc vì .git đã bị xóa khỏi repo
+_env = {**os.environ, "SETUPTOOLS_SCM_PRETEND_VERSION": "0.0.0"}
+_run(f"{sys.executable} -m pip install -q -e '{_spt_src}'", env=_env)
 
 # %% [markdown]
 # # LeJEPA ViT-L — Pretraining (IN-1K) + Few-Shot Linear Probe Evaluation
