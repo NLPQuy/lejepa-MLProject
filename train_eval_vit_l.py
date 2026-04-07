@@ -94,40 +94,15 @@ else:
         if _p not in sys.path:
             sys.path.insert(0, _p)
 
-# ── Cài dependencies ──────────────────────────────────────────────────────────
-_PACKAGES = [
-    # stable_pretraining full deps (từ pyproject.toml)
-    "lightning", "torchmetrics", "timm", "transformers", "datasets",
-    "huggingface_hub", "loguru", "hydra-core", "omegaconf",
-    "requests-cache", "rich", "filelock",
-    "tabulate", "pandas", "prettytable", "submitit",
-    "zstandard", "typer", "wandb", "matplotlib",
-    "pyarrow", "scikit-learn", "richuru", "opt-einsum",
-    "pillow",
-    # minari optional — bỏ qua nếu không cần RL
-    # "minari[hdf5]",
-]
-
-def _install_packages(packages: list):
-    """Cài các package chưa có, bỏ qua nếu đã install."""
-    to_install = []
-    for pkg in packages:
-        import importlib
-        # map pip name → import name
-        _import_name = {
-            "hydra-core": "hydra",
-            "huggingface_hub": "huggingface_hub",
-        }.get(pkg, pkg.replace("-", "_"))
-        if importlib.util.find_spec(_import_name) is None:
-            to_install.append(pkg)
-
-    if to_install:
-        print(f"[install] Cài: {' '.join(to_install)}")
-        _run(f"{sys.executable} -m pip install -q {' '.join(to_install)}")
-    else:
-        print("[install] Tất cả dependencies đã có sẵn ✓")
-
-_install_packages(_PACKAGES)
+# ── Cài stable_pretraining từ source đã có trong repo ────────────────────────
+# pip install -e sinh ra _version.py + cài tất cả deps từ pyproject.toml
+_spt_src = os.path.join(CLONE_DIR, "stable-pretraining")
+import importlib.util
+if importlib.util.find_spec("stable_pretraining") is None:
+    print(f"[install] pip install -e {_spt_src}")
+    _run(f"{sys.executable} -m pip install -q -e '{_spt_src}'")
+else:
+    print("[install] stable_pretraining đã install ✓")
 
 # %% [markdown]
 # # LeJEPA ViT-L — Pretraining (IN-1K) + Few-Shot Linear Probe Evaluation
