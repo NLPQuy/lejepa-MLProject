@@ -1,0 +1,47 @@
+\frametitle{Bắt Đầu Dùng LeJEPA}
+\begin{columns}[c]
+\column{0.48\textwidth}
+  \begin{center}
+    \begin{tikzpicture}[
+      node distance=0.8cm,
+      mynode/.style={rectangle, draw=primary, fill=primary!10, rounded corners=4pt, font=\scriptsize, align=center, minimum width=3.5cm, minimum height=0.6cm},
+      center node/.style={circle, draw=primary, fill=primary!80, text=white, font=\bfseries\small, minimum size=1.5cm, align=center}
+    ]
+      \node[center node] (center) at (0, 0) {LeJEPA};
+
+      \node[mynode, left=1.2cm of center] (github) {\textbf{GitHub}\\rbalestr-lab/lejepa\\50 LOC core};
+      \node[mynode, above=1cm of center] (integ) {\textbf{Integration}\\timm + Lightning};
+      \node[mynode, right=1.2cm of center] (eval) {\textbf{Evaluation}\\OnlineProbe, RankMe};
+      \node[mynode, below=1cm of center] (cite) {\textbf{Citation}\\arXiv: 2511.08544};
+
+      \draw[->, thick, primary] (center) -- (github);
+      \draw[->, thick, primary] (center) -- (integ);
+      \draw[->, thick, primary] (center) -- (eval);
+      \draw[->, thick, primary] (center) -- (cite);
+    \end{tikzpicture}
+  \end{center}
+\column{0.48\textwidth}
+  \begin{block}{Quick Start}
+\begin{lstlisting}
+import lejepa
+
+# Initialize Epps-Pulley test
+test = lejepa.multivariate.SlicingUnivariateTest(
+    univariate_test=lejepa.univariate.EppsPulley(17),
+    num_slices=1024
+)
+# Compute loss
+sigreg_loss = test(embeddings)
+\end{lstlisting}
+  \end{block}
+  \vspace{5pt}
+  \begin{alertblock}{Citation}
+    \tiny
+    @misc\{balestriero2025lejepa,\\
+      \ \ title=\{LeJEPA: Provable and Scalable Self-Supervised Learning\},\\
+      \ \ author=\{Balestriero, Randall and LeCun, Yann\},\\
+      \ \ year=\{2025\}, eprint=\{2511.08544\}\\
+    \}
+  \end{alertblock}
+\end{columns}
+\takeaway{\alert{\texttt{pip install lejepa} — bắt đầu trong 5 phút}}
