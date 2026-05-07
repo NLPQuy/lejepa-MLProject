@@ -138,3 +138,20 @@ If you use LeJEPA in your research, please cite:
 We welcome issues, feature requests, and pull requests!
 For questions or collaborations, please contact rbalestr@brown.edu
 
+## RunPod Setup
+
+```bash
+# Set secrets as environment variables (NEVER commit tokens!)
+export HF_TOKEN="your_hf_token_here"
+export RUNPOD_API_KEY="your_runpod_api_key_here"
+
+# Cài tool
+pip install -q huggingface_hub
+
+# Tải toàn bộ dataset vào network volume
+huggingface-cli download ILSVRC/imagenet-1k \
+  --repo-type dataset \
+  --token $HF_TOKEN \
+  --local-dir /workspace/imagenet-hf \
+  --local-dir-use-symlinks False
+```

@@ -129,10 +129,10 @@ _env = {**os.environ, "SETUPTOOLS_SCM_PRETEND_VERSION": "0.0.0"}
 _run(f"{sys.executable} -m pip install -q -e '{_spt_src}'", env=_env)
 
 # %% [markdown]
-# # LeJEPA ViT-L — Pretraining (IN-1K) + Few-Shot Linear Probe Evaluation
+# # LeJEPA ViT-B — Pretraining (IN-1K) + Few-Shot Linear Probe Evaluation
 #
 # Reproduces the main table in the README:
-# - **Backbone**: ViT-L/16 (304M params) via timm (`vit_large_patch16_224`)
+# - **Backbone**: ViT-B/16 (86M params) via timm (`vit_base_patch16_224`) 
 # - **Pretrain**: ImageNet-1K, 100 epochs
 # - **Eval**: Few-shot linear probe (1-shot, 10-shot, all) trên 8 datasets:
 #   DTD · Aircraft · Cars · CIFAR-10 · CIFAR-100 · Flowers102 · Food-101 · Oxford Pets
@@ -192,11 +192,11 @@ from stable_pretraining.methods.lejepa import (
 
 # %%
 # ── Backbone ──────────────────────────────────────────────────────────────────
-BACKBONE_NAME    = "vit_large_patch16_224"   # ViT-L/16, 304M params
+BACKBONE_NAME    = "vit_base_patch16_224"   # ViT-B/16, 86M params
 
 # ── Pretraining ───────────────────────────────────────────────────────────────
 PRETRAIN_DATASET = "ILSVRC/imagenet-1k"
-MAX_EPOCHS       = 100
+MAX_EPOCHS       = 1
 BATCH_SIZE       = 512
 LR               = 5e-4
 WEIGHT_DECAY     = 5e-2
@@ -231,11 +231,11 @@ EVAL_LR      = 1e-3
 EVAL_EPOCHS  = 50
 EVAL_BS      = 256
 
-# ── Kaggle local ImageNet-1K ──────────────────────────────────────────────────
-# Attach dataset "imagenet-object-localization-challenge" vào notebook trên Kaggle.
+# ── RunPod local ImageNet-1K ──────────────────────────────────────────────────
+# Data đã được giải nén vào /workspace/data/imagenet theo ImageFolder format.
 # Val dir của ILSVRC là flat (không có class subfolders) → dùng 50k ảnh cuối
 # của train làm val proxy.
-KAGGLE_IMAGENET = "/kaggle/input/imagenet-object-localization-challenge/ILSVRC/Data/CLS-LOC"
+KAGGLE_IMAGENET = "/workspace/data/imagenet"
 
 # ── Misc ──────────────────────────────────────────────────────────────────────
 NUM_WORKERS  = 8   # local SSD → có thể tăng workers
@@ -412,8 +412,8 @@ def build_pretrain_datamodule() -> DataModule:
 
 
 def build_pretrain_module() -> tuple[spt.Module, list]:
-    """Tạo spt.Module bọc LeJEPA (ViT-L) + các callbacks."""
-    # LeJEPA tự tạo backbone (timm ViT-L), projector MLP, và SlicedEppsPulley
+    """Tạo spt.Module bọc LeJEPA (ViT-B) + các callbacks."""
+    # LeJEPA tự tạo backbone (timm ViT-B), projector MLP, và SlicedEppsPulley
     model = LeJEPA(
         encoder_name   = BACKBONE_NAME,
         n_slices       = SIGREG_SLICES,
@@ -496,7 +496,7 @@ def _find_free_port() -> int:
 
 
 def run_pretraining(resume_ckpt: str = None) -> str:
-    """Chạy pretraining LeJEPA ViT-L trên IN-1K.
+    """Chạy pretraining LeJEPA ViT-B trên IN-1K.
 
     Returns:
         Path đến best checkpoint.
@@ -513,7 +513,7 @@ def run_pretraining(resume_ckpt: str = None) -> str:
 
     ckpt_cb = pl.callbacks.ModelCheckpoint(
         dirpath=str(CKPT_DIR),
-        filename="lejepa-vitl-ep{epoch:03d}",
+        filename="lejepa-vitb-ep{epoch:03d}",
         save_top_k=3,
         monitor="eval/inet_probe_top1_epoch",
         mode="max",
@@ -761,7 +761,7 @@ def main(skip_pretrain: bool = False, checkpoint_path: str = None):
     """
     if not skip_pretrain:
         print("=" * 60)
-        print("Phase 1 — LeJEPA Pretraining on ImageNet-1K (ViT-L/16)")
+        print("Phase 1 — LeJEPA Pretraining on ImageNet-1K (ViT-B/16)")
         print("=" * 60)
         ckpt = run_pretraining()
     else:
@@ -774,7 +774,7 @@ def main(skip_pretrain: bool = False, checkpoint_path: str = None):
     print("=" * 60)
     results = run_evaluation(ckpt)
 
-    print("\n=== LeJEPA ViT-L (100ep IN-1K) — Few-Shot Linear Probe ===")
+    print("\n=== LeJEPA ViT-B (100ep IN-1K) — Few-Shot Linear Probe ===")
     print_results_table(results)
     return results
 
@@ -788,7 +788,7 @@ def _is_notebook() -> bool:
 if __name__ == "__main__" and not _is_notebook():
     import argparse
 
-    p = argparse.ArgumentParser(description="LeJEPA ViT-L Train + Eval")
+    p = argparse.ArgumentParser(description="LeJEPA ViT-B Train + Eval")
     p.add_argument("--skip-pretrain", action="store_true",
                    help="Chỉ chạy eval, bỏ qua pretraining.")
     p.add_argument("--checkpoint",    type=str, default=None,
