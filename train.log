@@ -1,100 +1,99 @@
-nohup: ignoring input
 [env] Loaded /workspace/.env
 [shm] /dev/shm free: 31.0 GB  →  cache dir: /dev/shm/hf_cache
-Note: Environment variable`HF_TOKEN` is set and is the current active token independently from the token you've just configured.
-[hf] Logged in to HuggingFace.
+[hf] WARNING: HuggingFace login failed (Invalid user token. The token from HF_TOKEN environment variable is invalid. Note that HF_TOKEN takes precedence over `hf auth login`.). Continuing without HF auth.
+[hf] Training on local ImageNet will proceed normally.
 [install] pip install -e /workspace/lejepa-MLProject/stable-pretraining
   $ /workspace/jepa/bin/python -m pip install -q -e '/workspace/lejepa-MLProject/stable-pretraining'
 WARNING: typer 0.25.1 does not provide the extra 'all'
 ============================================================
 Phase 1 — LeJEPA Pretraining on ImageNet-1K (ViT-B/16)
 ============================================================
-[DDP] Using MASTER_PORT=33459
+[DDP] Using MASTER_PORT=38159
 [data] ImageNet-1K train: /workspace/imagenet/train
 [data] ImageNet-1K val:   /workspace/imagenet/val
 [data] train=1,527,212  val=50,000
-21:11:02 | INFO  | module.py   | Setting up DataModule
-21:11:02 | INFO  | utils.py    | ── Module ────────────────────────────────────────
-21:11:02 | WARN  | module.py   | ! No hyperparameters provided - hyperparameter logging is disabled.
-21:11:02 | INFO  | module.py   |   Setting custom forward method.
-21:11:02 | WARN  | module.py   | ! You didn't pass a forward method. This will fail unless you implemented your own Module class.
-21:11:02 | INFO  | module.py   |   No metrics configuration provided - automatic metric tracking is disabled.
-21:11:03 | INFO  | utils.py    | ── Module ────────────────────────────────────────
-21:11:03 | INFO  | module.py   |   Saving provided hyperparameters.
-21:11:03 | INFO  | module.py   |   Setting custom forward method.
-21:11:03 | INFO  | module.py   |   Setting attribute: self.model = <class 'stable_pretraining.methods.lejepa.LeJEPA'>
-21:11:03 | INFO  | module.py   |   Setting attribute: self.optim = <class 'dict'>
-21:11:03 | INFO  | module.py   |   No metrics configuration provided - automatic metric tracking is disabled.
-21:11:03 | INFO  | utils.py    |   wrapping configure_model
-21:11:03 | INFO  | utils.py    |   wrapping configure_optimizers
-21:11:03 | INFO  | utils.py    | ── OnlineProbe ───────────────────────────────────
-21:11:03 | INFO  | probe.py    |   name: inet_probe
-21:11:03 | INFO  | probe.py    |   input: embedding
-21:11:03 | INFO  | probe.py    |   target: label
-21:11:03 | INFO  | probe.py    |   accumulate_grad_batches: 1
-21:11:03 | INFO  | probe.py    |   wrapping forward
+12:50:49 | INFO  | module.py   | Setting up DataModule
+12:50:49 | INFO  | utils.py    | ── Module ────────────────────────────────────────
+12:50:49 | WARN  | module.py   | ! No hyperparameters provided - hyperparameter logging is disabled.
+12:50:49 | INFO  | module.py   |   Setting custom forward method.
+12:50:49 | WARN  | module.py   | ! You didn't pass a forward method. This will fail unless you implemented your own Module class.
+12:50:49 | INFO  | module.py   |   No metrics configuration provided - automatic metric tracking is disabled.
+12:50:50 | INFO  | utils.py    | ── Module ────────────────────────────────────────
+12:50:50 | INFO  | module.py   |   Saving provided hyperparameters.
+12:50:50 | INFO  | module.py   |   Setting custom forward method.
+12:50:50 | INFO  | module.py   |   Setting attribute: self.model = <class 'stable_pretraining.methods.lejepa.LeJEPA'>
+12:50:50 | INFO  | module.py   |   Setting attribute: self.optim = <class 'dict'>
+12:50:50 | INFO  | module.py   |   No metrics configuration provided - automatic metric tracking is disabled.
+12:50:50 | INFO  | utils.py    |   wrapping configure_model
+12:50:50 | INFO  | utils.py    |   wrapping configure_optimizers
+12:50:50 | INFO  | utils.py    | ── OnlineProbe ───────────────────────────────────
+12:50:50 | INFO  | probe.py    |   name: inet_probe
+12:50:50 | INFO  | probe.py    |   input: embedding
+12:50:50 | INFO  | probe.py    |   target: label
+12:50:50 | INFO  | probe.py    |   accumulate_grad_batches: 1
+12:50:50 | INFO  | probe.py    |   wrapping forward
 Using bfloat16 Automatic Mixed Precision (AMP)
-21:11:04 | INFO  | env_info.py |   EnvironmentDumpCallback initialized (filename=environment.json, async=True)
-21:11:04 | INFO  | utils.py    | ── HuggingFaceCheckpoint ─────────────────────────
-21:11:04 | INFO  | hf_models.py|   save_dir: <cyan>hf_exports</cyan>
+12:50:51 | INFO  | env_info.py |   EnvironmentDumpCallback initialized (filename=environment.json, async=True)
+12:50:51 | INFO  | utils.py    | ── HuggingFaceCheckpoint ─────────────────────────
+12:50:51 | INFO  | hf_models.py|   save_dir: <cyan>hf_exports</cyan>
 Adding 11 callbacks from entry point 'stablepretraining_callbacks': PrintProgressBar, ModuleRegistryCallback, LoggingCallback, EnvironmentDumpCallback, TrainerInfo, SklearnCheckpoint, WandbCheckpoint, ModuleSummary, SLURMInfo, LogUnusedParametersOnce, HuggingFaceCheckpointCallback
 GPU available: True (cuda), used: True
 TPU available: False, using: 0 TPU cores
 /workspace/jepa/lib/python3.11/site-packages/lightning/pytorch/trainer/connectors/logger_connector/logger_connector.py:76: Starting from v1.9.0, `tensorboardX` has been removed as a dependency of the `lightning.pytorch` package, due to potential conflicts with other packages in the ML ecosystem. For this reason, `logger=True` will use `CSVLogger` as the default logger, unless the `tensorboard` or `tensorboardX` packages are found. Please `pip install lightning[extra]` or one of them to enable TensorBoard support by default
 💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
-21:11:04 | WARN  | manager.py  | User didn't specify seed, runs won't be exactly reproducible!
-21:11:04 | INFO  | utils.py    | ── WorkingDirectory ──────────────────────────────
-21:11:04 | INFO  | manager.py  |   cwd: /workspace/lejepa-MLProject
-21:11:04 | INFO  | utils.py    | ── Seed ──────────────────────────────────────────
-21:11:04 | INFO  | manager.py  |   seed: None
+12:50:51 | WARN  | manager.py  | User didn't specify seed, runs won't be exactly reproducible!
+12:50:51 | INFO  | utils.py    | ── WorkingDirectory ──────────────────────────────
+12:50:51 | INFO  | manager.py  |   cwd: /workspace/lejepa-MLProject
+12:50:51 | INFO  | utils.py    | ── Seed ──────────────────────────────────────────
+12:50:51 | INFO  | manager.py  |   seed: None
 /workspace/jepa/lib/python3.11/site-packages/lightning/fabric/utilities/seed.py:44: No seed found, seed set to 0
 Seed set to 0
-21:11:04 | INFO  | utils.py    | ── CSVLogger ─────────────────────────────────────
-21:11:04 | INFO  | manager.py  |   root_dir: /workspace/lejepa-MLProject/logs/lightning_logs
-21:11:04 | INFO  | manager.py  |   save_dir: /workspace/lejepa-MLProject/logs
-21:11:04 | INFO  | manager.py  |   log_dir: /workspace/lejepa-MLProject/logs/lightning_logs/version_12
-21:11:04 | INFO  | utils.py    | ── SignalHandlers ────────────────────────────────
-21:11:04 | INFO  | manager.py  |   SIGUSR1: `0`
-21:11:04 | INFO  | manager.py  |   SIGUSR2: `0`
-21:11:04 | INFO  | manager.py  |   SIGCONT: `0`
-21:11:04 | INFO  | manager.py  |   SIGTERM: `0`
-21:11:04 | INFO  | utils.py    | ── Callbacks ─────────────────────────────────────
-21:11:04 | INFO  | manager.py  |   count: 19
-21:11:04 | INFO  | utils.py    | ── CheckpointingSetup ────────────────────────────
-21:11:04 | INFO  | manager.py  |   Checkpointing: A user-defined `ModelCheckpoint` callback was found. It will be used for saving checkpoints.
-21:11:04 | INFO  | manager.py  |   The `Manager` will not manage resuming from a specific path as `manager.ckpt_path` was not provided.
-21:11:04 | INFO  | utils.py    | ── TrainerFit ────────────────────────────────────
-21:11:04 | INFO  | manager.py  |   ckpt_path: None
-21:11:04 | INFO  | manager.py  |   resume_weights_only: False
-21:11:04 | OK    | module.py   | ✓ dataset for TrainerFn.FITTING loaded
-21:11:04 | INFO  | module.py   |   setup was done by user
-21:11:04 | INFO  | queue.py    |   no queue found for key 'embedding', creating new OnlineQueue with length=1000, dim=768, dtype=torch.float32
-21:11:04 | INFO  | utils.py    | ── OnlineQueue ───────────────────────────────────
-21:11:04 | INFO  | queue.py    |   key: embedding
-21:11:04 | INFO  | queue.py    |   requested_length: 1000
-21:11:04 | INFO  | queue.py    |   dim: 768
-21:11:04 | INFO  | queue.py    |   dtype: torch.float32
-21:11:04 | INFO  | queue.py    |   created shared queue for 'embedding' with size 1000
-21:11:04 | INFO  | rankme.py   |   target queue: embedding
-21:11:04 | INFO  | trainer_inf~|   linking trainer to DataModule
-21:11:04 | INFO  | utils.py    | ── EnvironmentDump ───────────────────────────────
-21:11:04 | INFO  | env_info.py |   log_dir: /workspace/lejepa-MLProject/logs
-21:11:04 | INFO  | env_info.py |   Running environment dump in background thread (non-blocking)
-21:11:04 | INFO  | env_info.py |   Collecting environment information...
-21:11:04 | OK    | env_info.py | ✓ Background thread started successfully
-21:11:04 | OK    | env_info.py | ✓ Python 3.11.10
-21:11:04 | INFO  | trainer_inf~|   linking trainer to DataModule
-21:11:04 | INFO  | utils.py    | ── SklearnCheckpoint ─────────────────────────────
-21:11:04 | INFO  | checkpoint_~|   Sklearn Modules:
-21:11:04 | INFO  | checkpoint_~| 
+12:50:51 | INFO  | utils.py    | ── CSVLogger ─────────────────────────────────────
+12:50:51 | INFO  | manager.py  |   root_dir: /workspace/lejepa-MLProject/logs/lightning_logs
+12:50:51 | INFO  | manager.py  |   save_dir: /workspace/lejepa-MLProject/logs
+12:50:51 | INFO  | manager.py  |   log_dir: /workspace/lejepa-MLProject/logs/lightning_logs/version_12
+12:50:51 | INFO  | utils.py    | ── SignalHandlers ────────────────────────────────
+12:50:51 | INFO  | manager.py  |   SIGUSR1: `0`
+12:50:51 | INFO  | manager.py  |   SIGUSR2: `0`
+12:50:51 | INFO  | manager.py  |   SIGCONT: `0`
+12:50:51 | INFO  | manager.py  |   SIGTERM: `0`
+12:50:51 | INFO  | utils.py    | ── Callbacks ─────────────────────────────────────
+12:50:51 | INFO  | manager.py  |   count: 19
+12:50:51 | INFO  | utils.py    | ── CheckpointingSetup ────────────────────────────
+12:50:51 | INFO  | manager.py  |   Checkpointing: A user-defined `ModelCheckpoint` callback was found. It will be used for saving checkpoints.
+12:50:51 | INFO  | manager.py  |   The `Manager` will not manage resuming from a specific path as `manager.ckpt_path` was not provided.
+12:50:51 | INFO  | utils.py    | ── TrainerFit ────────────────────────────────────
+12:50:51 | INFO  | manager.py  |   ckpt_path: None
+12:50:51 | INFO  | manager.py  |   resume_weights_only: False
+12:50:51 | OK    | module.py   | ✓ dataset for TrainerFn.FITTING loaded
+12:50:51 | INFO  | module.py   |   setup was done by user
+12:50:51 | INFO  | queue.py    |   no queue found for key 'embedding', creating new OnlineQueue with length=1000, dim=768, dtype=torch.float32
+12:50:51 | INFO  | utils.py    | ── OnlineQueue ───────────────────────────────────
+12:50:51 | INFO  | queue.py    |   key: embedding
+12:50:51 | INFO  | queue.py    |   requested_length: 1000
+12:50:51 | INFO  | queue.py    |   dim: 768
+12:50:51 | INFO  | queue.py    |   dtype: torch.float32
+12:50:51 | INFO  | queue.py    |   created shared queue for 'embedding' with size 1000
+12:50:51 | INFO  | rankme.py   |   target queue: embedding
+12:50:51 | INFO  | trainer_inf~|   linking trainer to DataModule
+12:50:51 | INFO  | utils.py    | ── EnvironmentDump ───────────────────────────────
+12:50:51 | INFO  | env_info.py |   log_dir: /workspace/lejepa-MLProject/logs
+12:50:51 | INFO  | env_info.py |   Running environment dump in background thread (non-blocking)
+12:50:51 | INFO  | env_info.py |   Collecting environment information...
+12:50:51 | OK    | env_info.py | ✓ Background thread started successfully
+12:50:51 | OK    | env_info.py | ✓ Python 3.11.10
+12:50:51 | INFO  | trainer_inf~|   linking trainer to DataModule
+12:50:51 | INFO  | utils.py    | ── SklearnCheckpoint ─────────────────────────────
+12:50:51 | INFO  | checkpoint_~|   Sklearn Modules:
+12:50:51 | INFO  | checkpoint_~| 
 ┏━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━┓
 ┃ Module   ┃ Name   ┃ Type   ┃
 ┣━━━━━━━━━━╋━━━━━━━━╋━━━━━━━━┫
 ┗━━━━━━━━━━┻━━━━━━━━┻━━━━━━━━┛
-21:11:04 | INFO  | utils.py    | ── WandbCheckpoint ───────────────────────────────
-21:11:04 | INFO  | utils.py    | ── PyTorch Modules ───────────────────────────────
-21:11:04 | WARN  | module.py   | ! You are calling self.parameters which also gives callbacks parameters, to remove them, pass `with_callbacks=False`
-21:11:04 | INFO  | trainer_inf~| \n+-------------------------------------------+----------------------+--------------------------+--------------------------+---------+
+12:50:51 | INFO  | utils.py    | ── WandbCheckpoint ───────────────────────────────
+12:50:51 | INFO  | utils.py    | ── PyTorch Modules ───────────────────────────────
+12:50:51 | WARN  | module.py   | ! You are calling self.parameters which also gives callbacks parameters, to remove them, pass `with_callbacks=False`
+12:50:51 | INFO  | trainer_inf~| \n+-------------------------------------------+----------------------+--------------------------+--------------------------+---------+
 | Module                                    | Trainable parameters | Non Trainable parameters | Uninitialized parameters | Buffers |
 +-------------------------------------------+----------------------+--------------------------+--------------------------+---------+
 |                                           |             92496640 |                        0 |                        0 |  777250 |
@@ -396,34 +395,34 @@ Seed set to 0
 | model.sigreg                              |                    0 |                        0 |                        0 |      52 |
 | model.sigreg.ep                           |                    0 |                        0 |                        0 |      51 |
 +-------------------------------------------+----------------------+--------------------------+--------------------------+---------+
-21:11:04 | OK    | env_info.py | ✓ System: Linux 6.8.0-100-generic (x86_64)
-21:11:04 | INFO  | utils.py    | ── SLURM ─────────────────────────────────────────
-21:11:04 | INFO  | env_info.py |   Hostname: 12383aa106df
-21:11:04 | INFO  | trainer_inf~|   Job ID: N/A
-21:11:04 | INFO  | trainer_inf~|   Task ID: N/A
-21:11:04 | INFO  | trainer_inf~|   Job Name: N/A
-21:11:04 | INFO  | trainer_inf~|   Nodes: N/A
-21:11:04 | INFO  | trainer_inf~|   Tasks: N/A
-21:11:04 | INFO  | trainer_inf~|   CPUs per node: N/A
-21:11:04 | INFO  | trainer_inf~|   CPUs per task: N/A
-21:11:04 | INFO  | trainer_inf~|   Memory per node: N/A
-21:11:04 | INFO  | trainer_inf~|   Memory per CPU: N/A
-21:11:04 | INFO  | trainer_inf~|   Time limit: N/A
-21:11:04 | INFO  | trainer_inf~|   Partition: N/A
-21:11:04 | INFO  | trainer_inf~|   Node List: N/A
-21:11:04 | INFO  | trainer_inf~|   Submit Directory: N/A
-21:11:04 | INFO  | utils.py    |   storing module in callbacks_modules
-21:11:04 | INFO  | utils.py    |   setting up metrics
+12:50:51 | OK    | env_info.py | ✓ System: Linux 6.8.0-110-generic (x86_64)
+12:50:51 | INFO  | utils.py    | ── SLURM ─────────────────────────────────────────
+12:50:51 | INFO  | env_info.py |   Hostname: 38d56912728f
+12:50:51 | INFO  | trainer_inf~|   Job ID: N/A
+12:50:51 | INFO  | trainer_inf~|   Task ID: N/A
+12:50:51 | INFO  | trainer_inf~|   Job Name: N/A
+12:50:51 | INFO  | trainer_inf~|   Nodes: N/A
+12:50:51 | INFO  | trainer_inf~|   Tasks: N/A
+12:50:51 | INFO  | trainer_inf~|   CPUs per node: N/A
+12:50:51 | INFO  | trainer_inf~|   CPUs per task: N/A
+12:50:51 | INFO  | trainer_inf~|   Memory per node: N/A
+12:50:51 | INFO  | trainer_inf~|   Memory per CPU: N/A
+12:50:51 | INFO  | trainer_inf~|   Time limit: N/A
+12:50:51 | INFO  | trainer_inf~|   Partition: N/A
+12:50:51 | INFO  | trainer_inf~|   Node List: N/A
+12:50:51 | INFO  | trainer_inf~|   Submit Directory: N/A
+12:50:51 | INFO  | utils.py    |   storing module in callbacks_modules
+12:50:51 | INFO  | utils.py    |   setting up metrics
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-21:11:04 | INFO  | utils.py    | ── Optimizers ────────────────────────────────────
-21:11:04 | INFO  | module.py   |   Configuring single optimizer.
+12:50:51 | INFO  | utils.py    | ── Optimizers ────────────────────────────────────
+12:50:51 | INFO  | module.py   |   Configuring single optimizer.
 Loading `train_dataloader` to estimate number of stepping batches.
-21:11:04 | WARN  | module.py   | could not set pl_trainer to train dataset
+12:50:51 | WARN  | module.py   | could not set pl_trainer to train dataset
 /workspace/jepa/lib/python3.11/site-packages/lightning/pytorch/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
-21:11:05 | INFO  | lr_schedule~| 	User provided a dict
-21:11:05 | INFO  | module.py   |   Configured AdamW optimizer with LinearWarmupCosineAnnealing scheduler.
-21:11:05 | INFO  | utils.py    |   using explicitly provided optimizer
-21:11:05 | INFO  | utils.py    |   no scheduler given, using default ConstantLR
+12:50:52 | INFO  | lr_schedule~| 	User provided a dict
+12:50:52 | INFO  | module.py   |   Configured AdamW optimizer with LinearWarmupCosineAnnealing scheduler.
+12:50:52 | INFO  | utils.py    |   using explicitly provided optimizer
+12:50:52 | INFO  | utils.py    |   no scheduler given, using default ConstantLR
 /workspace/jepa/lib/python3.11/site-packages/lightning/pytorch/utilities/model_summary/model_summary.py:242: Precision bf16-mixed is not supported by the model summary.  Estimated model size in MB will not be accurate. Using 32 bits instead.
 ┏━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
 ┃   ┃ Name              ┃ Type       ┃ Params ┃ Mode  ┃ FLOPs ┃
@@ -439,1122 +438,632 @@ Total estimated model params size (MB): 373
 Modules in train mode: 303                                                      
 Modules in eval mode: 0                                                         
 Total FLOPs: 0                                                                  
-21:11:05 | WARN  | hf_models.py| ! No Hugging Face (PreTrainedModel) submodules found in LightningModule.
-21:11:05 | INFO  | utils.py    | ── Optimizers ────────────────────────────────────
-21:11:05 | INFO  | module.py   |   self.optimizers() gave us 2 optimizers
-21:11:05 | WARN  | module.py   | ! No clip val found for optimizer default_0
-21:11:05 | WARN  | module.py   | ! Will use the Trainer's value of None
-21:11:05 | WARN  | module.py   | ! No clip algorithm found for optimizer default_0
-21:11:05 | WARN  | module.py   | ! Will use the Trainer's value of None
-21:11:05 | OK    | module.py   | ✓ Optimizer check complete:
+12:50:52 | WARN  | hf_models.py| ! No Hugging Face (PreTrainedModel) submodules found in LightningModule.
+12:50:52 | INFO  | utils.py    | ── Optimizers ────────────────────────────────────
+12:50:52 | INFO  | module.py   |   self.optimizers() gave us 2 optimizers
+12:50:52 | WARN  | module.py   | ! No clip val found for optimizer default_0
+12:50:52 | WARN  | module.py   | ! Will use the Trainer's value of None
+12:50:52 | WARN  | module.py   | ! No clip algorithm found for optimizer default_0
+12:50:52 | WARN  | module.py   | ! Will use the Trainer's value of None
+12:50:52 | OK    | module.py   | ✓ Optimizer check complete:
 +------------+------------+----------------+-----------+-----------+
 | Opt. Index | Opt. name  |      opt       | clip val. | clip alg. |
 +------------+------------+----------------+-----------+-----------+
 |     0      | default_0  | LightningAdamW |    None   |    None   |
 |     1      | inet_probe | LightningAdamW |    None   |    norm   |
 +------------+------------+----------------+-----------+-----------+
-21:11:09 | INFO  | utils.py    | ── LogUnusedParametersOnce ───────────────────────
-21:11:09 | INFO  | unused_para~|   registered hooks on 164 leaf parameters
-21:11:09 | OK    | env_info.py | ✓ Packages: 123 packages collected in 4.55s
-21:11:09 | OK    | env_info.py | ✓ NVIDIA Driver: 580.126.16
-21:11:10 | OK    | env_info.py | ✓ Git: ml @ 42c25c3b
-21:11:10 | INFO  | env_info.py |   Remote: https://github.com/NLPQuy/lejepa-MLProject.git
-21:11:10 | WARN  | env_info.py | ! Working directory has uncommitted changes
-21:11:10 | OK    | env_info.py | ✓ Environment: 4 relevant variables captured
-21:11:10 | INFO  | env_info.py |   Serializing environment data...
-21:11:10 | INFO  | env_info.py |   File exists, using version 11: environment_v11.json
-21:11:10 | INFO  | env_info.py |   File exists, using version 11: requirements_frozen_v11.txt
-21:11:10 | INFO  | env_info.py |   Save directory: /workspace/lejepa-MLProject/logs
-21:11:10 | INFO  | env_info.py |   Writing environment to temp file...
-21:11:10 | INFO  | env_info.py |   Moving to: environment_v11.json
-21:11:10 | OK    | env_info.py | ✓ Environment file saved (7.6 KB)
-21:11:10 | OK    | env_info.py | ✓ Requirements file saved (2.6 KB)
+12:50:55 | INFO  | utils.py    | ── LogUnusedParametersOnce ───────────────────────
+12:50:55 | INFO  | unused_para~|   registered hooks on 164 leaf parameters
+12:50:55 | OK    | env_info.py | ✓ Packages: 123 packages collected in 3.77s
+12:50:55 | OK    | env_info.py | ✓ NVIDIA Driver: 580.126.20
+12:50:56 | OK    | env_info.py | ✓ Git: ml @ 88f3064e
+12:50:56 | INFO  | env_info.py |   Remote: https://@github.com/NLPQuy/lejepa-MLProject.git
+12:50:56 | WARN  | env_info.py | ! Working directory has uncommitted changes
+12:50:56 | OK    | env_info.py | ✓ Environment: 4 relevant variables captured
+12:50:56 | INFO  | env_info.py |   Serializing environment data...
+12:50:56 | INFO  | env_info.py |   File exists, using version 11: environment_v11.json
+12:50:56 | INFO  | env_info.py |   File exists, using version 11: requirements_frozen_v11.txt
+12:50:56 | INFO  | env_info.py |   Save directory: /workspace/lejepa-MLProject/logs
+12:50:56 | INFO  | env_info.py |   Writing environment to temp file...
+12:50:56 | INFO  | env_info.py |   Moving to: environment_v11.json
+12:50:56 | OK    | env_info.py | ✓ Environment file saved (7.6 KB)
+12:50:56 | OK    | env_info.py | ✓ Requirements file saved (2.6 KB)
 /workspace/jepa/lib/python3.11/site-packages/lightning/pytorch/utilities/data.py:79: Trying to infer the `batch_size` from an ambiguous collection. The batch size we found is 64. To avoid any miscalculations, use `self.log(..., batch_size=batch_size)`.
-21:11:12 | OK    | unused_para~| ✓ all tracked parameters received gradients on the first backward pass
-21:11:12 | INFO  | unused_para~|   hooks removed, callback disabled
+12:50:58 | OK    | unused_para~| ✓ all tracked parameters received gradients on the first backward pass
+12:50:58 | INFO  | unused_para~|   hooks removed, callback disabled
 /workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/callbacks/queue.py:180: UserWarning: log('queue/embedding_fill_pct') called outside a training/validation step — metric buffered for next step
   _spt_log(
-[Epoch 0/1] step 50/23862 (2.4 it/s)
-[Epoch 0/1] step 100/23862 (2.6 it/s)
-[Epoch 0/1] step 150/23862 (2.7 it/s)
-[Epoch 0/1] step 200/23862 (2.7 it/s)
-[Epoch 0/1] step 250/23862 (2.8 it/s)
-[Epoch 0/1] step 300/23862 (2.8 it/s)
-[Epoch 0/1] step 350/23862 (2.8 it/s)
-[Epoch 0/1] step 400/23862 (2.8 it/s)
-[Epoch 0/1] step 450/23862 (2.8 it/s)
-[Epoch 0/1] step 500/23862 (2.8 it/s)
-[Epoch 0/1] step 550/23862 (2.8 it/s)
-[Epoch 0/1] step 600/23862 (2.8 it/s)
-[Epoch 0/1] step 650/23862 (2.8 it/s)
-[Epoch 0/1] step 700/23862 (2.8 it/s)
-[Epoch 0/1] step 750/23862 (2.8 it/s)
-[Epoch 0/1] step 800/23862 (2.8 it/s)
-[Epoch 0/1] step 850/23862 (2.8 it/s)
-[Epoch 0/1] step 900/23862 (2.8 it/s)
-[Epoch 0/1] step 950/23862 (2.8 it/s)
-[Epoch 0/1] step 1000/23862 (2.8 it/s)
-[Epoch 0/1] step 1050/23862 (2.8 it/s)
-[Epoch 0/1] step 1100/23862 (2.8 it/s)
-[Epoch 0/1] step 1150/23862 (2.8 it/s)
-[Epoch 0/1] step 1200/23862 (2.8 it/s)
-[Epoch 0/1] step 1250/23862 (2.8 it/s)
-[Epoch 0/1] step 1300/23862 (2.8 it/s)
-[Epoch 0/1] step 1350/23862 (2.8 it/s)
-[Epoch 0/1] step 1400/23862 (2.8 it/s)
-[Epoch 0/1] step 1450/23862 (2.8 it/s)
-[Epoch 0/1] step 1500/23862 (2.8 it/s)
-[Epoch 0/1] step 1550/23862 (2.8 it/s)
-[Epoch 0/1] step 1600/23862 (2.8 it/s)
-[Epoch 0/1] step 1650/23862 (2.8 it/s)
-[Epoch 0/1] step 1700/23862 (2.8 it/s)
-[Epoch 0/1] step 1750/23862 (2.8 it/s)
-[Epoch 0/1] step 1800/23862 (2.8 it/s)
-[Epoch 0/1] step 1850/23862 (2.8 it/s)
-[Epoch 0/1] step 1900/23862 (2.8 it/s)
-[Epoch 0/1] step 1950/23862 (2.8 it/s)
-[Epoch 0/1] step 2000/23862 (2.8 it/s)
-[Epoch 0/1] step 2050/23862 (2.8 it/s)
-[Epoch 0/1] step 2100/23862 (2.8 it/s)
-[Epoch 0/1] step 2150/23862 (2.8 it/s)
-[Epoch 0/1] step 2200/23862 (2.8 it/s)
-[Epoch 0/1] step 2250/23862 (2.9 it/s)
-[Epoch 0/1] step 2300/23862 (2.9 it/s)
-[Epoch 0/1] step 2350/23862 (2.9 it/s)
-[Epoch 0/1] step 2400/23862 (2.9 it/s)
-[Epoch 0/1] step 2450/23862 (2.9 it/s)
-[Epoch 0/1] step 2500/23862 (2.9 it/s)
-[Epoch 0/1] step 2550/23862 (2.9 it/s)
-[Epoch 0/1] step 2600/23862 (2.9 it/s)
-[Epoch 0/1] step 2650/23862 (2.9 it/s)
-[Epoch 0/1] step 2700/23862 (2.9 it/s)
-[Epoch 0/1] step 2750/23862 (2.9 it/s)
-[Epoch 0/1] step 2800/23862 (2.9 it/s)
-[Epoch 0/1] step 2850/23862 (2.9 it/s)
-[Epoch 0/1] step 2900/23862 (2.9 it/s)
-[Epoch 0/1] step 2950/23862 (2.9 it/s)
-[Epoch 0/1] step 3000/23862 (2.9 it/s)
-[Epoch 0/1] step 3050/23862 (2.9 it/s)
-[Epoch 0/1] step 3100/23862 (2.9 it/s)
-[Epoch 0/1] step 3150/23862 (2.9 it/s)
-[Epoch 0/1] step 3200/23862 (2.9 it/s)
-[Epoch 0/1] step 3250/23862 (2.9 it/s)
-[Epoch 0/1] step 3300/23862 (2.9 it/s)
-[Epoch 0/1] step 3350/23862 (2.9 it/s)
-[Epoch 0/1] step 3400/23862 (2.9 it/s)
-[Epoch 0/1] step 3450/23862 (2.9 it/s)
-[Epoch 0/1] step 3500/23862 (2.9 it/s)
-[Epoch 0/1] step 3550/23862 (2.9 it/s)
-[Epoch 0/1] step 3600/23862 (2.9 it/s)
-[Epoch 0/1] step 3650/23862 (2.9 it/s)
-[Epoch 0/1] step 3700/23862 (2.9 it/s)
-[Epoch 0/1] step 3750/23862 (2.9 it/s)
-[Epoch 0/1] step 3800/23862 (2.9 it/s)
-[Epoch 0/1] step 3850/23862 (2.9 it/s)
-[Epoch 0/1] step 3900/23862 (2.9 it/s)
-[Epoch 0/1] step 3950/23862 (2.9 it/s)
-[Epoch 0/1] step 4000/23862 (2.9 it/s)
-[Epoch 0/1] step 4050/23862 (2.9 it/s)
-[Epoch 0/1] step 4100/23862 (2.9 it/s)
-[Epoch 0/1] step 4150/23862 (2.9 it/s)
-[Epoch 0/1] step 4200/23862 (2.9 it/s)
-[Epoch 0/1] step 4250/23862 (2.9 it/s)
-[Epoch 0/1] step 4300/23862 (2.9 it/s)
-[Epoch 0/1] step 4350/23862 (2.9 it/s)
-[Epoch 0/1] step 4400/23862 (2.9 it/s)
-[Epoch 0/1] step 4450/23862 (2.9 it/s)
-[Epoch 0/1] step 4500/23862 (2.9 it/s)
-[Epoch 0/1] step 4550/23862 (2.9 it/s)
-[Epoch 0/1] step 4600/23862 (2.9 it/s)
-[Epoch 0/1] step 4650/23862 (2.9 it/s)
-[Epoch 0/1] step 4700/23862 (2.9 it/s)
-[Epoch 0/1] step 4750/23862 (2.9 it/s)
-[Epoch 0/1] step 4800/23862 (2.9 it/s)
-[Epoch 0/1] step 4850/23862 (2.9 it/s)
-[Epoch 0/1] step 4900/23862 (2.9 it/s)
-[Epoch 0/1] step 4950/23862 (2.9 it/s)
-[Epoch 0/1] step 5000/23862 (2.9 it/s)
-[Epoch 0/1] step 5050/23862 (2.9 it/s)
-[Epoch 0/1] step 5100/23862 (2.8 it/s)
-[Epoch 0/1] step 5150/23862 (2.8 it/s)
-[Epoch 0/1] step 5200/23862 (2.8 it/s)
-[Epoch 0/1] step 5250/23862 (2.8 it/s)
-[Epoch 0/1] step 5300/23862 (2.8 it/s)
-[Epoch 0/1] step 5350/23862 (2.8 it/s)
-[Epoch 0/1] step 5400/23862 (2.8 it/s)
-[Epoch 0/1] step 5450/23862 (2.8 it/s)
-[Epoch 0/1] step 5500/23862 (2.8 it/s)
-[Epoch 0/1] step 5550/23862 (2.8 it/s)
-[Epoch 0/1] step 5600/23862 (2.8 it/s)
-[Epoch 0/1] step 5650/23862 (2.8 it/s)
-[Epoch 0/1] step 5700/23862 (2.8 it/s)
-[Epoch 0/1] step 5750/23862 (2.8 it/s)
-[Epoch 0/1] step 5800/23862 (2.8 it/s)
-[Epoch 0/1] step 5850/23862 (2.8 it/s)
-[Epoch 0/1] step 5900/23862 (2.8 it/s)
-[Epoch 0/1] step 5950/23862 (2.8 it/s)
-[Epoch 0/1] step 6000/23862 (2.8 it/s)
-[Epoch 0/1] step 6050/23862 (2.8 it/s)
-[Epoch 0/1] step 6100/23862 (2.8 it/s)
-[Epoch 0/1] step 6150/23862 (2.8 it/s)
-[Epoch 0/1] step 6200/23862 (2.8 it/s)
-[Epoch 0/1] step 6250/23862 (2.8 it/s)
-[Epoch 0/1] step 6300/23862 (2.8 it/s)
-[Epoch 0/1] step 6350/23862 (2.8 it/s)
-[Epoch 0/1] step 6400/23862 (2.8 it/s)
-[Epoch 0/1] step 6450/23862 (2.8 it/s)
-[Epoch 0/1] step 6500/23862 (2.8 it/s)
-[Epoch 0/1] step 6550/23862 (2.8 it/s)
-[Epoch 0/1] step 6600/23862 (2.8 it/s)
-[Epoch 0/1] step 6650/23862 (2.8 it/s)
-[Epoch 0/1] step 6700/23862 (2.8 it/s)
-[Epoch 0/1] step 6750/23862 (2.8 it/s)
-[Epoch 0/1] step 6800/23862 (2.8 it/s)
-[Epoch 0/1] step 6850/23862 (2.8 it/s)
-[Epoch 0/1] step 6900/23862 (2.8 it/s)
-[Epoch 0/1] step 6950/23862 (2.8 it/s)
-[Epoch 0/1] step 7000/23862 (2.8 it/s)
-[Epoch 0/1] step 7050/23862 (2.8 it/s)
-[Epoch 0/1] step 7100/23862 (2.8 it/s)
-[Epoch 0/1] step 7150/23862 (2.8 it/s)
-[Epoch 0/1] step 7200/23862 (2.8 it/s)
-[Epoch 0/1] step 7250/23862 (2.8 it/s)
-[Epoch 0/1] step 7300/23862 (2.8 it/s)
-[Epoch 0/1] step 7350/23862 (2.8 it/s)
-[Epoch 0/1] step 7400/23862 (2.8 it/s)
-[Epoch 0/1] step 7450/23862 (2.8 it/s)
-[Epoch 0/1] step 7500/23862 (2.8 it/s)
-[Epoch 0/1] step 7550/23862 (2.8 it/s)
-[Epoch 0/1] step 7600/23862 (2.8 it/s)
-[Epoch 0/1] step 7650/23862 (2.8 it/s)
-[Epoch 0/1] step 7700/23862 (2.8 it/s)
-[Epoch 0/1] step 7750/23862 (2.8 it/s)
-[Epoch 0/1] step 7800/23862 (2.8 it/s)
-[Epoch 0/1] step 7850/23862 (2.8 it/s)
-[Epoch 0/1] step 7900/23862 (2.8 it/s)
-[Epoch 0/1] step 7950/23862 (2.8 it/s)
-[Epoch 0/1] step 8000/23862 (2.8 it/s)
-[Epoch 0/1] step 8050/23862 (2.8 it/s)
-[Epoch 0/1] step 8100/23862 (2.8 it/s)
-[Epoch 0/1] step 8150/23862 (2.8 it/s)
-[Epoch 0/1] step 8200/23862 (2.8 it/s)
-[Epoch 0/1] step 8250/23862 (2.8 it/s)
-[Epoch 0/1] step 8300/23862 (2.8 it/s)
-[Epoch 0/1] step 8350/23862 (2.8 it/s)
-[Epoch 0/1] step 8400/23862 (2.8 it/s)
-[Epoch 0/1] step 8450/23862 (2.8 it/s)
-[Epoch 0/1] step 8500/23862 (2.8 it/s)
-[Epoch 0/1] step 8550/23862 (2.8 it/s)
-[Epoch 0/1] step 8600/23862 (2.8 it/s)
-[Epoch 0/1] step 8650/23862 (2.8 it/s)
-[Epoch 0/1] step 8700/23862 (2.8 it/s)
-[Epoch 0/1] step 8750/23862 (2.8 it/s)
-[Epoch 0/1] step 8800/23862 (2.8 it/s)
-[Epoch 0/1] step 8850/23862 (2.8 it/s)
-[Epoch 0/1] step 8900/23862 (2.8 it/s)
-[Epoch 0/1] step 8950/23862 (2.8 it/s)
-[Epoch 0/1] step 9000/23862 (2.8 it/s)
-[Epoch 0/1] step 9050/23862 (2.8 it/s)
-[Epoch 0/1] step 9100/23862 (2.8 it/s)
-[Epoch 0/1] step 9150/23862 (2.8 it/s)
-[Epoch 0/1] step 9200/23862 (2.8 it/s)
-[Epoch 0/1] step 9250/23862 (2.8 it/s)
-[Epoch 0/1] step 9300/23862 (2.8 it/s)
-[Epoch 0/1] step 9350/23862 (2.8 it/s)
-[Epoch 0/1] step 9400/23862 (2.8 it/s)
-[Epoch 0/1] step 9450/23862 (2.8 it/s)
-[Epoch 0/1] step 9500/23862 (2.8 it/s)
-[Epoch 0/1] step 9550/23862 (2.8 it/s)
-[Epoch 0/1] step 9600/23862 (2.8 it/s)
-[Epoch 0/1] step 9650/23862 (2.8 it/s)
-[Epoch 0/1] step 9700/23862 (2.8 it/s)
-[Epoch 0/1] step 9750/23862 (2.8 it/s)
-[Epoch 0/1] step 9800/23862 (2.8 it/s)
-[Epoch 0/1] step 9850/23862 (2.8 it/s)
-[Epoch 0/1] step 9900/23862 (2.8 it/s)
-[Epoch 0/1] step 9950/23862 (2.8 it/s)
-[Epoch 0/1] step 10000/23862 (2.8 it/s)
-[Epoch 0/1] step 10050/23862 (2.8 it/s)
-[Epoch 0/1] step 10100/23862 (2.8 it/s)
-[Epoch 0/1] step 10150/23862 (2.8 it/s)
-[Epoch 0/1] step 10200/23862 (2.8 it/s)
-[Epoch 0/1] step 10250/23862 (2.8 it/s)
-[Epoch 0/1] step 10300/23862 (2.8 it/s)
-[Epoch 0/1] step 10350/23862 (2.8 it/s)
-[Epoch 0/1] step 10400/23862 (2.8 it/s)
-[Epoch 0/1] step 10450/23862 (2.8 it/s)
-[Epoch 0/1] step 10500/23862 (2.8 it/s)
-[Epoch 0/1] step 10550/23862 (2.8 it/s)
-[Epoch 0/1] step 10600/23862 (2.8 it/s)
-[Epoch 0/1] step 10650/23862 (2.8 it/s)
-[Epoch 0/1] step 10700/23862 (2.8 it/s)
-[Epoch 0/1] step 10750/23862 (2.8 it/s)
-[Epoch 0/1] step 10800/23862 (2.8 it/s)
-[Epoch 0/1] step 10850/23862 (2.8 it/s)
-[Epoch 0/1] step 10900/23862 (2.8 it/s)
-[Epoch 0/1] step 10950/23862 (2.8 it/s)
-[Epoch 0/1] step 11000/23862 (2.8 it/s)
-[Epoch 0/1] step 11050/23862 (2.8 it/s)
-[Epoch 0/1] step 11100/23862 (2.8 it/s)
-[Epoch 0/1] step 11150/23862 (2.8 it/s)
-[Epoch 0/1] step 11200/23862 (2.8 it/s)
-[Epoch 0/1] step 11250/23862 (2.8 it/s)
-[Epoch 0/1] step 11300/23862 (2.8 it/s)
-[Epoch 0/1] step 11350/23862 (2.8 it/s)
-[Epoch 0/1] step 11400/23862 (2.8 it/s)
-[Epoch 0/1] step 11450/23862 (2.8 it/s)
-[Epoch 0/1] step 11500/23862 (2.9 it/s)
-[Epoch 0/1] step 11550/23862 (2.9 it/s)
-[Epoch 0/1] step 11600/23862 (2.9 it/s)
-[Epoch 0/1] step 11650/23862 (2.9 it/s)
-[Epoch 0/1] step 11700/23862 (2.9 it/s)
-[Epoch 0/1] step 11750/23862 (2.9 it/s)
-[Epoch 0/1] step 11800/23862 (2.9 it/s)
-[Epoch 0/1] step 11850/23862 (2.9 it/s)
-[Epoch 0/1] step 11900/23862 (2.9 it/s)
-[Epoch 0/1] step 11950/23862 (2.9 it/s)
-[Epoch 0/1] step 12000/23862 (2.9 it/s)
-[Epoch 0/1] step 12050/23862 (2.9 it/s)
-[Epoch 0/1] step 12100/23862 (2.9 it/s)
-[Epoch 0/1] step 12150/23862 (2.9 it/s)
-[Epoch 0/1] step 12200/23862 (2.9 it/s)
-[Epoch 0/1] step 12250/23862 (2.9 it/s)
-[Epoch 0/1] step 12300/23862 (2.9 it/s)
-[Epoch 0/1] step 12350/23862 (2.9 it/s)
-[Epoch 0/1] step 12400/23862 (2.9 it/s)
-[Epoch 0/1] step 12450/23862 (2.9 it/s)
-[Epoch 0/1] step 12500/23862 (2.9 it/s)
-[Epoch 0/1] step 12550/23862 (2.9 it/s)
-[Epoch 0/1] step 12600/23862 (2.9 it/s)
-[Epoch 0/1] step 12650/23862 (2.9 it/s)
-[Epoch 0/1] step 12700/23862 (2.9 it/s)
-[Epoch 0/1] step 12750/23862 (2.9 it/s)
-[Epoch 0/1] step 12800/23862 (2.9 it/s)
-[Epoch 0/1] step 12850/23862 (2.9 it/s)
-[Epoch 0/1] step 12900/23862 (2.9 it/s)
-[Epoch 0/1] step 12950/23862 (2.9 it/s)
-[Epoch 0/1] step 13000/23862 (2.9 it/s)
-[Epoch 0/1] step 13050/23862 (2.9 it/s)
-[Epoch 0/1] step 13100/23862 (2.9 it/s)
-[Epoch 0/1] step 13150/23862 (2.9 it/s)
-[Epoch 0/1] step 13200/23862 (2.9 it/s)
-[Epoch 0/1] step 13250/23862 (2.9 it/s)
-[Epoch 0/1] step 13300/23862 (2.9 it/s)
-[Epoch 0/1] step 13350/23862 (2.9 it/s)
-[Epoch 0/1] step 13400/23862 (2.9 it/s)
-[Epoch 0/1] step 13450/23862 (2.9 it/s)
-[Epoch 0/1] step 13500/23862 (2.9 it/s)
-[Epoch 0/1] step 13550/23862 (2.9 it/s)
-[Epoch 0/1] step 13600/23862 (2.9 it/s)
-[Epoch 0/1] step 13650/23862 (2.9 it/s)
-[Epoch 0/1] step 13700/23862 (2.9 it/s)
-[Epoch 0/1] step 13750/23862 (2.9 it/s)
-[Epoch 0/1] step 13800/23862 (2.9 it/s)
-[Epoch 0/1] step 13850/23862 (2.9 it/s)
-[Epoch 0/1] step 13900/23862 (2.9 it/s)
-[Epoch 0/1] step 13950/23862 (2.9 it/s)
-[Epoch 0/1] step 14000/23862 (2.9 it/s)
-[Epoch 0/1] step 14050/23862 (2.8 it/s)
-[Epoch 0/1] step 14100/23862 (2.8 it/s)
-[Epoch 0/1] step 14150/23862 (2.8 it/s)
-[Epoch 0/1] step 14200/23862 (2.8 it/s)
-[Epoch 0/1] step 14250/23862 (2.8 it/s)
-[Epoch 0/1] step 14300/23862 (2.8 it/s)
-[Epoch 0/1] step 14350/23862 (2.8 it/s)
-[Epoch 0/1] step 14400/23862 (2.8 it/s)
-[Epoch 0/1] step 14450/23862 (2.8 it/s)
-[Epoch 0/1] step 14500/23862 (2.8 it/s)
-[Epoch 0/1] step 14550/23862 (2.8 it/s)
-[Epoch 0/1] step 14600/23862 (2.8 it/s)
-[Epoch 0/1] step 14650/23862 (2.8 it/s)
-[Epoch 0/1] step 14700/23862 (2.8 it/s)
-[Epoch 0/1] step 14750/23862 (2.8 it/s)
-[Epoch 0/1] step 14800/23862 (2.8 it/s)
-[Epoch 0/1] step 14850/23862 (2.8 it/s)
-[Epoch 0/1] step 14900/23862 (2.8 it/s)
-[Epoch 0/1] step 14950/23862 (2.8 it/s)
-[Epoch 0/1] step 15000/23862 (2.8 it/s)
-[Epoch 0/1] step 15050/23862 (2.8 it/s)
-[Epoch 0/1] step 15100/23862 (2.8 it/s)
-[Epoch 0/1] step 15150/23862 (2.8 it/s)
-[Epoch 0/1] step 15200/23862 (2.8 it/s)
-[Epoch 0/1] step 15250/23862 (2.8 it/s)
-[Epoch 0/1] step 15300/23862 (2.8 it/s)
-[Epoch 0/1] step 15350/23862 (2.8 it/s)
-[Epoch 0/1] step 15400/23862 (2.8 it/s)
-[Epoch 0/1] step 15450/23862 (2.8 it/s)
-[Epoch 0/1] step 15500/23862 (2.8 it/s)
-[Epoch 0/1] step 15550/23862 (2.8 it/s)
-[Epoch 0/1] step 15600/23862 (2.8 it/s)
-[Epoch 0/1] step 15650/23862 (2.8 it/s)
-[Epoch 0/1] step 15700/23862 (2.8 it/s)
-[Epoch 0/1] step 15750/23862 (2.8 it/s)
-[Epoch 0/1] step 15800/23862 (2.8 it/s)
-[Epoch 0/1] step 15850/23862 (2.8 it/s)
-[Epoch 0/1] step 15900/23862 (2.8 it/s)
-[Epoch 0/1] step 15950/23862 (2.8 it/s)
-[Epoch 0/1] step 16000/23862 (2.8 it/s)
-[Epoch 0/1] step 16050/23862 (2.8 it/s)
-[Epoch 0/1] step 16100/23862 (2.8 it/s)
-[Epoch 0/1] step 16150/23862 (2.8 it/s)
-[Epoch 0/1] step 16200/23862 (2.8 it/s)
-[Epoch 0/1] step 16250/23862 (2.8 it/s)
-[Epoch 0/1] step 16300/23862 (2.8 it/s)
-[Epoch 0/1] step 16350/23862 (2.8 it/s)
-[Epoch 0/1] step 16400/23862 (2.8 it/s)
-[Epoch 0/1] step 16450/23862 (2.8 it/s)
-[Epoch 0/1] step 16500/23862 (2.8 it/s)
-[Epoch 0/1] step 16550/23862 (2.8 it/s)
-[Epoch 0/1] step 16600/23862 (2.8 it/s)
-[Epoch 0/1] step 16650/23862 (2.8 it/s)
-[Epoch 0/1] step 16700/23862 (2.8 it/s)
-[Epoch 0/1] step 16750/23862 (2.8 it/s)
-[Epoch 0/1] step 16800/23862 (2.8 it/s)
-[Epoch 0/1] step 16850/23862 (2.8 it/s)
-[Epoch 0/1] step 16900/23862 (2.8 it/s)
-[Epoch 0/1] step 16950/23862 (2.8 it/s)
-[Epoch 0/1] step 17000/23862 (2.8 it/s)
-[Epoch 0/1] step 17050/23862 (2.8 it/s)
-[Epoch 0/1] step 17100/23862 (2.8 it/s)
-[Epoch 0/1] step 17150/23862 (2.8 it/s)
-[Epoch 0/1] step 17200/23862 (2.8 it/s)
-[Epoch 0/1] step 17250/23862 (2.8 it/s)
-[Epoch 0/1] step 17300/23862 (2.8 it/s)
-[Epoch 0/1] step 17350/23862 (2.8 it/s)
-[Epoch 0/1] step 17400/23862 (2.8 it/s)
-[Epoch 0/1] step 17450/23862 (2.8 it/s)
-[Epoch 0/1] step 17500/23862 (2.8 it/s)
-[Epoch 0/1] step 17550/23862 (2.8 it/s)
-[Epoch 0/1] step 17600/23862 (2.8 it/s)
-[Epoch 0/1] step 17650/23862 (2.8 it/s)
-[Epoch 0/1] step 17700/23862 (2.8 it/s)
-[Epoch 0/1] step 17750/23862 (2.8 it/s)
-[Epoch 0/1] step 17800/23862 (2.8 it/s)
-[Epoch 0/1] step 17850/23862 (2.8 it/s)
-[Epoch 0/1] step 17900/23862 (2.8 it/s)
-[Epoch 0/1] step 17950/23862 (2.8 it/s)
-[Epoch 0/1] step 18000/23862 (2.8 it/s)
-[Epoch 0/1] step 18050/23862 (2.8 it/s)
-[Epoch 0/1] step 18100/23862 (2.8 it/s)
-[Epoch 0/1] step 18150/23862 (2.8 it/s)
-[Epoch 0/1] step 18200/23862 (2.8 it/s)
-[Epoch 0/1] step 18250/23862 (2.8 it/s)
-[Epoch 0/1] step 18300/23862 (2.8 it/s)
-[Epoch 0/1] step 18350/23862 (2.8 it/s)
-[Epoch 0/1] step 18400/23862 (2.8 it/s)
-[Epoch 0/1] step 18450/23862 (2.8 it/s)
-[Epoch 0/1] step 18500/23862 (2.8 it/s)
-[Epoch 0/1] step 18550/23862 (2.8 it/s)
-[Epoch 0/1] step 18600/23862 (2.8 it/s)
-[Epoch 0/1] step 18650/23862 (2.8 it/s)
-[Epoch 0/1] step 18700/23862 (2.8 it/s)
-[Epoch 0/1] step 18750/23862 (2.8 it/s)
-[Epoch 0/1] step 18800/23862 (2.8 it/s)
-[Epoch 0/1] step 18850/23862 (2.8 it/s)
-[Epoch 0/1] step 18900/23862 (2.8 it/s)
-[Epoch 0/1] step 18950/23862 (2.8 it/s)
-[Epoch 0/1] step 19000/23862 (2.8 it/s)
-[Epoch 0/1] step 19050/23862 (2.8 it/s)
-[Epoch 0/1] step 19100/23862 (2.8 it/s)
-[Epoch 0/1] step 19150/23862 (2.8 it/s)
-[Epoch 0/1] step 19200/23862 (2.8 it/s)
-[Epoch 0/1] step 19250/23862 (2.8 it/s)
-[Epoch 0/1] step 19300/23862 (2.8 it/s)
-[Epoch 0/1] step 19350/23862 (2.8 it/s)
-[Epoch 0/1] step 19400/23862 (2.8 it/s)
-[Epoch 0/1] step 19450/23862 (2.8 it/s)
-[Epoch 0/1] step 19500/23862 (2.8 it/s)
-[Epoch 0/1] step 19550/23862 (2.8 it/s)
-[Epoch 0/1] step 19600/23862 (2.8 it/s)
-[Epoch 0/1] step 19650/23862 (2.8 it/s)
-[Epoch 0/1] step 19700/23862 (2.8 it/s)
-[Epoch 0/1] step 19750/23862 (2.8 it/s)
-[Epoch 0/1] step 19800/23862 (2.8 it/s)
-[Epoch 0/1] step 19850/23862 (2.8 it/s)
-[Epoch 0/1] step 19900/23862 (2.8 it/s)
-[Epoch 0/1] step 19950/23862 (2.8 it/s)
-[Epoch 0/1] step 20000/23862 (2.8 it/s)
-[Epoch 0/1] step 20050/23862 (2.8 it/s)
-[Epoch 0/1] step 20100/23862 (2.8 it/s)
-[Epoch 0/1] step 20150/23862 (2.8 it/s)
-[Epoch 0/1] step 20200/23862 (2.8 it/s)
-[Epoch 0/1] step 20250/23862 (2.8 it/s)
-[Epoch 0/1] step 20300/23862 (2.8 it/s)
-[Epoch 0/1] step 20350/23862 (2.8 it/s)
-[Epoch 0/1] step 20400/23862 (2.8 it/s)
-[Epoch 0/1] step 20450/23862 (2.8 it/s)
-[Epoch 0/1] step 20500/23862 (2.8 it/s)
-[Epoch 0/1] step 20550/23862 (2.8 it/s)
-[Epoch 0/1] step 20600/23862 (2.8 it/s)
-[Epoch 0/1] step 20650/23862 (2.8 it/s)
-[Epoch 0/1] step 20700/23862 (2.8 it/s)
-[Epoch 0/1] step 20750/23862 (2.8 it/s)
-[Epoch 0/1] step 20800/23862 (2.8 it/s)
-[Epoch 0/1] step 20850/23862 (2.8 it/s)
-[Epoch 0/1] step 20900/23862 (2.8 it/s)
-[Epoch 0/1] step 20950/23862 (2.8 it/s)
-[Epoch 0/1] step 21000/23862 (2.8 it/s)
-[Epoch 0/1] step 21050/23862 (2.8 it/s)
-[Epoch 0/1] step 21100/23862 (2.8 it/s)
-[Epoch 0/1] step 21150/23862 (2.8 it/s)
-[Epoch 0/1] step 21200/23862 (2.8 it/s)
-[Epoch 0/1] step 21250/23862 (2.8 it/s)
-[Epoch 0/1] step 21300/23862 (2.8 it/s)
-[Epoch 0/1] step 21350/23862 (2.8 it/s)
-[Epoch 0/1] step 21400/23862 (2.8 it/s)
-[Epoch 0/1] step 21450/23862 (2.8 it/s)
-[Epoch 0/1] step 21500/23862 (2.8 it/s)
-[Epoch 0/1] step 21550/23862 (2.8 it/s)
-[Epoch 0/1] step 21600/23862 (2.8 it/s)
-[Epoch 0/1] step 21650/23862 (2.8 it/s)
-[Epoch 0/1] step 21700/23862 (2.8 it/s)
-[Epoch 0/1] step 21750/23862 (2.8 it/s)
-[Epoch 0/1] step 21800/23862 (2.8 it/s)
-[Epoch 0/1] step 21850/23862 (2.8 it/s)
-[Epoch 0/1] step 21900/23862 (2.8 it/s)
-[Epoch 0/1] step 21950/23862 (2.8 it/s)
-[Epoch 0/1] step 22000/23862 (2.8 it/s)
-[Epoch 0/1] step 22050/23862 (2.8 it/s)
-[Epoch 0/1] step 22100/23862 (2.8 it/s)
-[Epoch 0/1] step 22150/23862 (2.8 it/s)
-[Epoch 0/1] step 22200/23862 (2.8 it/s)
-[Epoch 0/1] step 22250/23862 (2.8 it/s)
-[Epoch 0/1] step 22300/23862 (2.8 it/s)
-[Epoch 0/1] step 22350/23862 (2.8 it/s)
-[Epoch 0/1] step 22400/23862 (2.8 it/s)
-[Epoch 0/1] step 22450/23862 (2.8 it/s)
-[Epoch 0/1] step 22500/23862 (2.8 it/s)
-[Epoch 0/1] step 22550/23862 (2.8 it/s)
-[Epoch 0/1] step 22600/23862 (2.8 it/s)
-[Epoch 0/1] step 22650/23862 (2.8 it/s)
-[Epoch 0/1] step 22700/23862 (2.8 it/s)
-[Epoch 0/1] step 22750/23862 (2.8 it/s)
-[Epoch 0/1] step 22800/23862 (2.8 it/s)
-[Epoch 0/1] step 22850/23862 (2.8 it/s)
-[Epoch 0/1] step 22900/23862 (2.8 it/s)
-[Epoch 0/1] step 22950/23862 (2.8 it/s)
-[Epoch 0/1] step 23000/23862 (2.8 it/s)
-[Epoch 0/1] step 23050/23862 (2.8 it/s)
-[Epoch 0/1] step 23100/23862 (2.8 it/s)
-[Epoch 0/1] step 23150/23862 (2.8 it/s)
-[Epoch 0/1] step 23200/23862 (2.8 it/s)
-[Epoch 0/1] step 23250/23862 (2.8 it/s)
-[Epoch 0/1] step 23300/23862 (2.8 it/s)
-[Epoch 0/1] step 23350/23862 (2.8 it/s)
-[Epoch 0/1] step 23400/23862 (2.8 it/s)
-[Epoch 0/1] step 23450/23862 (2.8 it/s)
-[Epoch 0/1] step 23500/23862 (2.8 it/s)
-[Epoch 0/1] step 23550/23862 (2.8 it/s)
-[Epoch 0/1] step 23600/23862 (2.8 it/s)
-[Epoch 0/1] step 23650/23862 (2.8 it/s)
-[Epoch 0/1] step 23700/23862 (2.8 it/s)
-[Epoch 0/1] step 23750/23862 (2.8 it/s)
-[Epoch 0/1] step 23800/23862 (2.8 it/s)
-[Epoch 0/1] step 23850/23862 (2.8 it/s)
-[Epoch 0/1] done in 8606.8s
-23:34:32 | INFO  | checkpoint_~|   Checking for non PyTorch modules to save
-23:34:32 | INFO  | checkpoint_~|   Checking for Wandb params to save
-23:34:32 | OK    | checkpoint_~| ✓ Wandb params save check complete
-23:34:36 | INFO  | checkpoint_~|   Checking for non PyTorch modules to save
-23:34:36 | INFO  | checkpoint_~|   Checking for Wandb params to save
-23:34:36 | OK    | checkpoint_~| ✓ Wandb params save check complete
+[Epoch 0/1] step 50/23862 (2.7 it/s)
+[Epoch 0/1] step 100/23862 (3.0 it/s)
+[Epoch 0/1] step 150/23862 (3.1 it/s)
+[Epoch 0/1] step 200/23862 (3.2 it/s)
+[Epoch 0/1] step 250/23862 (3.2 it/s)
+[Epoch 0/1] step 300/23862 (3.2 it/s)
+[Epoch 0/1] step 350/23862 (3.3 it/s)
+[Epoch 0/1] step 400/23862 (3.3 it/s)
+[Epoch 0/1] step 450/23862 (3.3 it/s)
+[Epoch 0/1] step 500/23862 (3.3 it/s)
+[Epoch 0/1] step 550/23862 (3.3 it/s)
+[Epoch 0/1] step 600/23862 (3.3 it/s)
+[Epoch 0/1] step 650/23862 (3.3 it/s)
+[Epoch 0/1] step 700/23862 (3.3 it/s)
+[Epoch 0/1] step 750/23862 (3.3 it/s)
+[Epoch 0/1] step 800/23862 (3.3 it/s)
+[Epoch 0/1] step 850/23862 (3.3 it/s)
+[Epoch 0/1] step 900/23862 (3.3 it/s)
+[Epoch 0/1] step 950/23862 (3.3 it/s)
+[Epoch 0/1] step 1000/23862 (3.3 it/s)
+[Epoch 0/1] step 1050/23862 (3.4 it/s)
+[Epoch 0/1] step 1100/23862 (3.4 it/s)
+[Epoch 0/1] step 1150/23862 (3.4 it/s)
+[Epoch 0/1] step 1200/23862 (3.4 it/s)
+[Epoch 0/1] step 1250/23862 (3.4 it/s)
+[Epoch 0/1] step 1300/23862 (3.4 it/s)
+[Epoch 0/1] step 1350/23862 (3.4 it/s)
+[Epoch 0/1] step 1400/23862 (3.4 it/s)
+[Epoch 0/1] step 1450/23862 (3.4 it/s)
+[Epoch 0/1] step 1500/23862 (3.4 it/s)
+[Epoch 0/1] step 1550/23862 (3.4 it/s)
+[Epoch 0/1] step 1600/23862 (3.4 it/s)
+[Epoch 0/1] step 1650/23862 (3.4 it/s)
+[Epoch 0/1] step 1700/23862 (3.4 it/s)
+[Epoch 0/1] step 1750/23862 (3.4 it/s)
+[Epoch 0/1] step 1800/23862 (3.4 it/s)
+[Epoch 0/1] step 1850/23862 (3.4 it/s)
+[Epoch 0/1] step 1900/23862 (3.4 it/s)
+[Epoch 0/1] step 1950/23862 (3.4 it/s)
+[Epoch 0/1] step 2000/23862 (3.4 it/s)
+[Epoch 0/1] step 2050/23862 (3.4 it/s)
+[Epoch 0/1] step 2100/23862 (3.4 it/s)
+[Epoch 0/1] step 2150/23862 (3.4 it/s)
+[Epoch 0/1] step 2200/23862 (3.4 it/s)
+[Epoch 0/1] step 2250/23862 (3.4 it/s)
+[Epoch 0/1] step 2300/23862 (3.4 it/s)
+[Epoch 0/1] step 2350/23862 (3.4 it/s)
+[Epoch 0/1] step 2400/23862 (3.4 it/s)
+[Epoch 0/1] step 2450/23862 (3.4 it/s)
+[Epoch 0/1] step 2500/23862 (3.4 it/s)
+[Epoch 0/1] step 2550/23862 (3.4 it/s)
+[Epoch 0/1] step 2600/23862 (3.4 it/s)
+[Epoch 0/1] step 2650/23862 (3.4 it/s)
+[Epoch 0/1] step 2700/23862 (3.4 it/s)
+[Epoch 0/1] step 2750/23862 (3.4 it/s)
+[Epoch 0/1] step 2800/23862 (3.4 it/s)
+[Epoch 0/1] step 2850/23862 (3.4 it/s)
+[Epoch 0/1] step 2900/23862 (3.4 it/s)
+[Epoch 0/1] step 2950/23862 (3.4 it/s)
+[Epoch 0/1] step 3000/23862 (3.4 it/s)
+[Epoch 0/1] step 3050/23862 (3.4 it/s)
+[Epoch 0/1] step 3100/23862 (3.4 it/s)
+[Epoch 0/1] step 3150/23862 (3.4 it/s)
+[Epoch 0/1] step 3200/23862 (3.4 it/s)
+[Epoch 0/1] step 3250/23862 (3.4 it/s)
+[Epoch 0/1] step 3300/23862 (3.4 it/s)
+[Epoch 0/1] step 3350/23862 (3.4 it/s)
+[Epoch 0/1] step 3400/23862 (3.4 it/s)
+[Epoch 0/1] step 3450/23862 (3.4 it/s)
+[Epoch 0/1] step 3500/23862 (3.4 it/s)
+[Epoch 0/1] step 3550/23862 (3.4 it/s)
+[Epoch 0/1] step 3600/23862 (3.4 it/s)
+[Epoch 0/1] step 3650/23862 (3.4 it/s)
+[Epoch 0/1] step 3700/23862 (3.4 it/s)
+[Epoch 0/1] step 3750/23862 (3.4 it/s)
+[Epoch 0/1] step 3800/23862 (3.4 it/s)
+[Epoch 0/1] step 3850/23862 (3.4 it/s)
+[Epoch 0/1] step 3900/23862 (3.4 it/s)
+[Epoch 0/1] step 3950/23862 (3.4 it/s)
+[Epoch 0/1] step 4000/23862 (3.4 it/s)
+[Epoch 0/1] step 4050/23862 (3.4 it/s)
+[Epoch 0/1] step 4100/23862 (3.4 it/s)
+[Epoch 0/1] step 4150/23862 (3.4 it/s)
+[Epoch 0/1] step 4200/23862 (3.4 it/s)
+[Epoch 0/1] step 4250/23862 (3.4 it/s)
+[Epoch 0/1] step 4300/23862 (3.4 it/s)
+[Epoch 0/1] step 4350/23862 (3.4 it/s)
+[Epoch 0/1] step 4400/23862 (3.4 it/s)
+[Epoch 0/1] step 4450/23862 (3.4 it/s)
+[Epoch 0/1] step 4500/23862 (3.4 it/s)
+[Epoch 0/1] step 4550/23862 (3.4 it/s)
+[Epoch 0/1] step 4600/23862 (3.4 it/s)
+[Epoch 0/1] step 4650/23862 (3.4 it/s)
+[Epoch 0/1] step 4700/23862 (3.4 it/s)
+[Epoch 0/1] step 4750/23862 (3.4 it/s)
+[Epoch 0/1] step 4800/23862 (3.4 it/s)
+[Epoch 0/1] step 4850/23862 (3.4 it/s)
+[Epoch 0/1] step 4900/23862 (3.4 it/s)
+[Epoch 0/1] step 4950/23862 (3.4 it/s)
+[Epoch 0/1] step 5000/23862 (3.4 it/s)
+[Epoch 0/1] step 5050/23862 (3.4 it/s)
+[Epoch 0/1] step 5100/23862 (3.4 it/s)
+[Epoch 0/1] step 5150/23862 (3.4 it/s)
+[Epoch 0/1] step 5200/23862 (3.4 it/s)
+[Epoch 0/1] step 5250/23862 (3.4 it/s)
+[Epoch 0/1] step 5300/23862 (3.4 it/s)
+[Epoch 0/1] step 5350/23862 (3.4 it/s)
+[Epoch 0/1] step 5400/23862 (3.4 it/s)
+[Epoch 0/1] step 5450/23862 (3.4 it/s)
+[Epoch 0/1] step 5500/23862 (3.4 it/s)
+[Epoch 0/1] step 5550/23862 (3.4 it/s)
+[Epoch 0/1] step 5600/23862 (3.4 it/s)
+[Epoch 0/1] step 5650/23862 (3.4 it/s)
+[Epoch 0/1] step 5700/23862 (3.4 it/s)
+[Epoch 0/1] step 5750/23862 (3.4 it/s)
+[Epoch 0/1] step 5800/23862 (3.4 it/s)
+[Epoch 0/1] step 5850/23862 (3.4 it/s)
+[Epoch 0/1] step 5900/23862 (3.4 it/s)
+[Epoch 0/1] step 5950/23862 (3.4 it/s)
+[Epoch 0/1] step 6000/23862 (3.4 it/s)
+[Epoch 0/1] step 6050/23862 (3.4 it/s)
+[Epoch 0/1] step 6100/23862 (3.4 it/s)
+[Epoch 0/1] step 6150/23862 (3.4 it/s)
+[Epoch 0/1] step 6200/23862 (3.4 it/s)
+[Epoch 0/1] step 6250/23862 (3.4 it/s)
+[Epoch 0/1] step 6300/23862 (3.4 it/s)
+[Epoch 0/1] step 6350/23862 (3.4 it/s)
+[Epoch 0/1] step 6400/23862 (3.4 it/s)
+[Epoch 0/1] step 6450/23862 (3.4 it/s)
+[Epoch 0/1] step 6500/23862 (3.4 it/s)
+[Epoch 0/1] step 6550/23862 (3.4 it/s)
+[Epoch 0/1] step 6600/23862 (3.4 it/s)
+[Epoch 0/1] step 6650/23862 (3.4 it/s)
+[Epoch 0/1] step 6700/23862 (3.4 it/s)
+[Epoch 0/1] step 6750/23862 (3.4 it/s)
+[Epoch 0/1] step 6800/23862 (3.4 it/s)
+[Epoch 0/1] step 6850/23862 (3.4 it/s)
+[Epoch 0/1] step 6900/23862 (3.4 it/s)
+[Epoch 0/1] step 6950/23862 (3.4 it/s)
+[Epoch 0/1] step 7000/23862 (3.4 it/s)
+[Epoch 0/1] step 7050/23862 (3.4 it/s)
+[Epoch 0/1] step 7100/23862 (3.4 it/s)
+[Epoch 0/1] step 7150/23862 (3.4 it/s)
+[Epoch 0/1] step 7200/23862 (3.4 it/s)
+[Epoch 0/1] step 7250/23862 (3.4 it/s)
+[Epoch 0/1] step 7300/23862 (3.4 it/s)
+[Epoch 0/1] step 7350/23862 (3.4 it/s)
+[Epoch 0/1] step 7400/23862 (3.4 it/s)
+[Epoch 0/1] step 7450/23862 (3.4 it/s)
+[Epoch 0/1] step 7500/23862 (3.4 it/s)
+[Epoch 0/1] step 7550/23862 (3.4 it/s)
+[Epoch 0/1] step 7600/23862 (3.4 it/s)
+[Epoch 0/1] step 7650/23862 (3.4 it/s)
+[Epoch 0/1] step 7700/23862 (3.4 it/s)
+[Epoch 0/1] step 7750/23862 (3.4 it/s)
+[Epoch 0/1] step 7800/23862 (3.4 it/s)
+[Epoch 0/1] step 7850/23862 (3.4 it/s)
+[Epoch 0/1] step 7900/23862 (3.4 it/s)
+[Epoch 0/1] step 7950/23862 (3.4 it/s)
+[Epoch 0/1] step 8000/23862 (3.4 it/s)
+[Epoch 0/1] step 8050/23862 (3.4 it/s)
+[Epoch 0/1] step 8100/23862 (3.4 it/s)
+[Epoch 0/1] step 8150/23862 (3.4 it/s)
+[Epoch 0/1] step 8200/23862 (3.4 it/s)
+[Epoch 0/1] step 8250/23862 (3.4 it/s)
+[Epoch 0/1] step 8300/23862 (3.4 it/s)
+[Epoch 0/1] step 8350/23862 (3.4 it/s)
+[Epoch 0/1] step 8400/23862 (3.4 it/s)
+[Epoch 0/1] step 8450/23862 (3.4 it/s)
+[Epoch 0/1] step 8500/23862 (3.4 it/s)
+[Epoch 0/1] step 8550/23862 (3.4 it/s)
+[Epoch 0/1] step 8600/23862 (3.4 it/s)
+[Epoch 0/1] step 8650/23862 (3.4 it/s)
+[Epoch 0/1] step 8700/23862 (3.4 it/s)
+[Epoch 0/1] step 8750/23862 (3.4 it/s)
+[Epoch 0/1] step 8800/23862 (3.4 it/s)
+[Epoch 0/1] step 8850/23862 (3.4 it/s)
+[Epoch 0/1] step 8900/23862 (3.4 it/s)
+[Epoch 0/1] step 8950/23862 (3.4 it/s)
+[Epoch 0/1] step 9000/23862 (3.4 it/s)
+[Epoch 0/1] step 9050/23862 (3.4 it/s)
+[Epoch 0/1] step 9100/23862 (3.4 it/s)
+[Epoch 0/1] step 9150/23862 (3.4 it/s)
+[Epoch 0/1] step 9200/23862 (3.4 it/s)
+[Epoch 0/1] step 9250/23862 (3.4 it/s)
+[Epoch 0/1] step 9300/23862 (3.4 it/s)
+[Epoch 0/1] step 9350/23862 (3.4 it/s)
+[Epoch 0/1] step 9400/23862 (3.4 it/s)
+[Epoch 0/1] step 9450/23862 (3.4 it/s)
+[Epoch 0/1] step 9500/23862 (3.4 it/s)
+[Epoch 0/1] step 9550/23862 (3.4 it/s)
+[Epoch 0/1] step 9600/23862 (3.4 it/s)
+[Epoch 0/1] step 9650/23862 (3.4 it/s)
+[Epoch 0/1] step 9700/23862 (3.4 it/s)
+[Epoch 0/1] step 9750/23862 (3.4 it/s)
+[Epoch 0/1] step 9800/23862 (3.4 it/s)
+[Epoch 0/1] step 9850/23862 (3.4 it/s)
+[Epoch 0/1] step 9900/23862 (3.4 it/s)
+[Epoch 0/1] step 9950/23862 (3.4 it/s)
+[Epoch 0/1] step 10000/23862 (3.4 it/s)
+[Epoch 0/1] step 10050/23862 (3.4 it/s)
+[Epoch 0/1] step 10100/23862 (3.4 it/s)
+[Epoch 0/1] step 10150/23862 (3.4 it/s)
+[Epoch 0/1] step 10200/23862 (3.4 it/s)
+[Epoch 0/1] step 10250/23862 (3.4 it/s)
+[Epoch 0/1] step 10300/23862 (3.4 it/s)
+[Epoch 0/1] step 10350/23862 (3.4 it/s)
+[Epoch 0/1] step 10400/23862 (3.4 it/s)
+[Epoch 0/1] step 10450/23862 (3.4 it/s)
+[Epoch 0/1] step 10500/23862 (3.4 it/s)
+[Epoch 0/1] step 10550/23862 (3.4 it/s)
+[Epoch 0/1] step 10600/23862 (3.4 it/s)
+[Epoch 0/1] step 10650/23862 (3.4 it/s)
+[Epoch 0/1] step 10700/23862 (3.4 it/s)
+[Epoch 0/1] step 10750/23862 (3.4 it/s)
+[Epoch 0/1] step 10800/23862 (3.4 it/s)
+[Epoch 0/1] step 10850/23862 (3.4 it/s)
+[Epoch 0/1] step 10900/23862 (3.4 it/s)
+[Epoch 0/1] step 10950/23862 (3.4 it/s)
+[Epoch 0/1] step 11000/23862 (3.4 it/s)
+[Epoch 0/1] step 11050/23862 (3.4 it/s)
+[Epoch 0/1] step 11100/23862 (3.4 it/s)
+[Epoch 0/1] step 11150/23862 (3.4 it/s)
+[Epoch 0/1] step 11200/23862 (3.4 it/s)
+[Epoch 0/1] step 11250/23862 (3.4 it/s)
+[Epoch 0/1] step 11300/23862 (3.4 it/s)
+[Epoch 0/1] step 11350/23862 (3.4 it/s)
+[Epoch 0/1] step 11400/23862 (3.4 it/s)
+[Epoch 0/1] step 11450/23862 (3.4 it/s)
+[Epoch 0/1] step 11500/23862 (3.4 it/s)
+[Epoch 0/1] step 11550/23862 (3.4 it/s)
+[Epoch 0/1] step 11600/23862 (3.4 it/s)
+[Epoch 0/1] step 11650/23862 (3.4 it/s)
+[Epoch 0/1] step 11700/23862 (3.4 it/s)
+[Epoch 0/1] step 11750/23862 (3.4 it/s)
+[Epoch 0/1] step 11800/23862 (3.4 it/s)
+[Epoch 0/1] step 11850/23862 (3.4 it/s)
+[Epoch 0/1] step 11900/23862 (3.4 it/s)
+[Epoch 0/1] step 11950/23862 (3.4 it/s)
+[Epoch 0/1] step 12000/23862 (3.4 it/s)
+[Epoch 0/1] step 12050/23862 (3.4 it/s)
+[Epoch 0/1] step 12100/23862 (3.3 it/s)
+[Epoch 0/1] step 12150/23862 (3.3 it/s)
+[Epoch 0/1] step 12200/23862 (3.3 it/s)
+[Epoch 0/1] step 12250/23862 (3.3 it/s)
+[Epoch 0/1] step 12300/23862 (3.3 it/s)
+[Epoch 0/1] step 12350/23862 (3.3 it/s)
+[Epoch 0/1] step 12400/23862 (3.3 it/s)
+[Epoch 0/1] step 12450/23862 (3.3 it/s)
+[Epoch 0/1] step 12500/23862 (3.3 it/s)
+[Epoch 0/1] step 12550/23862 (3.3 it/s)
+[Epoch 0/1] step 12600/23862 (3.3 it/s)
+[Epoch 0/1] step 12650/23862 (3.3 it/s)
+[Epoch 0/1] step 12700/23862 (3.3 it/s)
+[Epoch 0/1] step 12750/23862 (3.3 it/s)
+[Epoch 0/1] step 12800/23862 (3.3 it/s)
+[Epoch 0/1] step 12850/23862 (3.3 it/s)
+[Epoch 0/1] step 12900/23862 (3.3 it/s)
+[Epoch 0/1] step 12950/23862 (3.3 it/s)
+[Epoch 0/1] step 13000/23862 (3.3 it/s)
+[Epoch 0/1] step 13050/23862 (3.3 it/s)
+[Epoch 0/1] step 13100/23862 (3.3 it/s)
+[Epoch 0/1] step 13150/23862 (3.3 it/s)
+[Epoch 0/1] step 13200/23862 (3.3 it/s)
+[Epoch 0/1] step 13250/23862 (3.3 it/s)
+[Epoch 0/1] step 13300/23862 (3.3 it/s)
+[Epoch 0/1] step 13350/23862 (3.3 it/s)
+[Epoch 0/1] step 13400/23862 (3.3 it/s)
+[Epoch 0/1] step 13450/23862 (3.3 it/s)
+[Epoch 0/1] step 13500/23862 (3.3 it/s)
+[Epoch 0/1] step 13550/23862 (3.3 it/s)
+[Epoch 0/1] step 13600/23862 (3.3 it/s)
+[Epoch 0/1] step 13650/23862 (3.3 it/s)
+[Epoch 0/1] step 13700/23862 (3.3 it/s)
+[Epoch 0/1] step 13750/23862 (3.3 it/s)
+[Epoch 0/1] step 13800/23862 (3.3 it/s)
+[Epoch 0/1] step 13850/23862 (3.3 it/s)
+[Epoch 0/1] step 13900/23862 (3.3 it/s)
+[Epoch 0/1] step 13950/23862 (3.3 it/s)
+[Epoch 0/1] step 14000/23862 (3.3 it/s)
+[Epoch 0/1] step 14050/23862 (3.3 it/s)
+[Epoch 0/1] step 14100/23862 (3.3 it/s)
+[Epoch 0/1] step 14150/23862 (3.3 it/s)
+[Epoch 0/1] step 14200/23862 (3.3 it/s)
+[Epoch 0/1] step 14250/23862 (3.3 it/s)
+[Epoch 0/1] step 14300/23862 (3.3 it/s)
+[Epoch 0/1] step 14350/23862 (3.3 it/s)
+[Epoch 0/1] step 14400/23862 (3.3 it/s)
+[Epoch 0/1] step 14450/23862 (3.3 it/s)
+[Epoch 0/1] step 14500/23862 (3.3 it/s)
+[Epoch 0/1] step 14550/23862 (3.3 it/s)
+[Epoch 0/1] step 14600/23862 (3.3 it/s)
+[Epoch 0/1] step 14650/23862 (3.3 it/s)
+[Epoch 0/1] step 14700/23862 (3.3 it/s)
+[Epoch 0/1] step 14750/23862 (3.3 it/s)
+[Epoch 0/1] step 14800/23862 (3.3 it/s)
+[Epoch 0/1] step 14850/23862 (3.3 it/s)
+[Epoch 0/1] step 14900/23862 (3.3 it/s)
+[Epoch 0/1] step 14950/23862 (3.3 it/s)
+[Epoch 0/1] step 15000/23862 (3.3 it/s)
+[Epoch 0/1] step 15050/23862 (3.3 it/s)
+[Epoch 0/1] step 15100/23862 (3.3 it/s)
+[Epoch 0/1] step 15150/23862 (3.3 it/s)
+[Epoch 0/1] step 15200/23862 (3.3 it/s)
+[Epoch 0/1] step 15250/23862 (3.3 it/s)
+[Epoch 0/1] step 15300/23862 (3.3 it/s)
+[Epoch 0/1] step 15350/23862 (3.3 it/s)
+[Epoch 0/1] step 15400/23862 (3.3 it/s)
+[Epoch 0/1] step 15450/23862 (3.3 it/s)
+[Epoch 0/1] step 15500/23862 (3.3 it/s)
+[Epoch 0/1] step 15550/23862 (3.3 it/s)
+[Epoch 0/1] step 15600/23862 (3.3 it/s)
+[Epoch 0/1] step 15650/23862 (3.3 it/s)
+[Epoch 0/1] step 15700/23862 (3.3 it/s)
+[Epoch 0/1] step 15750/23862 (3.3 it/s)
+[Epoch 0/1] step 15800/23862 (3.3 it/s)
+[Epoch 0/1] step 15850/23862 (3.3 it/s)
+[Epoch 0/1] step 15900/23862 (3.3 it/s)
+[Epoch 0/1] step 15950/23862 (3.3 it/s)
+[Epoch 0/1] step 16000/23862 (3.3 it/s)
+[Epoch 0/1] step 16050/23862 (3.3 it/s)
+[Epoch 0/1] step 16100/23862 (3.3 it/s)
+[Epoch 0/1] step 16150/23862 (3.3 it/s)
+[Epoch 0/1] step 16200/23862 (3.3 it/s)
+[Epoch 0/1] step 16250/23862 (3.3 it/s)
+[Epoch 0/1] step 16300/23862 (3.3 it/s)
+[Epoch 0/1] step 16350/23862 (3.3 it/s)
+[Epoch 0/1] step 16400/23862 (3.3 it/s)
+[Epoch 0/1] step 16450/23862 (3.3 it/s)
+[Epoch 0/1] step 16500/23862 (3.3 it/s)
+[Epoch 0/1] step 16550/23862 (3.3 it/s)
+[Epoch 0/1] step 16600/23862 (3.3 it/s)
+[Epoch 0/1] step 16650/23862 (3.3 it/s)
+[Epoch 0/1] step 16700/23862 (3.3 it/s)
+[Epoch 0/1] step 16750/23862 (3.3 it/s)
+[Epoch 0/1] step 16800/23862 (3.3 it/s)
+[Epoch 0/1] step 16850/23862 (3.3 it/s)
+[Epoch 0/1] step 16900/23862 (3.3 it/s)
+[Epoch 0/1] step 16950/23862 (3.3 it/s)
+[Epoch 0/1] step 17000/23862 (3.3 it/s)
+[Epoch 0/1] step 17050/23862 (3.3 it/s)
+[Epoch 0/1] step 17100/23862 (3.3 it/s)
+[Epoch 0/1] step 17150/23862 (3.3 it/s)
+[Epoch 0/1] step 17200/23862 (3.3 it/s)
+[Epoch 0/1] step 17250/23862 (3.3 it/s)
+[Epoch 0/1] step 17300/23862 (3.3 it/s)
+[Epoch 0/1] step 17350/23862 (3.3 it/s)
+[Epoch 0/1] step 17400/23862 (3.3 it/s)
+[Epoch 0/1] step 17450/23862 (3.3 it/s)
+[Epoch 0/1] step 17500/23862 (3.3 it/s)
+[Epoch 0/1] step 17550/23862 (3.3 it/s)
+[Epoch 0/1] step 17600/23862 (3.3 it/s)
+[Epoch 0/1] step 17650/23862 (3.3 it/s)
+[Epoch 0/1] step 17700/23862 (3.3 it/s)
+[Epoch 0/1] step 17750/23862 (3.3 it/s)
+[Epoch 0/1] step 17800/23862 (3.3 it/s)
+[Epoch 0/1] step 17850/23862 (3.3 it/s)
+[Epoch 0/1] step 17900/23862 (3.3 it/s)
+[Epoch 0/1] step 17950/23862 (3.3 it/s)
+[Epoch 0/1] step 18000/23862 (3.3 it/s)
+[Epoch 0/1] step 18050/23862 (3.3 it/s)
+[Epoch 0/1] step 18100/23862 (3.3 it/s)
+[Epoch 0/1] step 18150/23862 (3.3 it/s)
+[Epoch 0/1] step 18200/23862 (3.3 it/s)
+[Epoch 0/1] step 18250/23862 (3.3 it/s)
+[Epoch 0/1] step 18300/23862 (3.3 it/s)
+[Epoch 0/1] step 18350/23862 (3.3 it/s)
+[Epoch 0/1] step 18400/23862 (3.3 it/s)
+[Epoch 0/1] step 18450/23862 (3.3 it/s)
+[Epoch 0/1] step 18500/23862 (3.3 it/s)
+[Epoch 0/1] step 18550/23862 (3.3 it/s)
+[Epoch 0/1] step 18600/23862 (3.3 it/s)
+[Epoch 0/1] step 18650/23862 (3.3 it/s)
+[Epoch 0/1] step 18700/23862 (3.3 it/s)
+[Epoch 0/1] step 18750/23862 (3.3 it/s)
+[Epoch 0/1] step 18800/23862 (3.3 it/s)
+[Epoch 0/1] step 18850/23862 (3.3 it/s)
+[Epoch 0/1] step 18900/23862 (3.3 it/s)
+[Epoch 0/1] step 18950/23862 (3.3 it/s)
+[Epoch 0/1] step 19000/23862 (3.3 it/s)
+[Epoch 0/1] step 19050/23862 (3.3 it/s)
+[Epoch 0/1] step 19100/23862 (3.3 it/s)
+[Epoch 0/1] step 19150/23862 (3.3 it/s)
+[Epoch 0/1] step 19200/23862 (3.3 it/s)
+[Epoch 0/1] step 19250/23862 (3.3 it/s)
+[Epoch 0/1] step 19300/23862 (3.3 it/s)
+[Epoch 0/1] step 19350/23862 (3.3 it/s)
+[Epoch 0/1] step 19400/23862 (3.3 it/s)
+[Epoch 0/1] step 19450/23862 (3.3 it/s)
+[Epoch 0/1] step 19500/23862 (3.3 it/s)
+[Epoch 0/1] step 19550/23862 (3.3 it/s)
+[Epoch 0/1] step 19600/23862 (3.3 it/s)
+[Epoch 0/1] step 19650/23862 (3.3 it/s)
+[Epoch 0/1] step 19700/23862 (3.3 it/s)
+[Epoch 0/1] step 19750/23862 (3.3 it/s)
+[Epoch 0/1] step 19800/23862 (3.3 it/s)
+[Epoch 0/1] step 19850/23862 (3.3 it/s)
+[Epoch 0/1] step 19900/23862 (3.3 it/s)
+[Epoch 0/1] step 19950/23862 (3.3 it/s)
+[Epoch 0/1] step 20000/23862 (3.3 it/s)
+[Epoch 0/1] step 20050/23862 (3.3 it/s)
+[Epoch 0/1] step 20100/23862 (3.3 it/s)
+[Epoch 0/1] step 20150/23862 (3.3 it/s)
+[Epoch 0/1] step 20200/23862 (3.3 it/s)
+[Epoch 0/1] step 20250/23862 (3.3 it/s)
+[Epoch 0/1] step 20300/23862 (3.3 it/s)
+[Epoch 0/1] step 20350/23862 (3.3 it/s)
+[Epoch 0/1] step 20400/23862 (3.3 it/s)
+[Epoch 0/1] step 20450/23862 (3.3 it/s)
+[Epoch 0/1] step 20500/23862 (3.3 it/s)
+[Epoch 0/1] step 20550/23862 (3.3 it/s)
+[Epoch 0/1] step 20600/23862 (3.3 it/s)
+[Epoch 0/1] step 20650/23862 (3.3 it/s)
+[Epoch 0/1] step 20700/23862 (3.3 it/s)
+[Epoch 0/1] step 20750/23862 (3.3 it/s)
+[Epoch 0/1] step 20800/23862 (3.3 it/s)
+[Epoch 0/1] step 20850/23862 (3.3 it/s)
+[Epoch 0/1] step 20900/23862 (3.3 it/s)
+[Epoch 0/1] step 20950/23862 (3.3 it/s)
+[Epoch 0/1] step 21000/23862 (3.3 it/s)
+[Epoch 0/1] step 21050/23862 (3.3 it/s)
+[Epoch 0/1] step 21100/23862 (3.3 it/s)
+[Epoch 0/1] step 21150/23862 (3.3 it/s)
+[Epoch 0/1] step 21200/23862 (3.3 it/s)
+[Epoch 0/1] step 21250/23862 (3.3 it/s)
+[Epoch 0/1] step 21300/23862 (3.3 it/s)
+[Epoch 0/1] step 21350/23862 (3.3 it/s)
+[Epoch 0/1] step 21400/23862 (3.3 it/s)
+[Epoch 0/1] step 21450/23862 (3.3 it/s)
+[Epoch 0/1] step 21500/23862 (3.3 it/s)
+[Epoch 0/1] step 21550/23862 (3.3 it/s)
+[Epoch 0/1] step 21600/23862 (3.3 it/s)
+[Epoch 0/1] step 21650/23862 (3.3 it/s)
+[Epoch 0/1] step 21700/23862 (3.3 it/s)
+[Epoch 0/1] step 21750/23862 (3.3 it/s)
+[Epoch 0/1] step 21800/23862 (3.3 it/s)
+[Epoch 0/1] step 21850/23862 (3.3 it/s)
+[Epoch 0/1] step 21900/23862 (3.3 it/s)
+[Epoch 0/1] step 21950/23862 (3.3 it/s)
+[Epoch 0/1] step 22000/23862 (3.2 it/s)
+[Epoch 0/1] step 22050/23862 (3.2 it/s)
+[Epoch 0/1] step 22100/23862 (3.2 it/s)
+[Epoch 0/1] step 22150/23862 (3.2 it/s)
+[Epoch 0/1] step 22200/23862 (3.2 it/s)
+[Epoch 0/1] step 22250/23862 (3.2 it/s)
+[Epoch 0/1] step 22300/23862 (3.2 it/s)
+[Epoch 0/1] step 22350/23862 (3.2 it/s)
+[Epoch 0/1] step 22400/23862 (3.2 it/s)
+[Epoch 0/1] step 22450/23862 (3.2 it/s)
+[Epoch 0/1] step 22500/23862 (3.2 it/s)
+[Epoch 0/1] step 22550/23862 (3.2 it/s)
+[Epoch 0/1] step 22600/23862 (3.2 it/s)
+[Epoch 0/1] step 22650/23862 (3.2 it/s)
+[Epoch 0/1] step 22700/23862 (3.2 it/s)
+[Epoch 0/1] step 22750/23862 (3.2 it/s)
+[Epoch 0/1] step 22800/23862 (3.2 it/s)
+[Epoch 0/1] step 22850/23862 (3.2 it/s)
+[Epoch 0/1] step 22900/23862 (3.2 it/s)
+[Epoch 0/1] step 22950/23862 (3.2 it/s)
+[Epoch 0/1] step 23000/23862 (3.2 it/s)
+[Epoch 0/1] step 23050/23862 (3.2 it/s)
+[Epoch 0/1] step 23100/23862 (3.2 it/s)
+[Epoch 0/1] step 23150/23862 (3.2 it/s)
+[Epoch 0/1] step 23200/23862 (3.2 it/s)
+[Epoch 0/1] step 23250/23862 (3.2 it/s)
+[Epoch 0/1] step 23300/23862 (3.2 it/s)
+[Epoch 0/1] step 23350/23862 (3.2 it/s)
+[Epoch 0/1] step 23400/23862 (3.2 it/s)
+[Epoch 0/1] step 23450/23862 (3.2 it/s)
+[Epoch 0/1] step 23500/23862 (3.2 it/s)
+[Epoch 0/1] step 23550/23862 (3.2 it/s)
+[Epoch 0/1] step 23600/23862 (3.2 it/s)
+[Epoch 0/1] step 23650/23862 (3.2 it/s)
+[Epoch 0/1] step 23700/23862 (3.2 it/s)
+[Epoch 0/1] step 23750/23862 (3.2 it/s)
+[Epoch 0/1] step 23800/23862 (3.2 it/s)
+[Epoch 0/1] step 23850/23862 (3.2 it/s)
+[Epoch 0/1] done in 7364.5s
+14:53:36 | INFO  | checkpoint_~|   Checking for non PyTorch modules to save
+14:53:36 | INFO  | checkpoint_~|   Checking for Wandb params to save
+14:53:36 | OK    | checkpoint_~| ✓ Wandb params save check complete
+14:53:41 | INFO  | checkpoint_~|   Checking for non PyTorch modules to save
+14:53:41 | INFO  | checkpoint_~|   Checking for Wandb params to save
+14:53:41 | OK    | checkpoint_~| ✓ Wandb params save check complete
 `Trainer.fit` stopped: `max_epochs=1` reached.
-Epoch 0/0  ━━━━━━━━━━━━━━━━━ 23862/23862 2:23:26 •        2.76it/s v_num: 12.000
+Epoch 0/0  ━━━━━━━━━━━━━━━━━ 23862/23862 2:02:44 •        3.21it/s v_num: 12.000
                                          0:00:00                                
 /workspace/jepa/lib/python3.11/site-packages/lightning/pytorch/trainer/call.py:228: 1 buffered metric(s) were dropped at teardown because no valid logging step occurred after they were buffered
 
-✓ Pretraining done. Best checkpoint: /workspace/lejepa-MLProject/checkpoints/lejepa-vitb-epepoch=000.ckpt
+✓ Pretraining done. Best checkpoint: /workspace/checkpoints/lejepa-vitb-epepoch=000.ckpt
 
 ============================================================
 Phase 2+3 — Embedding Extraction + Few-Shot Linear Probe
 ============================================================
-23:34:41 | INFO  | utils.py    | ── Module ────────────────────────────────────────
-23:34:41 | WARN  | module.py   | ! No hyperparameters provided - hyperparameter logging is disabled.
-23:34:41 | INFO  | module.py   |   Setting custom forward method.
-23:34:41 | WARN  | module.py   | ! You didn't pass a forward method. This will fail unless you implemented your own Module class.
-23:34:41 | INFO  | module.py   |   No metrics configuration provided - automatic metric tracking is disabled.
-✓ Loaded LeJEPA (vit_base_patch16_224) from /workspace/lejepa-MLProject/checkpoints/lejepa-vitb-epepoch=000.ckpt
+14:53:48 | INFO  | utils.py    | ── Module ────────────────────────────────────────
+14:53:48 | WARN  | module.py   | ! No hyperparameters provided - hyperparameter logging is disabled.
+14:53:48 | INFO  | module.py   |   Setting custom forward method.
+14:53:48 | WARN  | module.py   | ! You didn't pass a forward method. This will fail unless you implemented your own Module class.
+14:53:48 | INFO  | module.py   |   No metrics configuration provided - automatic metric tracking is disabled.
+✓ Loaded LeJEPA (vit_base_patch16_224) from /workspace/checkpoints/lejepa-vitb-epepoch=000.ckpt
 
 ============================================================
   DTD  (tanganke/dtd)
 ============================================================
   ▶ Trích xuất TRAIN embeddings ...
-23:34:43 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
-`trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'tanganke/dtd' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:34:43 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'tanganke/dtd' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:34:44 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-23:34:44 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/tanganke/dtd/d2afa97d9f335b1a6b3b09c637aef667f98f966e/README.md "HTTP/1.1 200 OK"
-23:34:44 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/tanganke/dtd/d2afa97d9f335b1a6b3b09c637aef667f98f966e/README.md "HTTP/1.1 200 OK"
-23:34:44 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/d2afa97d9f335b1a6b3b09c637aef667f98f966e/dtd.py "HTTP/1.1 404 Not Found"
-23:34:45 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/tanganke/dtd/tanganke/dtd.py "HTTP/1.1 404 Not Found"
-23:34:45 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/dtd/revision/d2afa97d9f335b1a6b3b09c637aef667f98f966e "HTTP/1.1 200 OK"
-23:34:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/d2afa97d9f335b1a6b3b09c637aef667f98f966e/.huggingface.yaml "HTTP/1.1 404 Not Found"
-23:34:45 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=tanganke/dtd "HTTP/1.1 200 OK"
-23:34:46 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/dtd/revision/d2afa97d9f335b1a6b3b09c637aef667f98f966e "HTTP/1.1 200 OK"
-23:34:46 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/dtd/tree/d2afa97d9f335b1a6b3b09c637aef667f98f966e/data?recursive=true&expand=false "HTTP/1.1 200 OK"
-23:34:46 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/dtd/tree/d2afa97d9f335b1a6b3b09c637aef667f98f966e?recursive=false&expand=false "HTTP/1.1 200 OK"
-23:34:46 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/d2afa97d9f335b1a6b3b09c637aef667f98f966e/dataset_infos.json "HTTP/1.1 404 Not Found"
-Generating dataset dtd (/dev/shm/hf_cache/tanganke___dtd/default/0.0.0/d2afa97d9f335b1a6b3b09c637aef667f98f966e)
-23:34:47 | INFO  | __init__.py | Generating dataset dtd (/dev/shm/hf_cache/tanganke___dtd/default/0.0.0/d2afa97d9f335b1a6b3b09c637aef667f98f966e)
-Downloading and preparing dataset dtd/default to /dev/shm/hf_cache/tanganke___dtd/default/0.0.0/d2afa97d9f335b1a6b3b09c637aef667f98f966e...
-23:34:47 | INFO  | __init__.py | Downloading and preparing dataset dtd/default to /dev/shm/hf_cache/tanganke___dtd/default/0.0.0/d2afa97d9f335b1a6b3b09c637aef667f98f966e...
-23:34:47 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/d2afa97d9f335b1a6b3b09c637aef667f98f966e/data/train-00000-of-00001.parquet "HTTP/1.1 302 Found"
-23:34:47 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/dtd/xet-read-token/d2afa97d9f335b1a6b3b09c637aef667f98f966e "HTTP/1.1 200 OK"
-23:34:52 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/d2afa97d9f335b1a6b3b09c637aef667f98f966e/data/test-00000-of-00001.parquet "HTTP/1.1 302 Found"
-Downloading took 0.0 min
-23:34:54 | INFO  | __init__.py | Downloading took 0.0 min
-Checksum Computation took 0.0 min
-23:34:54 | INFO  | __init__.py | Checksum Computation took 0.0 min
-Generating train split
-23:34:54 | INFO  | __init__.py | Generating train split
-Generating train split:   0%|          | 0/3760 [00:00<?, ? examples/s]Generating train split:   3%|▎         | 100/3760 [00:00<00:08, 437.32 examples/s]Generating train split:  11%|█         | 400/3760 [00:00<00:02, 1393.66 examples/s]Generating train split:  29%|██▉       | 1100/3760 [00:00<00:00, 2972.30 examples/s]Generating train split:  48%|████▊     | 1800/3760 [00:00<00:00, 3922.40 examples/s]Generating train split:  64%|██████▍   | 2400/3760 [00:00<00:00, 4462.59 examples/s]Generating train split:  88%|████████▊ | 3300/3760 [00:00<00:00, 5213.90 examples/s]Generating train split: 100%|██████████| 3760/3760 [00:00<00:00, 4017.50 examples/s]
-Generating test split
-23:34:55 | INFO  | __init__.py | Generating test split
-Generating test split:   0%|          | 0/1880 [00:00<?, ? examples/s]Generating test split:  32%|███▏      | 600/1880 [00:00<00:00, 5057.07 examples/s]Generating test split:  80%|███████▉  | 1500/1880 [00:00<00:00, 6911.75 examples/s]Generating test split: 100%|██████████| 1880/1880 [00:00<00:00, 6917.03 examples/s]
-All the splits matched successfully.
-23:34:55 | INFO  | __init__.py | All the splits matched successfully.
-Dataset dtd downloaded and prepared to /dev/shm/hf_cache/tanganke___dtd/default/0.0.0/d2afa97d9f335b1a6b3b09c637aef667f98f966e. Subsequent calls will reuse this data.
-23:34:55 | INFO  | __init__.py | Dataset dtd downloaded and prepared to /dev/shm/hf_cache/tanganke___dtd/default/0.0.0/d2afa97d9f335b1a6b3b09c637aef667f98f966e. Subsequent calls will reuse this data.
-    → torch.Size([3760, 768])
-  ▶ Trích xuất TEST embeddings ...
-23:35:05 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
-`trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'tanganke/dtd' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:35:05 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'tanganke/dtd' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:35:05 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-23:35:05 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/tanganke/dtd/d2afa97d9f335b1a6b3b09c637aef667f98f966e/README.md "HTTP/1.1 200 OK"
-23:35:05 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/d2afa97d9f335b1a6b3b09c637aef667f98f966e/dtd.py "HTTP/1.1 404 Not Found"
-23:35:05 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/tanganke/dtd/tanganke/dtd.py "HTTP/1.1 404 Not Found"
-23:35:05 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/d2afa97d9f335b1a6b3b09c637aef667f98f966e/.huggingface.yaml "HTTP/1.1 404 Not Found"
-23:35:06 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=tanganke/dtd "HTTP/1.1 200 OK"
-23:35:06 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/d2afa97d9f335b1a6b3b09c637aef667f98f966e/dataset_infos.json "HTTP/1.1 404 Not Found"
-Found cached dataset dtd (/dev/shm/hf_cache/tanganke___dtd/default/0.0.0/d2afa97d9f335b1a6b3b09c637aef667f98f966e)
-23:35:06 | INFO  | __init__.py | Found cached dataset dtd (/dev/shm/hf_cache/tanganke___dtd/default/0.0.0/d2afa97d9f335b1a6b3b09c637aef667f98f966e)
-    → torch.Size([1880, 768])
-  shots=  1  → 10.98%  (seeds=[0, 1, 2])
-  shots= 10  → 25.25%  (seeds=[0, 1, 2])
-  shots=all  → 39.26%
+14:53:50 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
+14:53:50 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/main/README.md "HTTP/1.1 401 Unauthorized"
+  ❌ SKIP DTD: Dataset 'tanganke/dtd' doesn't exist on the Hub or cannot be accessed.
 
 ============================================================
-  Aircraft  (Multimodal-Fatima/FGVC_dataset)
+  Aircraft  (HuggingFaceM4/FGVC-Aircraft)
 ============================================================
   ▶ Trích xuất TRAIN embeddings ...
-23:35:13 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
-`trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'Multimodal-Fatima/FGVC_dataset' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:35:13 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'Multimodal-Fatima/FGVC_dataset' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:35:13 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/Multimodal-Fatima/FGVC_dataset/resolve/main/README.md "HTTP/1.1 404 Not Found"
-  ❌ SKIP Aircraft: Dataset 'Multimodal-Fatima/FGVC_dataset' doesn't exist on the Hub or cannot be accessed.
+  0%|          | 0.00/2.75G [00:00<?, ?B/s]  0%|          | 131k/2.75G [00:00<43:41, 1.05MB/s]  0%|          | 1.05M/2.75G [00:00<09:49, 4.67MB/s]  0%|          | 5.60M/2.75G [00:00<02:11, 20.9MB/s]  1%|          | 13.8M/2.75G [00:00<01:03, 43.1MB/s]  1%|          | 21.0M/2.75G [00:00<00:51, 52.9MB/s]  1%|          | 27.4M/2.75G [00:00<00:48, 56.3MB/s]  1%|▏         | 34.8M/2.75G [00:00<00:43, 62.0MB/s]  2%|▏         | 42.2M/2.75G [00:00<00:41, 65.7MB/s]  2%|▏         | 49.2M/2.75G [00:00<00:40, 67.0MB/s]  2%|▏         | 57.0M/2.75G [00:01<00:40, 66.4MB/s]  2%|▏         | 64.2M/2.75G [00:01<00:39, 68.2MB/s]  3%|▎         | 71.7M/2.75G [00:01<00:38, 70.2MB/s]  3%|▎         | 79.1M/2.75G [00:01<00:37, 71.4MB/s]  3%|▎         | 86.5M/2.75G [00:01<00:37, 72.0MB/s]  3%|▎         | 94.2M/2.75G [00:01<00:36, 73.6MB/s]  4%|▎         | 103M/2.75G [00:01<00:34, 77.7MB/s]   4%|▍         | 111M/2.75G [00:01<00:33, 79.7MB/s]  4%|▍         | 120M/2.75G [00:01<00:32, 80.2MB/s]  5%|▍         | 128M/2.75G [00:01<00:32, 81.8MB/s]  5%|▍         | 137M/2.75G [00:02<00:31, 82.7MB/s]  5%|▌         | 145M/2.75G [00:02<00:31, 83.1MB/s]  6%|▌         | 153M/2.75G [00:02<00:33, 78.4MB/s]  6%|▌         | 162M/2.75G [00:02<00:32, 80.1MB/s]  6%|▌         | 170M/2.75G [00:02<00:31, 81.2MB/s]  6%|▋         | 178M/2.75G [00:02<00:31, 81.1MB/s]  7%|▋         | 187M/2.75G [00:02<00:31, 80.4MB/s]  7%|▋         | 195M/2.75G [00:02<00:32, 79.9MB/s]  7%|▋         | 203M/2.75G [00:02<00:31, 81.3MB/s]  8%|▊         | 211M/2.75G [00:03<00:33, 76.3MB/s]  8%|▊         | 219M/2.75G [00:03<00:32, 77.0MB/s]  8%|▊         | 227M/2.75G [00:03<00:32, 77.7MB/s]  9%|▊         | 235M/2.75G [00:03<00:33, 75.2MB/s]  9%|▉         | 243M/2.75G [00:03<00:32, 76.9MB/s]  9%|▉         | 251M/2.75G [00:03<00:33, 73.6MB/s]  9%|▉         | 259M/2.75G [00:03<00:32, 77.0MB/s] 10%|▉         | 268M/2.75G [00:03<00:31, 79.4MB/s] 10%|█         | 277M/2.75G [00:03<00:30, 81.5MB/s] 10%|█         | 285M/2.75G [00:03<00:29, 83.1MB/s] 11%|█         | 294M/2.75G [00:04<00:28, 85.0MB/s] 11%|█         | 303M/2.75G [00:04<00:30, 80.6MB/s] 11%|█▏        | 312M/2.75G [00:04<00:29, 81.9MB/s] 12%|█▏        | 321M/2.75G [00:04<00:28, 84.7MB/s] 12%|█▏        | 330M/2.75G [00:04<00:28, 86.2MB/s] 12%|█▏        | 339M/2.75G [00:04<00:28, 84.1MB/s] 13%|█▎        | 347M/2.75G [00:04<00:30, 79.3MB/s] 13%|█▎        | 355M/2.75G [00:04<00:30, 79.4MB/s] 13%|█▎        | 363M/2.75G [00:04<00:30, 79.4MB/s] 13%|█▎        | 371M/2.75G [00:05<00:30, 79.4MB/s] 14%|█▍        | 379M/2.75G [00:05<00:29, 79.3MB/s] 14%|█▍        | 387M/2.75G [00:05<00:29, 79.8MB/s] 14%|█▍        | 395M/2.75G [00:05<00:29, 80.2MB/s] 15%|█▍        | 403M/2.75G [00:05<00:31, 75.6MB/s] 15%|█▍        | 411M/2.75G [00:05<00:30, 76.8MB/s] 15%|█▌        | 420M/2.75G [00:05<00:29, 79.1MB/s] 16%|█▌        | 428M/2.75G [00:05<00:28, 81.0MB/s] 16%|█▌        | 437M/2.75G [00:05<00:27, 83.7MB/s] 16%|█▌        | 446M/2.75G [00:05<00:27, 84.8MB/s] 17%|█▋        | 455M/2.75G [00:06<00:28, 81.4MB/s] 17%|█▋        | 464M/2.75G [00:06<00:27, 83.5MB/s] 17%|█▋        | 472M/2.75G [00:06<00:27, 82.1MB/s] 17%|█▋        | 480M/2.75G [00:06<00:27, 82.1MB/s] 18%|█▊        | 489M/2.75G [00:06<00:27, 81.0MB/s] 18%|█▊        | 497M/2.75G [00:06<00:28, 79.8MB/s] 18%|█▊        | 505M/2.75G [00:06<00:28, 79.5MB/s] 19%|█▊        | 514M/2.75G [00:06<00:27, 80.9MB/s] 19%|█▉        | 522M/2.75G [00:06<00:27, 81.6MB/s] 19%|█▉        | 530M/2.75G [00:06<00:27, 81.3MB/s] 20%|█▉        | 538M/2.75G [00:07<00:28, 77.6MB/s] 20%|█▉        | 547M/2.75G [00:07<00:28, 78.5MB/s] 20%|██        | 555M/2.75G [00:07<00:27, 78.8MB/s] 20%|██        | 563M/2.75G [00:07<00:27, 79.4MB/s] 21%|██        | 571M/2.75G [00:07<00:27, 80.2MB/s] 21%|██        | 579M/2.75G [00:07<00:28, 75.5MB/s] 21%|██▏       | 587M/2.75G [00:07<00:30, 71.3MB/s] 22%|██▏       | 594M/2.75G [00:07<00:30, 71.4MB/s] 22%|██▏       | 601M/2.75G [00:07<00:31, 68.0MB/s] 22%|██▏       | 608M/2.75G [00:08<00:32, 66.1MB/s] 22%|██▏       | 615M/2.75G [00:08<00:31, 67.6MB/s] 23%|██▎       | 623M/2.75G [00:08<00:31, 68.6MB/s] 23%|██▎       | 630M/2.75G [00:08<00:31, 66.9MB/s] 23%|██▎       | 637M/2.75G [00:08<00:30, 68.6MB/s] 23%|██▎       | 644M/2.75G [00:08<00:31, 66.3MB/s] 24%|██▎       | 651M/2.75G [00:08<00:30, 68.9MB/s] 24%|██▍       | 658M/2.75G [00:08<00:31, 66.4MB/s] 24%|██▍       | 666M/2.75G [00:08<00:30, 69.2MB/s] 24%|██▍       | 673M/2.75G [00:09<00:31, 66.8MB/s] 25%|██▍       | 680M/2.75G [00:09<00:30, 67.0MB/s] 25%|██▍       | 687M/2.75G [00:09<00:30, 68.3MB/s] 25%|██▌       | 694M/2.75G [00:09<00:31, 66.3MB/s] 25%|██▌       | 701M/2.75G [00:09<00:29, 69.1MB/s] 26%|██▌       | 709M/2.75G [00:09<00:29, 68.8MB/s] 26%|██▌       | 716M/2.75G [00:09<00:30, 67.0MB/s] 26%|██▋       | 723M/2.75G [00:09<00:28, 70.4MB/s] 27%|██▋       | 730M/2.75G [00:09<00:30, 67.0MB/s] 27%|██▋       | 739M/2.75G [00:09<00:28, 70.8MB/s] 27%|██▋       | 746M/2.75G [00:10<00:29, 68.4MB/s] 27%|██▋       | 753M/2.75G [00:10<00:29, 68.6MB/s] 28%|██▊       | 760M/2.75G [00:10<00:28, 70.2MB/s] 28%|██▊       | 767M/2.75G [00:10<00:28, 70.8MB/s] 28%|██▊       | 774M/2.75G [00:10<00:29, 67.9MB/s] 28%|██▊       | 782M/2.75G [00:10<00:27, 70.4MB/s] 29%|██▊       | 789M/2.75G [00:10<00:27, 71.0MB/s] 29%|██▉       | 796M/2.75G [00:10<00:31, 62.4MB/s] 29%|██▉       | 803M/2.75G [00:10<00:33, 58.7MB/s] 29%|██▉       | 809M/2.75G [00:11<00:34, 55.8MB/s] 30%|██▉       | 815M/2.75G [00:11<00:33, 57.6MB/s] 30%|██▉       | 821M/2.75G [00:11<00:35, 54.8MB/s] 30%|███       | 827M/2.75G [00:11<00:36, 53.1MB/s] 30%|███       | 834M/2.75G [00:11<00:34, 56.0MB/s] 30%|███       | 839M/2.75G [00:11<00:35, 53.6MB/s] 31%|███       | 846M/2.75G [00:11<00:34, 56.1MB/s] 31%|███       | 851M/2.75G [00:11<00:35, 54.0MB/s] 31%|███       | 858M/2.75G [00:11<00:33, 56.4MB/s] 31%|███▏      | 863M/2.75G [00:12<00:34, 54.3MB/s] 32%|███▏      | 870M/2.75G [00:12<00:33, 56.8MB/s] 32%|███▏      | 875M/2.75G [00:12<00:34, 54.8MB/s] 32%|███▏      | 881M/2.75G [00:12<00:36, 50.7MB/s] 32%|███▏      | 887M/2.75G [00:12<00:36, 51.5MB/s] 32%|███▏      | 893M/2.75G [00:12<00:38, 48.0MB/s] 33%|███▎      | 898M/2.75G [00:12<00:39, 47.2MB/s] 33%|███▎      | 902M/2.75G [00:12<00:41, 44.3MB/s] 33%|███▎      | 907M/2.75G [00:13<00:42, 43.3MB/s] 33%|███▎      | 911M/2.75G [00:13<00:43, 42.8MB/s] 33%|███▎      | 916M/2.75G [00:13<00:43, 42.0MB/s] 33%|███▎      | 920M/2.75G [00:13<00:44, 41.7MB/s] 34%|███▎      | 924M/2.75G [00:13<00:44, 41.3MB/s] 34%|███▎      | 928M/2.75G [00:13<00:44, 41.1MB/s] 34%|███▍      | 933M/2.75G [00:13<00:43, 41.9MB/s] 34%|███▍      | 937M/2.75G [00:13<00:43, 41.6MB/s] 34%|███▍      | 942M/2.75G [00:13<00:42, 42.3MB/s] 34%|███▍      | 946M/2.75G [00:13<00:43, 42.0MB/s] 35%|███▍      | 952M/2.75G [00:14<00:41, 43.0MB/s] 35%|███▍      | 956M/2.75G [00:14<00:42, 42.6MB/s] 35%|███▍      | 961M/2.75G [00:14<00:41, 43.4MB/s] 35%|███▌      | 965M/2.75G [00:14<00:41, 43.1MB/s] 35%|███▌      | 970M/2.75G [00:14<00:41, 43.4MB/s] 35%|███▌      | 974M/2.75G [00:14<00:41, 43.1MB/s] 36%|███▌      | 980M/2.75G [00:14<00:40, 44.1MB/s] 36%|███▌      | 984M/2.75G [00:14<00:40, 43.7MB/s] 36%|███▌      | 989M/2.75G [00:14<00:39, 44.7MB/s] 36%|███▌      | 994M/2.75G [00:15<00:39, 44.3MB/s] 36%|███▋      | 999M/2.75G [00:15<00:39, 44.8MB/s] 36%|███▋      | 1.00G/2.75G [00:15<00:39, 44.4MB/s] 37%|███▋      | 1.01G/2.75G [00:15<00:38, 45.1MB/s] 37%|███▋      | 1.01G/2.75G [00:15<00:38, 44.7MB/s] 37%|███▋      | 1.02G/2.75G [00:15<00:38, 45.3MB/s] 37%|███▋      | 1.02G/2.75G [00:15<00:38, 44.9MB/s] 37%|███▋      | 1.03G/2.75G [00:15<00:37, 45.5MB/s] 37%|███▋      | 1.03G/2.75G [00:15<00:38, 45.1MB/s] 38%|███▊      | 1.04G/2.75G [00:16<00:37, 46.1MB/s] 38%|███▊      | 1.04G/2.75G [00:16<00:37, 45.6MB/s] 38%|███▊      | 1.05G/2.75G [00:16<00:36, 46.4MB/s] 38%|███▊      | 1.05G/2.75G [00:16<00:37, 45.9MB/s] 38%|███▊      | 1.06G/2.75G [00:16<00:36, 46.6MB/s] 39%|███▊      | 1.06G/2.75G [00:16<00:36, 46.1MB/s] 39%|███▉      | 1.07G/2.75G [00:16<00:36, 46.7MB/s] 39%|███▉      | 1.07G/2.75G [00:16<00:36, 46.3MB/s] 39%|███▉      | 1.08G/2.75G [00:16<00:35, 46.7MB/s] 39%|███▉      | 1.08G/2.75G [00:16<00:36, 46.2MB/s] 39%|███▉      | 1.09G/2.75G [00:17<00:35, 46.7MB/s] 40%|███▉      | 1.09G/2.75G [00:17<00:35, 46.3MB/s] 40%|███▉      | 1.10G/2.75G [00:17<00:35, 46.7MB/s] 40%|████      | 1.10G/2.75G [00:17<00:35, 46.2MB/s] 40%|████      | 1.11G/2.75G [00:17<00:35, 47.0MB/s] 40%|████      | 1.11G/2.75G [00:17<00:35, 46.5MB/s] 41%|████      | 1.12G/2.75G [00:17<00:34, 47.3MB/s] 41%|████      | 1.12G/2.75G [00:17<00:34, 46.9MB/s] 41%|████      | 1.13G/2.75G [00:17<00:34, 47.5MB/s] 41%|████      | 1.13G/2.75G [00:18<00:34, 47.0MB/s] 41%|████▏     | 1.14G/2.75G [00:18<00:33, 47.8MB/s] 42%|████▏     | 1.14G/2.75G [00:18<00:34, 47.2MB/s] 42%|████▏     | 1.15G/2.75G [00:18<00:33, 47.9MB/s] 42%|████▏     | 1.15G/2.75G [00:18<00:33, 47.4MB/s] 42%|████▏     | 1.16G/2.75G [00:18<00:33, 48.0MB/s] 42%|████▏     | 1.16G/2.75G [00:18<00:33, 47.5MB/s] 42%|████▏     | 1.17G/2.75G [00:18<00:33, 47.9MB/s] 43%|████▎     | 1.17G/2.75G [00:18<00:33, 47.4MB/s] 43%|████▎     | 1.18G/2.75G [00:19<00:32, 48.0MB/s] 43%|████▎     | 1.18G/2.75G [00:19<00:33, 47.6MB/s] 43%|████▎     | 1.19G/2.75G [00:19<00:32, 48.0MB/s] 43%|████▎     | 1.19G/2.75G [00:19<00:32, 47.6MB/s] 44%|████▎     | 1.20G/2.75G [00:19<00:32, 48.0MB/s] 44%|████▎     | 1.20G/2.75G [00:19<00:32, 47.5MB/s] 44%|████▍     | 1.21G/2.75G [00:19<00:32, 48.0MB/s] 44%|████▍     | 1.21G/2.75G [00:19<00:32, 47.5MB/s] 44%|████▍     | 1.22G/2.75G [00:19<00:31, 48.0MB/s] 44%|████▍     | 1.22G/2.75G [00:19<00:32, 47.5MB/s] 45%|████▍     | 1.23G/2.75G [00:20<00:31, 48.0MB/s] 45%|████▍     | 1.23G/2.75G [00:20<00:31, 47.6MB/s] 45%|████▌     | 1.24G/2.75G [00:20<00:31, 48.0MB/s] 45%|████▌     | 1.25G/2.75G [00:20<00:31, 47.7MB/s] 45%|████▌     | 1.25G/2.75G [00:20<00:31, 48.0MB/s] 46%|████▌     | 1.26G/2.75G [00:20<00:31, 47.6MB/s] 46%|████▌     | 1.26G/2.75G [00:20<00:31, 47.9MB/s] 46%|████▌     | 1.27G/2.75G [00:20<00:31, 47.6MB/s] 46%|████▌     | 1.27G/2.75G [00:20<00:30, 48.0MB/s] 46%|████▋     | 1.28G/2.75G [00:21<00:31, 47.6MB/s] 47%|████▋     | 1.28G/2.75G [00:21<00:30, 48.0MB/s] 47%|████▋     | 1.29G/2.75G [00:21<00:30, 47.7MB/s] 47%|████▋     | 1.29G/2.75G [00:21<00:30, 48.0MB/s] 47%|████▋     | 1.30G/2.75G [00:21<00:30, 47.6MB/s] 47%|████▋     | 1.30G/2.75G [00:21<00:32, 44.4MB/s] 47%|████▋     | 1.31G/2.75G [00:21<00:35, 41.2MB/s] 48%|████▊     | 1.31G/2.75G [00:21<00:36, 39.9MB/s] 48%|████▊     | 1.31G/2.75G [00:21<00:36, 39.4MB/s] 48%|████▊     | 1.32G/2.75G [00:22<00:38, 37.0MB/s] 48%|████▊     | 1.32G/2.75G [00:22<00:39, 35.8MB/s] 48%|████▊     | 1.33G/2.75G [00:22<00:37, 38.4MB/s] 48%|████▊     | 1.33G/2.75G [00:22<00:38, 36.7MB/s] 48%|████▊     | 1.33G/2.75G [00:22<00:38, 36.6MB/s] 49%|████▊     | 1.34G/2.75G [00:22<00:38, 36.6MB/s] 49%|████▉     | 1.34G/2.75G [00:22<00:38, 37.1MB/s] 49%|████▉     | 1.35G/2.75G [00:22<00:37, 37.1MB/s] 49%|████▉     | 1.35G/2.75G [00:22<00:37, 37.6MB/s] 49%|████▉     | 1.35G/2.75G [00:23<00:37, 37.7MB/s] 49%|████▉     | 1.36G/2.75G [00:23<00:36, 38.3MB/s] 49%|████▉     | 1.36G/2.75G [00:23<00:36, 38.2MB/s] 50%|████▉     | 1.37G/2.75G [00:23<00:35, 39.0MB/s] 50%|████▉     | 1.37G/2.75G [00:23<00:35, 39.0MB/s] 50%|████▉     | 1.38G/2.75G [00:23<00:34, 39.7MB/s] 50%|█████     | 1.38G/2.75G [00:23<00:34, 39.6MB/s] 50%|█████     | 1.38G/2.75G [00:23<00:34, 40.1MB/s] 50%|█████     | 1.39G/2.75G [00:23<00:34, 40.1MB/s] 51%|█████     | 1.39G/2.75G [00:24<00:33, 40.8MB/s] 51%|█████     | 1.40G/2.75G [00:24<00:33, 40.7MB/s] 51%|█████     | 1.40G/2.75G [00:24<00:32, 41.3MB/s] 51%|█████     | 1.41G/2.75G [00:24<00:32, 41.2MB/s] 51%|█████▏    | 1.41G/2.75G [00:24<00:32, 41.8MB/s] 51%|█████▏    | 1.42G/2.75G [00:24<00:32, 41.7MB/s] 52%|█████▏    | 1.42G/2.75G [00:24<00:31, 42.3MB/s] 52%|█████▏    | 1.42G/2.75G [00:24<00:31, 42.2MB/s] 52%|█████▏    | 1.43G/2.75G [00:24<00:30, 42.9MB/s] 52%|█████▏    | 1.43G/2.75G [00:24<00:30, 42.8MB/s] 52%|█████▏    | 1.44G/2.75G [00:25<00:30, 43.4MB/s] 52%|█████▏    | 1.44G/2.75G [00:25<00:30, 43.2MB/s] 53%|█████▎    | 1.45G/2.75G [00:25<00:30, 43.5MB/s] 53%|█████▎    | 1.45G/2.75G [00:25<00:30, 43.3MB/s] 53%|█████▎    | 1.46G/2.75G [00:25<00:29, 44.0MB/s] 53%|█████▎    | 1.46G/2.75G [00:25<00:29, 43.8MB/s] 53%|█████▎    | 1.47G/2.75G [00:25<00:28, 44.5MB/s] 53%|█████▎    | 1.47G/2.75G [00:25<00:28, 44.3MB/s] 54%|█████▎    | 1.48G/2.75G [00:25<00:28, 44.7MB/s] 54%|█████▍    | 1.48G/2.75G [00:26<00:28, 44.6MB/s] 54%|█████▍    | 1.49G/2.75G [00:26<00:28, 44.8MB/s] 54%|█████▍    | 1.49G/2.75G [00:26<00:28, 44.7MB/s] 54%|█████▍    | 1.50G/2.75G [00:26<00:27, 45.0MB/s] 55%|█████▍    | 1.50G/2.75G [00:26<00:27, 44.9MB/s] 55%|█████▍    | 1.51G/2.75G [00:26<00:28, 44.2MB/s] 55%|█████▍    | 1.51G/2.75G [00:26<00:27, 44.9MB/s] 55%|█████▌    | 1.52G/2.75G [00:26<00:25, 47.9MB/s] 55%|█████▌    | 1.52G/2.75G [00:26<00:26, 45.8MB/s] 55%|█████▌    | 1.53G/2.75G [00:27<00:26, 46.1MB/s] 56%|█████▌    | 1.53G/2.75G [00:27<00:26, 46.1MB/s] 56%|█████▌    | 1.54G/2.75G [00:27<00:26, 45.1MB/s] 56%|█████▌    | 1.54G/2.75G [00:27<00:24, 48.7MB/s] 56%|█████▌    | 1.55G/2.75G [00:27<00:26, 46.0MB/s] 56%|█████▋    | 1.55G/2.75G [00:27<00:25, 46.6MB/s] 57%|█████▋    | 1.56G/2.75G [00:27<00:25, 46.4MB/s] 57%|█████▋    | 1.56G/2.75G [00:27<00:25, 46.5MB/s] 57%|█████▋    | 1.57G/2.75G [00:27<00:25, 46.1MB/s] 57%|█████▋    | 1.57G/2.75G [00:28<00:25, 46.7MB/s] 57%|█████▋    | 1.58G/2.75G [00:28<00:25, 46.4MB/s] 58%|█████▊    | 1.58G/2.75G [00:28<00:24, 47.0MB/s] 58%|█████▊    | 1.59G/2.75G [00:28<00:24, 46.8MB/s] 58%|█████▊    | 1.59G/2.75G [00:28<00:24, 47.2MB/s] 58%|█████▊    | 1.60G/2.75G [00:28<00:24, 46.7MB/s] 58%|█████▊    | 1.60G/2.75G [00:28<00:24, 47.5MB/s] 58%|█████▊    | 1.61G/2.75G [00:28<00:24, 47.1MB/s] 59%|█████▊    | 1.61G/2.75G [00:28<00:23, 47.8MB/s] 59%|█████▉    | 1.62G/2.75G [00:29<00:24, 47.3MB/s] 59%|█████▉    | 1.62G/2.75G [00:29<00:23, 48.0MB/s] 59%|█████▉    | 1.63G/2.75G [00:29<00:23, 47.3MB/s] 59%|█████▉    | 1.63G/2.75G [00:29<00:23, 48.1MB/s] 60%|█████▉    | 1.64G/2.75G [00:29<00:23, 47.5MB/s] 60%|█████▉    | 1.64G/2.75G [00:29<00:23, 48.2MB/s] 60%|█████▉    | 1.65G/2.75G [00:29<00:23, 47.6MB/s] 60%|██████    | 1.66G/2.75G [00:29<00:22, 48.0MB/s] 60%|██████    | 1.66G/2.75G [00:29<00:23, 47.5MB/s] 60%|██████    | 1.67G/2.75G [00:29<00:22, 48.1MB/s] 61%|██████    | 1.67G/2.75G [00:30<00:22, 47.7MB/s] 61%|██████    | 1.68G/2.75G [00:30<00:22, 48.0MB/s] 61%|██████    | 1.68G/2.75G [00:30<00:22, 47.6MB/s] 61%|██████    | 1.69G/2.75G [00:30<00:22, 48.1MB/s] 61%|██████▏   | 1.69G/2.75G [00:30<00:22, 47.7MB/s] 62%|██████▏   | 1.70G/2.75G [00:30<00:22, 48.0MB/s] 62%|██████▏   | 1.70G/2.75G [00:30<00:22, 47.7MB/s] 62%|██████▏   | 1.71G/2.75G [00:30<00:21, 48.0MB/s] 62%|██████▏   | 1.71G/2.75G [00:30<00:21, 47.7MB/s] 62%|██████▏   | 1.72G/2.75G [00:31<00:21, 47.9MB/s] 63%|██████▎   | 1.72G/2.75G [00:31<00:21, 47.7MB/s] 63%|██████▎   | 1.73G/2.75G [00:31<00:21, 47.8MB/s] 63%|██████▎   | 1.73G/2.75G [00:31<00:21, 47.8MB/s] 63%|██████▎   | 1.74G/2.75G [00:31<00:21, 47.7MB/s] 63%|██████▎   | 1.74G/2.75G [00:31<00:21, 47.7MB/s] 63%|██████▎   | 1.75G/2.75G [00:31<00:21, 47.9MB/s] 64%|██████▎   | 1.75G/2.75G [00:31<00:20, 47.9MB/s] 64%|██████▍   | 1.76G/2.75G [00:31<00:20, 47.8MB/s] 64%|██████▍   | 1.76G/2.75G [00:32<00:20, 48.3MB/s] 64%|██████▍   | 1.77G/2.75G [00:32<00:20, 47.7MB/s] 64%|██████▍   | 1.77G/2.75G [00:32<00:20, 47.8MB/s] 65%|██████▍   | 1.78G/2.75G [00:32<00:20, 47.6MB/s] 65%|██████▍   | 1.78G/2.75G [00:32<00:20, 48.4MB/s] 65%|██████▍   | 1.79G/2.75G [00:32<00:20, 47.4MB/s] 65%|██████▌   | 1.79G/2.75G [00:32<00:19, 48.5MB/s] 65%|██████▌   | 1.80G/2.75G [00:32<00:20, 47.5MB/s] 66%|██████▌   | 1.80G/2.75G [00:32<00:19, 48.5MB/s] 66%|██████▌   | 1.81G/2.75G [00:32<00:19, 47.3MB/s] 66%|██████▌   | 1.81G/2.75G [00:33<00:19, 48.3MB/s] 66%|██████▌   | 1.82G/2.75G [00:33<00:19, 47.3MB/s] 66%|██████▌   | 1.82G/2.75G [00:33<00:19, 48.1MB/s] 66%|██████▋   | 1.83G/2.75G [00:33<00:19, 47.4MB/s] 67%|██████▋   | 1.83G/2.75G [00:33<00:18, 48.5MB/s] 67%|██████▋   | 1.84G/2.75G [00:33<00:19, 47.4MB/s] 67%|██████▋   | 1.84G/2.75G [00:33<00:18, 49.2MB/s] 67%|██████▋   | 1.85G/2.75G [00:33<00:19, 46.6MB/s] 67%|██████▋   | 1.86G/2.75G [00:33<00:17, 50.1MB/s] 68%|██████▊   | 1.86G/2.75G [00:34<00:18, 47.7MB/s] 68%|██████▊   | 1.87G/2.75G [00:34<00:18, 47.1MB/s] 68%|██████▊   | 1.87G/2.75G [00:34<00:18, 48.6MB/s] 68%|██████▊   | 1.88G/2.75G [00:34<00:18, 46.7MB/s] 68%|██████▊   | 1.88G/2.75G [00:34<00:17, 50.0MB/s] 69%|██████▊   | 1.89G/2.75G [00:34<00:18, 47.5MB/s] 69%|██████▊   | 1.89G/2.75G [00:34<00:18, 47.2MB/s] 69%|██████▉   | 1.90G/2.75G [00:34<00:17, 49.9MB/s] 69%|██████▉   | 1.90G/2.75G [00:34<00:17, 47.4MB/s] 69%|██████▉   | 1.91G/2.75G [00:35<00:17, 47.2MB/s] 70%|██████▉   | 1.92G/2.75G [00:35<00:16, 50.0MB/s] 70%|██████▉   | 1.92G/2.75G [00:35<00:17, 47.8MB/s] 70%|██████▉   | 1.93G/2.75G [00:35<00:17, 47.4MB/s] 70%|███████   | 1.93G/2.75G [00:35<00:16, 50.4MB/s] 70%|███████   | 1.94G/2.75G [00:35<00:17, 48.0MB/s] 71%|███████   | 1.94G/2.75G [00:35<00:17, 47.4MB/s] 71%|███████   | 1.95G/2.75G [00:35<00:16, 49.8MB/s] 71%|███████   | 1.95G/2.75G [00:35<00:16, 47.8MB/s] 71%|███████   | 1.96G/2.75G [00:36<00:15, 50.8MB/s] 71%|███████▏  | 1.96G/2.75G [00:36<00:16, 48.3MB/s] 72%|███████▏  | 1.97G/2.75G [00:36<00:16, 47.7MB/s] 72%|███████▏  | 1.98G/2.75G [00:36<00:15, 50.6MB/s] 72%|███████▏  | 1.98G/2.75G [00:36<00:15, 48.3MB/s] 72%|███████▏  | 1.99G/2.75G [00:36<00:15, 48.0MB/s] 72%|███████▏  | 1.99G/2.75G [00:36<00:14, 51.4MB/s] 73%|███████▎  | 2.00G/2.75G [00:36<00:15, 48.9MB/s] 73%|███████▎  | 2.00G/2.75G [00:37<00:15, 48.2MB/s] 73%|███████▎  | 2.01G/2.75G [00:37<00:14, 51.7MB/s] 73%|███████▎  | 2.02G/2.75G [00:37<00:15, 49.1MB/s] 73%|███████▎  | 2.02G/2.75G [00:37<00:15, 48.4MB/s] 74%|███████▎  | 2.03G/2.75G [00:37<00:14, 51.6MB/s] 74%|███████▍  | 2.03G/2.75G [00:37<00:14, 49.0MB/s] 74%|███████▍  | 2.04G/2.75G [00:37<00:14, 48.9MB/s] 74%|███████▍  | 2.05G/2.75G [00:37<00:13, 52.7MB/s] 74%|███████▍  | 2.05G/2.75G [00:37<00:14, 50.2MB/s] 75%|███████▍  | 2.06G/2.75G [00:38<00:14, 49.2MB/s] 75%|███████▍  | 2.06G/2.75G [00:38<00:13, 53.0MB/s] 75%|███████▌  | 2.07G/2.75G [00:38<00:13, 50.1MB/s] 75%|███████▌  | 2.07G/2.75G [00:38<00:13, 49.6MB/s] 76%|███████▌  | 2.08G/2.75G [00:38<00:13, 51.2MB/s] 76%|███████▌  | 2.08G/2.75G [00:38<00:13, 50.3MB/s] 76%|███████▌  | 2.09G/2.75G [00:38<00:12, 52.1MB/s] 76%|███████▌  | 2.10G/2.75G [00:38<00:13, 50.5MB/s] 76%|███████▋  | 2.10G/2.75G [00:38<00:12, 51.2MB/s] 77%|███████▋  | 2.11G/2.75G [00:39<00:11, 54.7MB/s] 77%|███████▋  | 2.11G/2.75G [00:39<00:12, 51.8MB/s] 77%|███████▋  | 2.12G/2.75G [00:39<00:12, 51.0MB/s] 77%|███████▋  | 2.13G/2.75G [00:39<00:12, 51.7MB/s] 78%|███████▊  | 2.13G/2.75G [00:39<00:11, 55.8MB/s] 78%|███████▊  | 2.14G/2.75G [00:39<00:11, 52.9MB/s] 78%|███████▊  | 2.15G/2.75G [00:39<00:11, 52.1MB/s] 78%|███████▊  | 2.15G/2.75G [00:39<00:10, 55.8MB/s] 78%|███████▊  | 2.16G/2.75G [00:40<00:11, 53.3MB/s] 79%|███████▊  | 2.17G/2.75G [00:40<00:10, 55.9MB/s] 79%|███████▉  | 2.17G/2.75G [00:40<00:12, 48.4MB/s] 79%|███████▉  | 2.18G/2.75G [00:40<00:10, 52.9MB/s] 79%|███████▉  | 2.18G/2.75G [00:40<00:12, 46.2MB/s] 79%|███████▉  | 2.19G/2.75G [00:40<00:12, 44.3MB/s] 80%|███████▉  | 2.19G/2.75G [00:40<00:12, 44.3MB/s] 80%|███████▉  | 2.20G/2.75G [00:40<00:13, 42.0MB/s] 80%|███████▉  | 2.20G/2.75G [00:40<00:13, 42.2MB/s] 80%|████████  | 2.21G/2.75G [00:41<00:13, 42.1MB/s] 80%|████████  | 2.21G/2.75G [00:41<00:12, 42.8MB/s] 80%|████████  | 2.22G/2.75G [00:41<00:12, 41.9MB/s] 81%|████████  | 2.22G/2.75G [00:41<00:12, 42.6MB/s] 81%|████████  | 2.22G/2.75G [00:41<00:12, 41.9MB/s] 81%|████████  | 2.23G/2.75G [00:41<00:11, 43.9MB/s] 81%|████████  | 2.23G/2.75G [00:41<00:12, 42.6MB/s] 81%|████████▏ | 2.24G/2.75G [00:41<00:11, 44.3MB/s] 81%|████████▏ | 2.24G/2.75G [00:41<00:11, 43.4MB/s] 82%|████████▏ | 2.25G/2.75G [00:42<00:11, 45.6MB/s] 82%|████████▏ | 2.25G/2.75G [00:42<00:11, 43.5MB/s] 82%|████████▏ | 2.26G/2.75G [00:42<00:11, 44.3MB/s] 82%|████████▏ | 2.26G/2.75G [00:42<00:10, 45.8MB/s] 82%|████████▏ | 2.27G/2.75G [00:42<00:10, 46.2MB/s] 83%|████████▎ | 2.27G/2.75G [00:42<00:10, 45.5MB/s] 83%|████████▎ | 2.28G/2.75G [00:42<00:10, 45.9MB/s] 83%|████████▎ | 2.28G/2.75G [00:42<00:10, 46.9MB/s] 83%|████████▎ | 2.29G/2.75G [00:42<00:09, 47.9MB/s] 83%|████████▎ | 2.29G/2.75G [00:43<00:09, 47.0MB/s] 83%|████████▎ | 2.30G/2.75G [00:43<00:09, 48.1MB/s] 84%|████████▎ | 2.30G/2.75G [00:43<00:09, 47.3MB/s] 84%|████████▍ | 2.31G/2.75G [00:43<00:08, 49.5MB/s] 84%|████████▍ | 2.31G/2.75G [00:43<00:09, 47.6MB/s] 84%|████████▍ | 2.32G/2.75G [00:43<00:08, 49.1MB/s] 84%|████████▍ | 2.32G/2.75G [00:43<00:08, 48.2MB/s] 85%|████████▍ | 2.33G/2.75G [00:43<00:08, 49.5MB/s] 85%|████████▍ | 2.34G/2.75G [00:43<00:08, 48.0MB/s] 85%|████████▌ | 2.34G/2.75G [00:43<00:08, 50.3MB/s] 85%|████████▌ | 2.35G/2.75G [00:44<00:08, 48.8MB/s] 85%|████████▌ | 2.35G/2.75G [00:44<00:07, 51.0MB/s] 86%|████████▌ | 2.36G/2.75G [00:44<00:07, 49.6MB/s] 86%|████████▌ | 2.36G/2.75G [00:44<00:07, 51.3MB/s] 86%|████████▌ | 2.37G/2.75G [00:44<00:07, 49.8MB/s] 86%|████████▌ | 2.37G/2.75G [00:44<00:07, 51.4MB/s] 86%|████████▋ | 2.38G/2.75G [00:44<00:07, 49.9MB/s] 87%|████████▋ | 2.38G/2.75G [00:44<00:07, 52.0MB/s] 87%|████████▋ | 2.39G/2.75G [00:44<00:07, 50.5MB/s] 87%|████████▋ | 2.40G/2.75G [00:45<00:06, 52.8MB/s] 87%|████████▋ | 2.40G/2.75G [00:45<00:06, 51.0MB/s] 87%|████████▋ | 2.41G/2.75G [00:45<00:06, 53.1MB/s] 88%|████████▊ | 2.41G/2.75G [00:45<00:06, 51.3MB/s] 88%|████████▊ | 2.42G/2.75G [00:45<00:06, 53.3MB/s] 88%|████████▊ | 2.42G/2.75G [00:45<00:06, 51.5MB/s] 88%|████████▊ | 2.43G/2.75G [00:45<00:06, 52.9MB/s] 88%|████████▊ | 2.43G/2.75G [00:45<00:06, 51.3MB/s] 89%|████████▊ | 2.44G/2.75G [00:45<00:06, 51.9MB/s] 89%|████████▉ | 2.45G/2.75G [00:46<00:05, 52.8MB/s] 89%|████████▉ | 2.45G/2.75G [00:46<00:05, 52.9MB/s] 89%|████████▉ | 2.46G/2.75G [00:46<00:05, 54.7MB/s] 89%|████████▉ | 2.46G/2.75G [00:46<00:05, 53.0MB/s] 90%|████████▉ | 2.47G/2.75G [00:46<00:05, 53.9MB/s] 90%|████████▉ | 2.47G/2.75G [00:46<00:05, 53.0MB/s] 90%|█████████ | 2.48G/2.75G [00:46<00:05, 53.4MB/s] 90%|█████████ | 2.48G/2.75G [00:46<00:04, 54.5MB/s] 90%|█████████ | 2.49G/2.75G [00:46<00:04, 53.1MB/s] 91%|█████████ | 2.50G/2.75G [00:46<00:04, 55.1MB/s] 91%|█████████ | 2.50G/2.75G [00:47<00:04, 53.0MB/s] 91%|█████████ | 2.51G/2.75G [00:47<00:04, 54.9MB/s] 91%|█████████▏| 2.51G/2.75G [00:47<00:04, 53.0MB/s] 92%|█████████▏| 2.52G/2.75G [00:47<00:04, 54.9MB/s] 92%|█████████▏| 2.52G/2.75G [00:47<00:04, 52.9MB/s] 92%|█████████▏| 2.53G/2.75G [00:47<00:04, 53.8MB/s] 92%|█████████▏| 2.54G/2.75G [00:47<00:04, 53.0MB/s] 92%|█████████▏| 2.54G/2.75G [00:47<00:03, 53.5MB/s] 93%|█████████▎| 2.55G/2.75G [00:47<00:03, 54.6MB/s] 93%|█████████▎| 2.55G/2.75G [00:47<00:03, 54.2MB/s] 93%|█████████▎| 2.56G/2.75G [00:48<00:03, 53.7MB/s] 93%|█████████▎| 2.56G/2.75G [00:48<00:03, 54.5MB/s] 93%|█████████▎| 2.57G/2.75G [00:48<00:03, 54.9MB/s] 94%|█████████▎| 2.58G/2.75G [00:48<00:03, 54.3MB/s] 94%|█████████▎| 2.58G/2.75G [00:48<00:03, 54.4MB/s] 94%|█████████▍| 2.59G/2.75G [00:48<00:03, 54.3MB/s] 94%|█████████▍| 2.59G/2.75G [00:48<00:02, 55.2MB/s] 94%|█████████▍| 2.60G/2.75G [00:48<00:02, 55.5MB/s] 95%|█████████▍| 2.60G/2.75G [00:48<00:02, 53.4MB/s] 95%|█████████▍| 2.61G/2.75G [00:49<00:02, 55.6MB/s] 95%|█████████▍| 2.61G/2.75G [00:49<00:02, 53.6MB/s] 95%|█████████▌| 2.62G/2.75G [00:49<00:02, 55.6MB/s] 95%|█████████▌| 2.63G/2.75G [00:49<00:02, 54.4MB/s] 96%|█████████▌| 2.63G/2.75G [00:49<00:02, 55.6MB/s] 96%|█████████▌| 2.64G/2.75G [00:49<00:02, 55.9MB/s] 96%|█████████▌| 2.64G/2.75G [00:49<00:02, 54.7MB/s] 96%|█████████▌| 2.65G/2.75G [00:49<00:01, 56.0MB/s] 96%|█████████▋| 2.66G/2.75G [00:49<00:01, 54.0MB/s] 97%|█████████▋| 2.66G/2.75G [00:49<00:01, 56.3MB/s] 97%|█████████▋| 2.67G/2.75G [00:50<00:01, 53.6MB/s] 97%|█████████▋| 2.67G/2.75G [00:50<00:01, 55.8MB/s] 97%|█████████▋| 2.68G/2.75G [00:50<00:01, 54.2MB/s] 98%|█████████▊| 2.69G/2.75G [00:50<00:01, 55.8MB/s] 98%|█████████▊| 2.69G/2.75G [00:50<00:01, 54.2MB/s] 98%|█████████▊| 2.70G/2.75G [00:50<00:01, 56.0MB/s] 98%|█████████▊| 2.70G/2.75G [00:50<00:00, 54.4MB/s] 98%|█████████▊| 2.71G/2.75G [00:50<00:00, 56.0MB/s] 99%|█████████▊| 2.71G/2.75G [00:50<00:00, 54.4MB/s] 99%|█████████▉| 2.72G/2.75G [00:51<00:00, 56.1MB/s] 99%|█████████▉| 2.73G/2.75G [00:51<00:00, 54.4MB/s] 99%|█████████▉| 2.73G/2.75G [00:51<00:00, 56.1MB/s] 99%|█████████▉| 2.74G/2.75G [00:51<00:00, 54.4MB/s]100%|█████████▉| 2.74G/2.75G [00:51<00:00, 55.6MB/s]100%|█████████▉| 2.75G/2.75G [00:51<00:00, 55.0MB/s]100%|██████████| 2.75G/2.75G [00:51<00:00, 53.3MB/s]
+    → torch.Size([6667, 768])
+  ▶ Trích xuất TEST embeddings ...
+    → torch.Size([3333, 768])
+  shots=  1  → 3.62%  (seeds=[0, 1, 2])
+  shots= 10  → 8.11%  (seeds=[0, 1, 2])
+  shots=all  → 16.05%
 
 ============================================================
   Cars  (tanganke/stanford_cars)
 ============================================================
   ▶ Trích xuất TRAIN embeddings ...
-23:35:13 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
-`trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'tanganke/stanford_cars' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:35:13 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'tanganke/stanford_cars' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:35:13 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-23:35:13 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/tanganke/stanford_cars/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/README.md "HTTP/1.1 200 OK"
-23:35:13 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/tanganke/stanford_cars/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/README.md "HTTP/1.1 200 OK"
-23:35:14 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/stanford_cars.py "HTTP/1.1 404 Not Found"
-23:35:14 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/tanganke/stanford_cars/tanganke/stanford_cars.py "HTTP/1.1 404 Not Found"
-23:35:14 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/stanford_cars/revision/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40 "HTTP/1.1 200 OK"
-23:35:15 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/.huggingface.yaml "HTTP/1.1 404 Not Found"
-23:35:15 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=tanganke/stanford_cars "HTTP/1.1 200 OK"
-23:35:15 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/stanford_cars/revision/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40 "HTTP/1.1 200 OK"
-23:35:15 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/stanford_cars/tree/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data?recursive=true&expand=false "HTTP/1.1 200 OK"
-23:35:15 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/stanford_cars/tree/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40?recursive=false&expand=false "HTTP/1.1 200 OK"
-23:35:15 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/dataset_infos.json "HTTP/1.1 404 Not Found"
-Generating dataset stanford_cars (/dev/shm/hf_cache/tanganke___stanford_cars/default/0.0.0/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40)
-23:35:15 | INFO  | __init__.py | Generating dataset stanford_cars (/dev/shm/hf_cache/tanganke___stanford_cars/default/0.0.0/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40)
-Downloading and preparing dataset stanford_cars/default to /dev/shm/hf_cache/tanganke___stanford_cars/default/0.0.0/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40...
-23:35:15 | INFO  | __init__.py | Downloading and preparing dataset stanford_cars/default to /dev/shm/hf_cache/tanganke___stanford_cars/default/0.0.0/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40...
-23:35:16 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/train-00000-of-00002.parquet "HTTP/1.1 302 Found"
-23:35:16 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/stanford_cars/xet-read-token/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40 "HTTP/1.1 200 OK"
-23:35:25 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/train-00001-of-00002.parquet "HTTP/1.1 302 Found"
-23:35:30 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/test-00000-of-00002.parquet "HTTP/1.1 302 Found"
-23:35:38 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/test-00001-of-00002.parquet "HTTP/1.1 302 Found"
-23:35:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/contrast-00000-of-00001.parquet "HTTP/1.1 302 Found"
-23:35:47 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/gaussian_noise-00000-of-00002.parquet "HTTP/1.1 302 Found"
-23:35:49 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/gaussian_noise-00001-of-00002.parquet "HTTP/1.1 302 Found"
-23:35:51 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/impulse_noise-00000-of-00002.parquet "HTTP/1.1 302 Found"
-23:35:54 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/impulse_noise-00001-of-00002.parquet "HTTP/1.1 302 Found"
-23:35:56 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/jpeg_compression-00000-of-00001.parquet "HTTP/1.1 302 Found"
-23:35:58 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/motion_blur-00000-of-00001.parquet "HTTP/1.1 302 Found"
-23:36:00 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/pixelate-00000-of-00001.parquet "HTTP/1.1 302 Found"
-23:36:01 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/spatter-00000-of-00002.parquet "HTTP/1.1 302 Found"
-23:36:03 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/spatter-00001-of-00002.parquet "HTTP/1.1 302 Found"
-Downloading took 0.0 min
-23:36:04 | INFO  | __init__.py | Downloading took 0.0 min
-Checksum Computation took 0.0 min
-23:36:04 | INFO  | __init__.py | Checksum Computation took 0.0 min
-Generating train split
-23:36:05 | INFO  | __init__.py | Generating train split
-Generating train split:   0%|          | 0/8144 [00:00<?, ? examples/s]Generating train split:   4%|▎         | 300/8144 [00:00<00:03, 2588.36 examples/s]Generating train split:  16%|█▌        | 1300/8144 [00:00<00:01, 5277.59 examples/s]Generating train split:  25%|██▍       | 2000/8144 [00:00<00:01, 5791.64 examples/s]Generating train split:  37%|███▋      | 3000/8144 [00:00<00:01, 5140.85 examples/s]Generating train split:  47%|████▋     | 3800/8144 [00:00<00:01, 3944.31 examples/s]Generating train split:  57%|█████▋    | 4672/8144 [00:00<00:00, 4722.59 examples/s]Generating train split:  72%|███████▏  | 5872/8144 [00:01<00:00, 6160.33 examples/s]Generating train split:  87%|████████▋ | 7072/8144 [00:01<00:00, 6466.25 examples/s]Generating train split:  99%|█████████▉| 8072/8144 [00:01<00:00, 6991.47 examples/s]Generating train split: 100%|██████████| 8144/8144 [00:01<00:00, 5776.27 examples/s]
-Generating test split
-23:36:06 | INFO  | __init__.py | Generating test split
-Generating test split:   0%|          | 0/8041 [00:00<?, ? examples/s]Generating test split:  19%|█▊        | 1500/8041 [00:00<00:00, 13193.51 examples/s]Generating test split:  39%|███▊      | 3100/8041 [00:00<00:00, 7782.24 examples/s] Generating test split:  52%|█████▏    | 4221/8041 [00:00<00:00, 7395.17 examples/s]Generating test split:  66%|██████▌   | 5321/8041 [00:00<00:00, 7792.57 examples/s]Generating test split:  79%|███████▊  | 6321/8041 [00:00<00:00, 7645.18 examples/s]Generating test split:  96%|█████████▌| 7721/8041 [00:00<00:00, 9067.92 examples/s]Generating test split: 100%|██████████| 8041/8041 [00:00<00:00, 8377.85 examples/s]
-Generating contrast split
-23:36:07 | INFO  | __init__.py | Generating contrast split
-Generating contrast split:   0%|          | 0/8041 [00:00<?, ? examples/s]Generating contrast split:  41%|████      | 3300/8041 [00:00<00:00, 32342.89 examples/s]Generating contrast split:  99%|█████████▉| 8000/8041 [00:00<00:00, 30439.34 examples/s]Generating contrast split: 100%|██████████| 8041/8041 [00:00<00:00, 29972.89 examples/s]
-Generating gaussian_noise split
-23:36:07 | INFO  | __init__.py | Generating gaussian_noise split
-Generating gaussian_noise split:   0%|          | 0/8041 [00:00<?, ? examples/s]Generating gaussian_noise split:  20%|█▉        | 1600/8041 [00:00<00:00, 13790.62 examples/s]Generating gaussian_noise split:  37%|███▋      | 3000/8041 [00:00<00:00, 7384.57 examples/s] Generating gaussian_noise split:  49%|████▊     | 3900/8041 [00:00<00:00, 7837.69 examples/s]Generating gaussian_noise split:  61%|██████    | 4921/8041 [00:00<00:00, 8349.52 examples/s]Generating gaussian_noise split:  77%|███████▋  | 6221/8041 [00:00<00:00, 9497.22 examples/s]Generating gaussian_noise split:  91%|█████████ | 7321/8041 [00:00<00:00, 9844.12 examples/s]Generating gaussian_noise split: 100%|██████████| 8041/8041 [00:00<00:00, 9409.32 examples/s]
-Generating impulse_noise split
-23:36:08 | INFO  | __init__.py | Generating impulse_noise split
-Generating impulse_noise split:   0%|          | 0/8041 [00:00<?, ? examples/s]Generating impulse_noise split:  16%|█▌        | 1300/8041 [00:00<00:00, 10695.43 examples/s]Generating impulse_noise split:  36%|███▌      | 2900/8041 [00:00<00:00, 9238.63 examples/s] Generating impulse_noise split:  51%|█████     | 4121/8041 [00:00<00:00, 7989.78 examples/s]Generating impulse_noise split:  69%|██████▊   | 5521/8041 [00:00<00:00, 8232.69 examples/s]Generating impulse_noise split:  80%|███████▉  | 6421/8041 [00:00<00:00, 8197.86 examples/s]Generating impulse_noise split:  97%|█████████▋| 7821/8041 [00:00<00:00, 9343.10 examples/s]Generating impulse_noise split: 100%|██████████| 8041/8041 [00:00<00:00, 8918.51 examples/s]
-Generating jpeg_compression split
-23:36:09 | INFO  | __init__.py | Generating jpeg_compression split
-Generating jpeg_compression split:   0%|          | 0/8041 [00:00<?, ? examples/s]Generating jpeg_compression split:  27%|██▋       | 2200/8041 [00:00<00:00, 20932.41 examples/s]Generating jpeg_compression split:  53%|█████▎    | 4300/8041 [00:00<00:00, 19855.74 examples/s]Generating jpeg_compression split:  81%|████████  | 6500/8041 [00:00<00:00, 20536.60 examples/s]Generating jpeg_compression split: 100%|██████████| 8041/8041 [00:00<00:00, 20886.84 examples/s]
-Generating motion_blur split
-23:36:09 | INFO  | __init__.py | Generating motion_blur split
-Generating motion_blur split:   0%|          | 0/8041 [00:00<?, ? examples/s]Generating motion_blur split:  27%|██▋       | 2200/8041 [00:00<00:00, 21400.40 examples/s]Generating motion_blur split:  61%|██████    | 4900/8041 [00:00<00:00, 18620.54 examples/s]Generating motion_blur split:  88%|████████▊ | 7100/8041 [00:00<00:00, 19723.04 examples/s]Generating motion_blur split: 100%|██████████| 8041/8041 [00:00<00:00, 19591.46 examples/s]
-Generating pixelate split
-23:36:10 | INFO  | __init__.py | Generating pixelate split
-Generating pixelate split:   0%|          | 0/8041 [00:00<?, ? examples/s]Generating pixelate split: 100%|██████████| 8041/8041 [00:00<00:00, 163705.28 examples/s]
-Generating spatter split
-23:36:10 | INFO  | __init__.py | Generating spatter split
-Generating spatter split:   0%|          | 0/8041 [00:00<?, ? examples/s]Generating spatter split:  17%|█▋        | 1400/8041 [00:00<00:00, 13248.86 examples/s]Generating spatter split:  40%|███▉      | 3200/8041 [00:00<00:00, 11234.53 examples/s]Generating spatter split:  60%|█████▉    | 4821/8041 [00:00<00:00, 10682.83 examples/s]Generating spatter split:  76%|███████▌  | 6121/8041 [00:00<00:00, 11085.13 examples/s]Generating spatter split:  94%|█████████▎| 7521/8041 [00:00<00:00, 11566.02 examples/s]Generating spatter split: 100%|██████████| 8041/8041 [00:00<00:00, 11397.05 examples/s]
-All the splits matched successfully.
-23:36:10 | INFO  | __init__.py | All the splits matched successfully.
-Dataset stanford_cars downloaded and prepared to /dev/shm/hf_cache/tanganke___stanford_cars/default/0.0.0/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40. Subsequent calls will reuse this data.
-23:36:10 | INFO  | __init__.py | Dataset stanford_cars downloaded and prepared to /dev/shm/hf_cache/tanganke___stanford_cars/default/0.0.0/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40. Subsequent calls will reuse this data.
-    → torch.Size([8144, 768])
-  ▶ Trích xuất TEST embeddings ...
-23:36:22 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
-`trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'tanganke/stanford_cars' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:36:22 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'tanganke/stanford_cars' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:36:22 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-23:36:23 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/tanganke/stanford_cars/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/README.md "HTTP/1.1 200 OK"
-23:36:23 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/stanford_cars.py "HTTP/1.1 404 Not Found"
-23:36:23 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/tanganke/stanford_cars/tanganke/stanford_cars.py "HTTP/1.1 404 Not Found"
-23:36:23 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/.huggingface.yaml "HTTP/1.1 404 Not Found"
-23:36:23 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=tanganke/stanford_cars "HTTP/1.1 200 OK"
-23:36:24 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/dataset_infos.json "HTTP/1.1 404 Not Found"
-Found cached dataset stanford_cars (/dev/shm/hf_cache/tanganke___stanford_cars/default/0.0.0/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40)
-23:36:24 | INFO  | __init__.py | Found cached dataset stanford_cars (/dev/shm/hf_cache/tanganke___stanford_cars/default/0.0.0/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40)
-    → torch.Size([8041, 768])
-  shots=  1  → 1.81%  (seeds=[0, 1, 2])
-  shots= 10  → 5.32%  (seeds=[0, 1, 2])
-  shots=all  → 10.77%
+15:01:56 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
+15:01:56 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/main/README.md "HTTP/1.1 401 Unauthorized"
+  ❌ SKIP Cars: Dataset 'tanganke/stanford_cars' doesn't exist on the Hub or cannot be accessed.
 
 ============================================================
   CIFAR-10  (cifar10)
 ============================================================
   ▶ Trích xuất TRAIN embeddings ...
-23:36:43 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
-`trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'cifar10' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:36:43 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'cifar10' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:36:43 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar10/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-23:36:43 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar10/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-23:36:44 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/uoft-cs/cifar10/0b2714987fa478483af9968de7c934580d0bb9a2/README.md "HTTP/1.1 200 OK"
-23:36:44 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/uoft-cs/cifar10/0b2714987fa478483af9968de7c934580d0bb9a2/README.md "HTTP/1.1 200 OK"
-23:36:44 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/cifar10.py "HTTP/1.1 307 Temporary Redirect"
-23:36:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/cifar10.py "HTTP/1.1 404 Not Found"
-23:36:45 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/cifar10/cifar10.py "HTTP/1.1 404 Not Found"
-23:36:45 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/cifar10/revision/0b2714987fa478483af9968de7c934580d0bb9a2 "HTTP/1.1 307 Temporary Redirect"
-23:36:45 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar10/revision/0b2714987fa478483af9968de7c934580d0bb9a2 "HTTP/1.1 200 OK"
-23:36:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/.huggingface.yaml "HTTP/1.1 307 Temporary Redirect"
-23:36:46 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/.huggingface.yaml "HTTP/1.1 404 Not Found"
-23:36:46 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=cifar10 "HTTP/1.1 404 Not Found"
-23:36:46 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/cifar10/revision/0b2714987fa478483af9968de7c934580d0bb9a2 "HTTP/1.1 307 Temporary Redirect"
-23:36:46 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar10/revision/0b2714987fa478483af9968de7c934580d0bb9a2 "HTTP/1.1 200 OK"
-23:36:46 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/cifar10/tree/0b2714987fa478483af9968de7c934580d0bb9a2/plain_text?recursive=true&expand=false "HTTP/1.1 307 Temporary Redirect"
-23:36:46 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar10/tree/0b2714987fa478483af9968de7c934580d0bb9a2/plain_text?recursive=true&expand=false "HTTP/1.1 200 OK"
-23:36:47 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/cifar10/tree/0b2714987fa478483af9968de7c934580d0bb9a2?recursive=false&expand=false "HTTP/1.1 307 Temporary Redirect"
-23:36:47 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar10/tree/0b2714987fa478483af9968de7c934580d0bb9a2?recursive=false&expand=false "HTTP/1.1 200 OK"
-23:36:47 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/dataset_infos.json "HTTP/1.1 307 Temporary Redirect"
-23:36:47 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/dataset_infos.json "HTTP/1.1 404 Not Found"
-Generating dataset cifar10 (/dev/shm/hf_cache/cifar10/plain_text/0.0.0/0b2714987fa478483af9968de7c934580d0bb9a2)
-23:36:47 | INFO  | __init__.py | Generating dataset cifar10 (/dev/shm/hf_cache/cifar10/plain_text/0.0.0/0b2714987fa478483af9968de7c934580d0bb9a2)
-Downloading and preparing dataset cifar10/plain_text to /dev/shm/hf_cache/cifar10/plain_text/0.0.0/0b2714987fa478483af9968de7c934580d0bb9a2...
-23:36:47 | INFO  | __init__.py | Downloading and preparing dataset cifar10/plain_text to /dev/shm/hf_cache/cifar10/plain_text/0.0.0/0b2714987fa478483af9968de7c934580d0bb9a2...
-23:36:47 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/plain_text/train-00000-of-00001.parquet "HTTP/1.1 307 Temporary Redirect"
-23:36:47 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/plain_text/train-00000-of-00001.parquet "HTTP/1.1 302 Found"
-23:36:48 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar10/xet-read-token/0b2714987fa478483af9968de7c934580d0bb9a2 "HTTP/1.1 200 OK"
-23:36:49 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/plain_text/test-00000-of-00001.parquet "HTTP/1.1 307 Temporary Redirect"
-23:36:49 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/plain_text/test-00000-of-00001.parquet "HTTP/1.1 302 Found"
-Downloading took 0.0 min
-23:36:49 | INFO  | __init__.py | Downloading took 0.0 min
-Checksum Computation took 0.0 min
-23:36:49 | INFO  | __init__.py | Checksum Computation took 0.0 min
-Generating train split
-23:36:49 | INFO  | __init__.py | Generating train split
-Generating train split:   0%|          | 0/50000 [00:00<?, ? examples/s]Generating train split:  40%|████      | 20200/50000 [00:00<00:00, 201172.82 examples/s]Generating train split:  99%|█████████▊| 49300/50000 [00:00<00:00, 253587.65 examples/s]Generating train split: 100%|██████████| 50000/50000 [00:00<00:00, 245253.11 examples/s]
-Generating test split
-23:36:49 | INFO  | __init__.py | Generating test split
-Generating test split:   0%|          | 0/10000 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 10000/10000 [00:00<00:00, 269421.76 examples/s]
-All the splits matched successfully.
-23:36:49 | INFO  | __init__.py | All the splits matched successfully.
-Dataset cifar10 downloaded and prepared to /dev/shm/hf_cache/cifar10/plain_text/0.0.0/0b2714987fa478483af9968de7c934580d0bb9a2. Subsequent calls will reuse this data.
-23:36:49 | INFO  | __init__.py | Dataset cifar10 downloaded and prepared to /dev/shm/hf_cache/cifar10/plain_text/0.0.0/0b2714987fa478483af9968de7c934580d0bb9a2. Subsequent calls will reuse this data.
-  ❌ SKIP CIFAR-10: Caught KeyError in DataLoader worker process 0.
-Original Traceback (most recent call last):
-  File "/workspace/jepa/lib/python3.11/site-packages/torch/utils/data/_utils/worker.py", line 358, in _worker_loop
-    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
-           ^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/jepa/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 54, in fetch
-    data = [self.dataset[idx] for idx in possibly_batched_index]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/jepa/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 54, in <listcomp>
-    data = [self.dataset[idx] for idx in possibly_batched_index]
-            ~~~~~~~~~~~~^^^^^
-  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/datasets.py", line 222, in __getitem__
-    return self.process_sample(self.dataset[idx], **extra)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/datasets.py", line 77, in process_sample
-    sample = self.transform(sample)
-             ^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/transforms.py", line 1005, in __call__
-    sample = a(sample)
-             ^^^^^^^^^
-  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/transforms.py", line 596, in __call__
-    x, F.grayscale_to_rgb(self.nested_get(x, self.source)), self.target
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/transforms.py", line 33, in nested_get
-    return self.single_nested_get(v, name)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/transforms.py", line 28, in single_nested_get
-    return self.single_nested_get(v[i[0]], ".".join(i[1:]))
-                                  ~^^^^^^
-KeyError: 'image'
-
+  0%|          | 0.00/170M [00:00<?, ?B/s]  0%|          | 32.8k/170M [00:00<20:58, 135kB/s]  0%|          | 98.3k/170M [00:00<09:26, 301kB/s]  0%|          | 229k/170M [00:00<04:52, 582kB/s]   0%|          | 360k/170M [00:00<03:47, 748kB/s]  0%|          | 754k/170M [00:00<01:49, 1.55MB/s]  1%|          | 1.47M/170M [00:00<00:57, 2.94MB/s]  2%|▏         | 2.98M/170M [00:00<00:28, 5.84MB/s]  3%|▎         | 5.96M/170M [00:01<00:14, 11.5MB/s]  6%|▌         | 9.50M/170M [00:01<00:09, 16.3MB/s]  7%|▋         | 12.7M/170M [00:01<00:08, 18.9MB/s]  9%|▉         | 16.0M/170M [00:01<00:07, 20.9MB/s] 11%|█         | 19.2M/170M [00:01<00:06, 22.1MB/s] 13%|█▎        | 22.4M/170M [00:01<00:06, 23.0MB/s] 15%|█▌        | 25.6M/170M [00:01<00:06, 23.7MB/s] 17%|█▋        | 28.7M/170M [00:02<00:05, 23.8MB/s] 19%|█▊        | 31.8M/170M [00:02<00:05, 24.0MB/s] 21%|██        | 35.0M/170M [00:02<00:05, 24.3MB/s] 22%|██▏       | 38.1M/170M [00:02<00:05, 24.4MB/s] 24%|██▍       | 41.4M/170M [00:02<00:05, 24.6MB/s] 26%|██▌       | 44.5M/170M [00:02<00:05, 24.6MB/s] 28%|██▊       | 47.7M/170M [00:02<00:04, 24.7MB/s] 30%|██▉       | 50.9M/170M [00:02<00:04, 24.8MB/s] 32%|███▏      | 54.1M/170M [00:03<00:04, 24.9MB/s] 34%|███▎      | 57.3M/170M [00:03<00:04, 24.8MB/s] 35%|███▌      | 60.4M/170M [00:03<00:04, 24.7MB/s] 37%|███▋      | 63.5M/170M [00:03<00:04, 24.6MB/s] 39%|███▉      | 66.7M/170M [00:03<00:04, 24.7MB/s] 41%|████      | 69.9M/170M [00:03<00:04, 24.7MB/s] 43%|████▎     | 73.0M/170M [00:03<00:03, 24.7MB/s] 45%|████▍     | 76.1M/170M [00:03<00:03, 24.5MB/s] 47%|████▋     | 79.3M/170M [00:04<00:03, 24.6MB/s] 48%|████▊     | 82.5M/170M [00:04<00:03, 24.7MB/s] 50%|█████     | 85.7M/170M [00:04<00:03, 24.7MB/s] 52%|█████▏    | 88.9M/170M [00:04<00:03, 24.8MB/s] 54%|█████▍    | 92.1M/170M [00:04<00:03, 24.9MB/s] 56%|█████▌    | 95.2M/170M [00:04<00:03, 24.7MB/s] 58%|█████▊    | 98.3M/170M [00:04<00:02, 24.6MB/s] 59%|█████▉    | 101M/170M [00:04<00:02, 24.5MB/s]  61%|██████▏   | 104M/170M [00:05<00:02, 24.4MB/s] 63%|██████▎   | 108M/170M [00:05<00:02, 24.3MB/s] 65%|██████▍   | 111M/170M [00:05<00:02, 24.2MB/s] 67%|██████▋   | 114M/170M [00:05<00:02, 24.6MB/s] 69%|██████▊   | 117M/170M [00:05<00:02, 24.4MB/s] 70%|███████   | 120M/170M [00:05<00:02, 24.2MB/s] 72%|███████▏  | 123M/170M [00:05<00:01, 24.2MB/s] 74%|███████▍  | 126M/170M [00:05<00:01, 24.4MB/s] 76%|███████▌  | 129M/170M [00:06<00:01, 24.4MB/s] 78%|███████▊  | 133M/170M [00:06<00:01, 24.4MB/s] 80%|███████▉  | 136M/170M [00:06<00:01, 24.5MB/s] 81%|████████▏ | 139M/170M [00:06<00:01, 24.4MB/s] 83%|████████▎ | 142M/170M [00:06<00:01, 24.3MB/s] 85%|████████▌ | 145M/170M [00:06<00:01, 24.5MB/s] 87%|████████▋ | 148M/170M [00:06<00:00, 24.6MB/s] 89%|████████▉ | 152M/170M [00:07<00:00, 24.7MB/s] 91%|█████████ | 155M/170M [00:07<00:00, 24.7MB/s] 93%|█████████▎| 158M/170M [00:07<00:00, 24.7MB/s] 94%|█████████▍| 161M/170M [00:07<00:00, 24.7MB/s] 96%|█████████▋| 164M/170M [00:07<00:00, 24.8MB/s] 98%|█████████▊| 167M/170M [00:07<00:00, 24.8MB/s]100%|██████████| 170M/170M [00:07<00:00, 22.2MB/s]
+/workspace/jepa/lib/python3.11/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+    → torch.Size([50000, 768])
+  ▶ Trích xuất TEST embeddings ...
+    → torch.Size([10000, 768])
+  shots=  1  → 23.04%  (seeds=[0, 1, 2])
+  shots= 10  → 40.48%  (seeds=[0, 1, 2])
+  shots=all  → 71.76%
 
 ============================================================
   CIFAR-100  (cifar100)
 ============================================================
   ▶ Trích xuất TRAIN embeddings ...
-23:37:31 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
-`trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'cifar100' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:37:31 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'cifar100' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:37:31 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar100/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-23:37:31 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar100/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-23:37:31 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/uoft-cs/cifar100/aadb3af77e9048adbea6b47c21a81e47dd092ae5/README.md "HTTP/1.1 200 OK"
-23:37:32 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/uoft-cs/cifar100/aadb3af77e9048adbea6b47c21a81e47dd092ae5/README.md "HTTP/1.1 200 OK"
-23:37:32 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/cifar100.py "HTTP/1.1 307 Temporary Redirect"
-23:37:32 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/cifar100.py "HTTP/1.1 404 Not Found"
-23:37:32 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/cifar100/cifar100.py "HTTP/1.1 404 Not Found"
-23:37:32 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/cifar100/revision/aadb3af77e9048adbea6b47c21a81e47dd092ae5 "HTTP/1.1 307 Temporary Redirect"
-23:37:33 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar100/revision/aadb3af77e9048adbea6b47c21a81e47dd092ae5 "HTTP/1.1 200 OK"
-23:37:33 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/.huggingface.yaml "HTTP/1.1 307 Temporary Redirect"
-23:37:34 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/.huggingface.yaml "HTTP/1.1 404 Not Found"
-23:37:34 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=cifar100 "HTTP/1.1 404 Not Found"
-23:37:34 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/cifar100/revision/aadb3af77e9048adbea6b47c21a81e47dd092ae5 "HTTP/1.1 307 Temporary Redirect"
-23:37:35 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar100/revision/aadb3af77e9048adbea6b47c21a81e47dd092ae5 "HTTP/1.1 200 OK"
-23:37:35 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/cifar100/tree/aadb3af77e9048adbea6b47c21a81e47dd092ae5/cifar100?recursive=true&expand=false "HTTP/1.1 307 Temporary Redirect"
-23:37:35 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar100/tree/aadb3af77e9048adbea6b47c21a81e47dd092ae5/cifar100?recursive=true&expand=false "HTTP/1.1 200 OK"
-23:37:35 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/cifar100/tree/aadb3af77e9048adbea6b47c21a81e47dd092ae5?recursive=false&expand=false "HTTP/1.1 307 Temporary Redirect"
-23:37:35 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar100/tree/aadb3af77e9048adbea6b47c21a81e47dd092ae5?recursive=false&expand=false "HTTP/1.1 200 OK"
-23:37:36 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/dataset_infos.json "HTTP/1.1 307 Temporary Redirect"
-23:37:36 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/dataset_infos.json "HTTP/1.1 404 Not Found"
-Generating dataset cifar100 (/dev/shm/hf_cache/cifar100/cifar100/0.0.0/aadb3af77e9048adbea6b47c21a81e47dd092ae5)
-23:37:36 | INFO  | __init__.py | Generating dataset cifar100 (/dev/shm/hf_cache/cifar100/cifar100/0.0.0/aadb3af77e9048adbea6b47c21a81e47dd092ae5)
-Downloading and preparing dataset cifar100/cifar100 to /dev/shm/hf_cache/cifar100/cifar100/0.0.0/aadb3af77e9048adbea6b47c21a81e47dd092ae5...
-23:37:36 | INFO  | __init__.py | Downloading and preparing dataset cifar100/cifar100 to /dev/shm/hf_cache/cifar100/cifar100/0.0.0/aadb3af77e9048adbea6b47c21a81e47dd092ae5...
-23:37:36 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/cifar100/train-00000-of-00001.parquet "HTTP/1.1 307 Temporary Redirect"
-23:37:36 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/cifar100/train-00000-of-00001.parquet "HTTP/1.1 302 Found"
-23:37:36 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar100/xet-read-token/aadb3af77e9048adbea6b47c21a81e47dd092ae5 "HTTP/1.1 200 OK"
-23:37:38 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/cifar100/test-00000-of-00001.parquet "HTTP/1.1 307 Temporary Redirect"
-23:37:38 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/cifar100/test-00000-of-00001.parquet "HTTP/1.1 302 Found"
-Downloading took 0.0 min
-23:37:41 | INFO  | __init__.py | Downloading took 0.0 min
-Checksum Computation took 0.0 min
-23:37:41 | INFO  | __init__.py | Checksum Computation took 0.0 min
-Generating train split
-23:37:41 | INFO  | __init__.py | Generating train split
-Generating train split:   0%|          | 0/50000 [00:00<?, ? examples/s]Generating train split:  30%|██▉       | 14800/50000 [00:00<00:00, 146919.86 examples/s]Generating train split:  73%|███████▎  | 36300/50000 [00:00<00:00, 186262.60 examples/s]Generating train split: 100%|██████████| 50000/50000 [00:00<00:00, 192450.65 examples/s]
-Generating test split
-23:37:41 | INFO  | __init__.py | Generating test split
-Generating test split:   0%|          | 0/10000 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 10000/10000 [00:00<00:00, 156136.26 examples/s]
-All the splits matched successfully.
-23:37:41 | INFO  | __init__.py | All the splits matched successfully.
-Dataset cifar100 downloaded and prepared to /dev/shm/hf_cache/cifar100/cifar100/0.0.0/aadb3af77e9048adbea6b47c21a81e47dd092ae5. Subsequent calls will reuse this data.
-23:37:41 | INFO  | __init__.py | Dataset cifar100 downloaded and prepared to /dev/shm/hf_cache/cifar100/cifar100/0.0.0/aadb3af77e9048adbea6b47c21a81e47dd092ae5. Subsequent calls will reuse this data.
-  ❌ SKIP CIFAR-100: Caught KeyError in DataLoader worker process 0.
-Original Traceback (most recent call last):
-  File "/workspace/jepa/lib/python3.11/site-packages/torch/utils/data/_utils/worker.py", line 358, in _worker_loop
-    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
-           ^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/jepa/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 54, in fetch
-    data = [self.dataset[idx] for idx in possibly_batched_index]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/jepa/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 54, in <listcomp>
-    data = [self.dataset[idx] for idx in possibly_batched_index]
-            ~~~~~~~~~~~~^^^^^
-  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/datasets.py", line 222, in __getitem__
-    return self.process_sample(self.dataset[idx], **extra)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/datasets.py", line 77, in process_sample
-    sample = self.transform(sample)
-             ^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/transforms.py", line 1005, in __call__
-    sample = a(sample)
-             ^^^^^^^^^
-  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/transforms.py", line 596, in __call__
-    x, F.grayscale_to_rgb(self.nested_get(x, self.source)), self.target
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/transforms.py", line 33, in nested_get
-    return self.single_nested_get(v, name)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/transforms.py", line 28, in single_nested_get
-    return self.single_nested_get(v[i[0]], ".".join(i[1:]))
-                                  ~^^^^^^
-KeyError: 'image'
-
+  0%|          | 0.00/169M [00:00<?, ?B/s]  0%|          | 32.8k/169M [00:00<21:41, 130kB/s]  0%|          | 98.3k/169M [00:00<09:42, 290kB/s]  0%|          | 229k/169M [00:00<04:59, 564kB/s]   0%|          | 426k/169M [00:00<03:06, 905kB/s]  1%|          | 885k/169M [00:00<01:33, 1.79MB/s]  1%|          | 1.77M/169M [00:00<00:48, 3.44MB/s]  2%|▏         | 3.57M/169M [00:01<00:24, 6.79MB/s]  4%|▎         | 6.32M/169M [00:01<00:14, 11.3MB/s]  6%|▌         | 9.40M/169M [00:01<00:10, 15.1MB/s]  7%|▋         | 12.6M/169M [00:01<00:08, 17.9MB/s]  9%|▉         | 15.7M/169M [00:01<00:07, 19.6MB/s] 11%|█         | 18.8M/169M [00:01<00:07, 20.8MB/s] 13%|█▎        | 21.9M/169M [00:01<00:06, 21.7MB/s] 15%|█▍        | 25.1M/169M [00:01<00:06, 22.2MB/s] 17%|█▋        | 28.2M/169M [00:02<00:06, 22.7MB/s] 18%|█▊        | 31.2M/169M [00:02<00:06, 22.8MB/s] 20%|██        | 34.4M/169M [00:02<00:05, 23.0MB/s] 22%|██▏       | 37.5M/169M [00:02<00:05, 23.1MB/s] 24%|██▍       | 40.6M/169M [00:02<00:05, 23.2MB/s] 26%|██▌       | 43.6M/169M [00:02<00:05, 23.3MB/s] 28%|██▊       | 46.7M/169M [00:02<00:05, 23.2MB/s] 29%|██▉       | 49.7M/169M [00:02<00:05, 23.1MB/s] 31%|███       | 52.8M/169M [00:03<00:04, 23.3MB/s] 33%|███▎      | 55.9M/169M [00:03<00:04, 23.4MB/s] 35%|███▍      | 59.1M/169M [00:03<00:04, 23.5MB/s] 37%|███▋      | 62.3M/169M [00:03<00:04, 23.5MB/s] 39%|███▊      | 65.4M/169M [00:03<00:04, 23.6MB/s] 41%|████      | 68.5M/169M [00:03<00:04, 23.5MB/s] 42%|████▏     | 71.4M/169M [00:03<00:04, 23.2MB/s] 44%|████▍     | 74.6M/169M [00:04<00:04, 23.5MB/s] 46%|████▌     | 77.7M/169M [00:04<00:03, 23.4MB/s] 48%|████▊     | 80.6M/169M [00:04<00:03, 23.2MB/s] 50%|████▉     | 83.8M/169M [00:04<00:03, 23.3MB/s] 51%|█████▏    | 86.9M/169M [00:04<00:03, 23.3MB/s] 53%|█████▎    | 89.9M/169M [00:04<00:03, 23.3MB/s] 55%|█████▌    | 93.1M/169M [00:04<00:03, 23.4MB/s] 57%|█████▋    | 96.2M/169M [00:04<00:03, 23.3MB/s] 59%|█████▊    | 99.3M/169M [00:05<00:03, 23.1MB/s] 60%|██████    | 102M/169M [00:05<00:02, 22.8MB/s]  62%|██████▏   | 105M/169M [00:05<00:02, 22.7MB/s] 64%|██████▍   | 108M/169M [00:05<00:02, 22.5MB/s] 66%|██████▌   | 111M/169M [00:05<00:02, 22.3MB/s] 67%|██████▋   | 114M/169M [00:05<00:02, 22.3MB/s] 69%|██████▉   | 117M/169M [00:05<00:02, 22.2MB/s] 71%|███████   | 120M/169M [00:06<00:02, 22.2MB/s] 73%|███████▎  | 123M/169M [00:06<00:02, 22.2MB/s] 74%|███████▍  | 126M/169M [00:06<00:01, 22.2MB/s] 76%|███████▌  | 129M/169M [00:06<00:01, 22.2MB/s] 78%|███████▊  | 131M/169M [00:06<00:01, 22.2MB/s] 80%|███████▉  | 134M/169M [00:06<00:01, 22.2MB/s] 81%|████████▏ | 137M/169M [00:06<00:01, 22.2MB/s] 83%|████████▎ | 140M/169M [00:06<00:01, 22.2MB/s] 85%|████████▍ | 143M/169M [00:07<00:01, 22.2MB/s] 87%|████████▋ | 146M/169M [00:07<00:01, 22.2MB/s] 88%|████████▊ | 149M/169M [00:07<00:00, 22.4MB/s] 90%|█████████ | 152M/169M [00:07<00:00, 22.3MB/s] 92%|█████████▏| 155M/169M [00:07<00:00, 22.4MB/s] 94%|█████████▎| 158M/169M [00:07<00:00, 22.4MB/s] 95%|█████████▌| 161M/169M [00:07<00:00, 22.5MB/s] 97%|█████████▋| 164M/169M [00:08<00:00, 22.8MB/s] 99%|█████████▉| 167M/169M [00:08<00:00, 23.1MB/s]100%|██████████| 169M/169M [00:08<00:00, 20.6MB/s]
+    → torch.Size([50000, 768])
+  ▶ Trích xuất TEST embeddings ...
+    → torch.Size([10000, 768])
+  shots=  1  → 7.47%  (seeds=[0, 1, 2])
+  shots= 10  → 22.30%  (seeds=[0, 1, 2])
+  shots=all  → 49.90%
 
 ============================================================
   Flowers102  (nelorth/oxford-flowers)
 ============================================================
   ▶ Trích xuất TRAIN embeddings ...
-23:37:42 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
-`trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'nelorth/oxford-flowers' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:38:22 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'nelorth/oxford-flowers' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:38:22 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-23:38:23 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-23:38:23 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/nkirschi/oxford-flowers/a37b1891609c0376fa81eced756e7863e1bd873b/README.md "HTTP/1.1 200 OK"
-23:38:23 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/nkirschi/oxford-flowers/a37b1891609c0376fa81eced756e7863e1bd873b/README.md "HTTP/1.1 200 OK"
-23:38:23 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/oxford-flowers.py "HTTP/1.1 307 Temporary Redirect"
-23:38:23 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/oxford-flowers.py "HTTP/1.1 404 Not Found"
-23:38:24 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/nelorth/oxford-flowers/nelorth/oxford-flowers.py "HTTP/1.1 404 Not Found"
-23:38:24 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nelorth/oxford-flowers/revision/a37b1891609c0376fa81eced756e7863e1bd873b "HTTP/1.1 307 Temporary Redirect"
-23:38:24 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nkirschi/oxford-flowers/revision/a37b1891609c0376fa81eced756e7863e1bd873b "HTTP/1.1 200 OK"
-23:38:24 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/.huggingface.yaml "HTTP/1.1 307 Temporary Redirect"
-23:38:25 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/.huggingface.yaml "HTTP/1.1 404 Not Found"
-23:38:25 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=nelorth/oxford-flowers "HTTP/1.1 404 Not Found"
-23:38:25 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nelorth/oxford-flowers/revision/a37b1891609c0376fa81eced756e7863e1bd873b "HTTP/1.1 307 Temporary Redirect"
-23:38:25 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nkirschi/oxford-flowers/revision/a37b1891609c0376fa81eced756e7863e1bd873b "HTTP/1.1 200 OK"
-23:38:25 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nelorth/oxford-flowers/tree/a37b1891609c0376fa81eced756e7863e1bd873b/data?recursive=true&expand=false "HTTP/1.1 307 Temporary Redirect"
-23:38:25 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nkirschi/oxford-flowers/tree/a37b1891609c0376fa81eced756e7863e1bd873b/data?recursive=true&expand=false "HTTP/1.1 200 OK"
-23:38:25 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nelorth/oxford-flowers/tree/a37b1891609c0376fa81eced756e7863e1bd873b?recursive=false&expand=false "HTTP/1.1 307 Temporary Redirect"
-23:38:26 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nkirschi/oxford-flowers/tree/a37b1891609c0376fa81eced756e7863e1bd873b?recursive=false&expand=false "HTTP/1.1 200 OK"
-23:38:26 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/dataset_infos.json "HTTP/1.1 307 Temporary Redirect"
-23:38:26 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/dataset_infos.json "HTTP/1.1 404 Not Found"
-Generating dataset oxford-flowers (/dev/shm/hf_cache/nelorth___oxford-flowers/default/0.0.0/a37b1891609c0376fa81eced756e7863e1bd873b)
-23:38:26 | INFO  | __init__.py | Generating dataset oxford-flowers (/dev/shm/hf_cache/nelorth___oxford-flowers/default/0.0.0/a37b1891609c0376fa81eced756e7863e1bd873b)
-Downloading and preparing dataset oxford-flowers/default to /dev/shm/hf_cache/nelorth___oxford-flowers/default/0.0.0/a37b1891609c0376fa81eced756e7863e1bd873b...
-23:38:26 | INFO  | __init__.py | Downloading and preparing dataset oxford-flowers/default to /dev/shm/hf_cache/nelorth___oxford-flowers/default/0.0.0/a37b1891609c0376fa81eced756e7863e1bd873b...
-23:38:26 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/data/train-00000-of-00001-12de94e121bdbead.parquet "HTTP/1.1 307 Temporary Redirect"
-23:38:26 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/data/train-00000-of-00001-12de94e121bdbead.parquet "HTTP/1.1 302 Found"
-23:38:26 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nkirschi/oxford-flowers/xet-read-token/a37b1891609c0376fa81eced756e7863e1bd873b "HTTP/1.1 200 OK"
-23:38:31 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/data/test-00000-of-00001-96eeec628415add6.parquet "HTTP/1.1 307 Temporary Redirect"
-23:38:32 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/data/test-00000-of-00001-96eeec628415add6.parquet "HTTP/1.1 302 Found"
-Downloading took 0.0 min
-23:38:34 | INFO  | __init__.py | Downloading took 0.0 min
-Checksum Computation took 0.0 min
-23:38:34 | INFO  | __init__.py | Checksum Computation took 0.0 min
-Generating train split
-23:38:34 | INFO  | __init__.py | Generating train split
-Generating train split:   0%|          | 0/7169 [00:00<?, ? examples/s]Generating train split:  14%|█▍        | 1000/7169 [00:00<00:02, 2891.49 examples/s]Generating train split:  28%|██▊       | 2000/7169 [00:00<00:01, 4398.29 examples/s]Generating train split:  42%|████▏     | 3000/7169 [00:00<00:00, 5563.09 examples/s]Generating train split:  56%|█████▌    | 4000/7169 [00:00<00:00, 6162.12 examples/s]Generating train split:  70%|██████▉   | 5000/7169 [00:00<00:00, 6282.18 examples/s]Generating train split:  84%|████████▎ | 6000/7169 [00:01<00:00, 6510.28 examples/s]Generating train split: 100%|██████████| 7169/7169 [00:01<00:00, 6642.77 examples/s]
-Generating test split
-23:38:35 | INFO  | __init__.py | Generating test split
-Generating test split:   0%|          | 0/1020 [00:00<?, ? examples/s]Generating test split:  98%|█████████▊| 1000/1020 [00:00<00:00, 5874.76 examples/s]Generating test split: 100%|██████████| 1020/1020 [00:00<00:00, 5789.64 examples/s]
-All the splits matched successfully.
-23:38:35 | INFO  | __init__.py | All the splits matched successfully.
-Dataset oxford-flowers downloaded and prepared to /dev/shm/hf_cache/nelorth___oxford-flowers/default/0.0.0/a37b1891609c0376fa81eced756e7863e1bd873b. Subsequent calls will reuse this data.
-23:38:35 | INFO  | __init__.py | Dataset oxford-flowers downloaded and prepared to /dev/shm/hf_cache/nelorth___oxford-flowers/default/0.0.0/a37b1891609c0376fa81eced756e7863e1bd873b. Subsequent calls will reuse this data.
-    → torch.Size([7169, 768])
-  ▶ Trích xuất TEST embeddings ...
-23:38:44 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
-`trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'nelorth/oxford-flowers' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:38:44 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'nelorth/oxford-flowers' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:38:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-23:38:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-23:38:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/nkirschi/oxford-flowers/a37b1891609c0376fa81eced756e7863e1bd873b/README.md "HTTP/1.1 200 OK"
-23:38:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/oxford-flowers.py "HTTP/1.1 307 Temporary Redirect"
-23:38:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/oxford-flowers.py "HTTP/1.1 404 Not Found"
-23:38:46 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/nelorth/oxford-flowers/nelorth/oxford-flowers.py "HTTP/1.1 404 Not Found"
-23:38:46 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/.huggingface.yaml "HTTP/1.1 307 Temporary Redirect"
-23:38:46 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/.huggingface.yaml "HTTP/1.1 404 Not Found"
-23:38:46 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=nelorth/oxford-flowers "HTTP/1.1 404 Not Found"
-23:38:46 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/dataset_infos.json "HTTP/1.1 307 Temporary Redirect"
-23:38:46 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/dataset_infos.json "HTTP/1.1 404 Not Found"
-Found cached dataset oxford-flowers (/dev/shm/hf_cache/nelorth___oxford-flowers/default/0.0.0/a37b1891609c0376fa81eced756e7863e1bd873b)
-23:38:46 | INFO  | __init__.py | Found cached dataset oxford-flowers (/dev/shm/hf_cache/nelorth___oxford-flowers/default/0.0.0/a37b1891609c0376fa81eced756e7863e1bd873b)
-    → torch.Size([1020, 768])
-  shots=  1  → 19.74%  (seeds=[0, 1, 2])
-  shots= 10  → 49.51%  (seeds=[0, 1, 2])
-  shots=all  → 65.29%
+15:09:00 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
+15:09:00 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/main/README.md "HTTP/1.1 401 Unauthorized"
+  ❌ SKIP Flowers102: Dataset 'nelorth/oxford-flowers' doesn't exist on the Hub or cannot be accessed.
 
 ============================================================
   Food-101  (ethz/food101)
 ============================================================
   ▶ Trích xuất TRAIN embeddings ...
-23:38:56 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
-`trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'ethz/food101' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:38:56 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'ethz/food101' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:38:56 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-23:38:56 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/ethz/food101/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/README.md "HTTP/1.1 200 OK"
-23:38:56 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/ethz/food101/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/README.md "HTTP/1.1 200 OK"
-23:38:56 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/food101.py "HTTP/1.1 404 Not Found"
-23:38:57 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/ethz/food101/ethz/food101.py "HTTP/1.1 404 Not Found"
-23:38:57 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/ethz/food101/revision/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9 "HTTP/1.1 200 OK"
-23:38:57 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/.huggingface.yaml "HTTP/1.1 404 Not Found"
-23:38:57 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=ethz/food101 "HTTP/1.1 200 OK"
-23:38:58 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/ethz/food101/revision/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9 "HTTP/1.1 200 OK"
-23:38:58 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/ethz/food101/tree/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data?recursive=true&expand=false "HTTP/1.1 200 OK"
-23:38:58 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/ethz/food101/tree/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9?recursive=false&expand=false "HTTP/1.1 200 OK"
-23:38:58 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/ethz/food101/revision/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9 "HTTP/1.1 200 OK"
-23:38:58 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/ethz/food101/revision/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9 "HTTP/1.1 200 OK"
-23:38:58 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/dataset_infos.json "HTTP/1.1 404 Not Found"
-Generating dataset food101 (/dev/shm/hf_cache/ethz___food101/default/0.0.0/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9)
-23:38:58 | INFO  | __init__.py | Generating dataset food101 (/dev/shm/hf_cache/ethz___food101/default/0.0.0/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9)
-Downloading and preparing dataset food101/default to /dev/shm/hf_cache/ethz___food101/default/0.0.0/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9...
-23:38:58 | INFO  | __init__.py | Downloading and preparing dataset food101/default to /dev/shm/hf_cache/ethz___food101/default/0.0.0/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9...
-23:38:59 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/train-00000-of-00008.parquet "HTTP/1.1 302 Found"
-23:38:59 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/ethz/food101/xet-read-token/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9 "HTTP/1.1 200 OK"
-23:39:01 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/train-00001-of-00008.parquet "HTTP/1.1 302 Found"
-23:39:03 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/train-00002-of-00008.parquet "HTTP/1.1 302 Found"
-23:39:05 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/train-00003-of-00008.parquet "HTTP/1.1 302 Found"
-23:39:09 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/train-00004-of-00008.parquet "HTTP/1.1 302 Found"
-23:39:11 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/train-00005-of-00008.parquet "HTTP/1.1 302 Found"
-23:39:13 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/train-00006-of-00008.parquet "HTTP/1.1 302 Found"
-23:39:18 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/train-00007-of-00008.parquet "HTTP/1.1 302 Found"
-23:39:20 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/validation-00000-of-00003.parquet "HTTP/1.1 302 Found"
-23:39:22 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/validation-00001-of-00003.parquet "HTTP/1.1 302 Found"
-23:39:27 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/validation-00002-of-00003.parquet "HTTP/1.1 302 Found"
-Downloading took 0.0 min
-23:39:28 | INFO  | __init__.py | Downloading took 0.0 min
-Checksum Computation took 0.0 min
-23:39:28 | INFO  | __init__.py | Checksum Computation took 0.0 min
-Generating train split
-23:39:28 | INFO  | __init__.py | Generating train split
-Generating train split:   0%|          | 0/75750 [00:00<?, ? examples/s]Generating train split:   1%|          | 600/75750 [00:00<00:14, 5085.25 examples/s]Generating train split:   3%|▎         | 1900/75750 [00:00<00:08, 9189.26 examples/s]Generating train split:   5%|▌         | 3900/75750 [00:00<00:05, 12874.59 examples/s]Generating train split:   7%|▋         | 5600/75750 [00:00<00:04, 14228.45 examples/s]Generating train split:  10%|▉         | 7200/75750 [00:00<00:04, 13816.36 examples/s]Generating train split:  13%|█▎        | 9569/75750 [00:00<00:04, 13787.35 examples/s]Generating train split:  16%|█▌        | 12069/75750 [00:00<00:03, 16665.01 examples/s]Generating train split:  19%|█▉        | 14269/75750 [00:00<00:03, 17896.96 examples/s]Generating train split:  22%|██▏       | 16469/75750 [00:01<00:03, 18986.68 examples/s]Generating train split:  25%|██▍       | 18769/75750 [00:01<00:02, 19701.35 examples/s]Generating train split:  29%|██▉       | 21838/75750 [00:01<00:02, 19625.63 examples/s]Generating train split:  32%|███▏      | 23938/75750 [00:01<00:02, 19904.88 examples/s]Generating train split:  34%|███▍      | 26038/75750 [00:01<00:02, 20000.51 examples/s]Generating train split:  38%|███▊      | 28507/75750 [00:01<00:02, 17984.99 examples/s]Generating train split:  41%|████      | 31207/75750 [00:01<00:02, 20167.26 examples/s]Generating train split:  44%|████▍     | 33607/75750 [00:01<00:02, 20975.13 examples/s]Generating train split:  48%|████▊     | 36007/75750 [00:01<00:01, 21617.65 examples/s]Generating train split:  51%|█████     | 38676/75750 [00:02<00:01, 19846.84 examples/s]Generating train split:  55%|█████▍    | 41376/75750 [00:02<00:01, 21466.60 examples/s]Generating train split:  58%|█████▊    | 43976/75750 [00:02<00:01, 22591.94 examples/s]Generating train split:  61%|██████▏   | 46476/75750 [00:02<00:01, 23142.70 examples/s]Generating train split:  66%|██████▌   | 49945/75750 [00:02<00:01, 22634.44 examples/s]Generating train split:  69%|██████▉   | 52545/75750 [00:02<00:00, 23324.73 examples/s]Generating train split:  73%|███████▎  | 55645/75750 [00:02<00:00, 22158.54 examples/s]Generating train split:  78%|███████▊  | 58914/75750 [00:03<00:00, 21680.43 examples/s]Generating train split:  81%|████████▏ | 61614/75750 [00:03<00:00, 22865.59 examples/s]Generating train split:  85%|████████▍ | 64114/75750 [00:03<00:00, 23004.29 examples/s]Generating train split:  90%|████████▉ | 67982/75750 [00:03<00:00, 23685.63 examples/s]Generating train split:  93%|█████████▎| 70682/75750 [00:03<00:00, 24150.35 examples/s]Generating train split:  97%|█████████▋| 73482/75750 [00:03<00:00, 24801.34 examples/s]Generating train split: 100%|██████████| 75750/75750 [00:03<00:00, 20375.19 examples/s]
-Generating validation split
-23:39:32 | INFO  | __init__.py | Generating validation split
-Generating validation split:   0%|          | 0/25250 [00:00<?, ? examples/s]Generating validation split:  11%|█         | 2700/25250 [00:00<00:00, 26699.44 examples/s]Generating validation split:  22%|██▏       | 5500/25250 [00:00<00:00, 27287.83 examples/s]Generating validation split:  33%|███▎      | 8300/25250 [00:00<00:00, 26827.90 examples/s]Generating validation split:  48%|████▊     | 12217/25250 [00:00<00:00, 26279.88 examples/s]Generating validation split:  59%|█████▉    | 14917/25250 [00:00<00:00, 26115.55 examples/s]Generating validation split:  75%|███████▍  | 18834/25250 [00:00<00:00, 25734.69 examples/s]Generating validation split:  85%|████████▌ | 21534/25250 [00:00<00:00, 25726.88 examples/s]Generating validation split:  96%|█████████▋| 24334/25250 [00:00<00:00, 25926.73 examples/s]Generating validation split: 100%|██████████| 25250/25250 [00:00<00:00, 25904.02 examples/s]
-All the splits matched successfully.
-23:39:33 | INFO  | __init__.py | All the splits matched successfully.
-Dataset food101 downloaded and prepared to /dev/shm/hf_cache/ethz___food101/default/0.0.0/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9. Subsequent calls will reuse this data.
-23:39:33 | INFO  | __init__.py | Dataset food101 downloaded and prepared to /dev/shm/hf_cache/ethz___food101/default/0.0.0/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9. Subsequent calls will reuse this data.
-/workspace/jepa/lib/python3.11/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
-  warnings.warn(str(msg))
-    → torch.Size([75750, 768])
-  ▶ Trích xuất TEST embeddings ...
-23:40:37 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
-`trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'ethz/food101' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:40:37 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'ethz/food101' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:40:37 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-23:40:37 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/ethz/food101/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/README.md "HTTP/1.1 200 OK"
-23:40:37 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/food101.py "HTTP/1.1 404 Not Found"
-23:40:38 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/ethz/food101/ethz/food101.py "HTTP/1.1 404 Not Found"
-23:40:38 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/.huggingface.yaml "HTTP/1.1 404 Not Found"
-23:40:38 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=ethz/food101 "HTTP/1.1 200 OK"
-23:40:38 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/dataset_infos.json "HTTP/1.1 404 Not Found"
-Found cached dataset food101 (/dev/shm/hf_cache/ethz___food101/default/0.0.0/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9)
-23:40:39 | INFO  | __init__.py | Found cached dataset food101 (/dev/shm/hf_cache/ethz___food101/default/0.0.0/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9)
-/workspace/jepa/lib/python3.11/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
-  warnings.warn(str(msg))
-/workspace/jepa/lib/python3.11/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
-  warnings.warn(str(msg))
-    → torch.Size([25250, 768])
-  shots=  1  → 4.09%  (seeds=[0, 1, 2])
-  shots= 10  → 13.98%  (seeds=[0, 1, 2])
-  shots=all  → 39.49%
+15:09:00 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
+15:09:00 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/main/README.md "HTTP/1.1 401 Unauthorized"
+  ❌ SKIP Food-101: Dataset 'ethz/food101' doesn't exist on the Hub or cannot be accessed.
 
 ============================================================
   Oxford Pets  (pcuenq/oxford-pets)
 ============================================================
   ▶ Trích xuất TRAIN embeddings ...
-23:41:39 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
-`trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'pcuenq/oxford-pets' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:41:39 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
-Please check that the Hugging Face dataset 'pcuenq/oxford-pets' isn't based on a loading script and remove `trust_remote_code`.
-If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
-23:41:40 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/pcuenq/oxford-pets/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-23:41:40 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/enterprise-explorers/oxford-pets/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
-23:41:40 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/enterprise-explorers/oxford-pets/2c628097f293a86bdba429379dbb91c0952415eb/README.md "HTTP/1.1 200 OK"
-23:41:40 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/enterprise-explorers/oxford-pets/2c628097f293a86bdba429379dbb91c0952415eb/README.md "HTTP/1.1 200 OK"
-23:41:40 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/pcuenq/oxford-pets/resolve/2c628097f293a86bdba429379dbb91c0952415eb/oxford-pets.py "HTTP/1.1 307 Temporary Redirect"
-23:41:41 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/enterprise-explorers/oxford-pets/resolve/2c628097f293a86bdba429379dbb91c0952415eb/oxford-pets.py "HTTP/1.1 404 Not Found"
-23:41:41 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/pcuenq/oxford-pets/pcuenq/oxford-pets.py "HTTP/1.1 404 Not Found"
-23:41:41 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/pcuenq/oxford-pets/revision/2c628097f293a86bdba429379dbb91c0952415eb "HTTP/1.1 307 Temporary Redirect"
-23:41:42 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/enterprise-explorers/oxford-pets/revision/2c628097f293a86bdba429379dbb91c0952415eb "HTTP/1.1 200 OK"
-23:41:42 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/pcuenq/oxford-pets/resolve/2c628097f293a86bdba429379dbb91c0952415eb/.huggingface.yaml "HTTP/1.1 307 Temporary Redirect"
-23:41:42 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/enterprise-explorers/oxford-pets/resolve/2c628097f293a86bdba429379dbb91c0952415eb/.huggingface.yaml "HTTP/1.1 404 Not Found"
-23:41:42 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=pcuenq/oxford-pets "HTTP/1.1 404 Not Found"
-23:41:42 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/pcuenq/oxford-pets/revision/2c628097f293a86bdba429379dbb91c0952415eb "HTTP/1.1 307 Temporary Redirect"
-23:41:43 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/enterprise-explorers/oxford-pets/revision/2c628097f293a86bdba429379dbb91c0952415eb "HTTP/1.1 200 OK"
-23:41:43 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/pcuenq/oxford-pets/tree/2c628097f293a86bdba429379dbb91c0952415eb/data?recursive=true&expand=false "HTTP/1.1 307 Temporary Redirect"
-23:41:43 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/enterprise-explorers/oxford-pets/tree/2c628097f293a86bdba429379dbb91c0952415eb/data?recursive=true&expand=false "HTTP/1.1 200 OK"
-23:41:43 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/pcuenq/oxford-pets/tree/2c628097f293a86bdba429379dbb91c0952415eb?recursive=false&expand=false "HTTP/1.1 307 Temporary Redirect"
-23:41:43 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/enterprise-explorers/oxford-pets/tree/2c628097f293a86bdba429379dbb91c0952415eb?recursive=false&expand=false "HTTP/1.1 200 OK"
-23:41:43 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/pcuenq/oxford-pets/revision/2c628097f293a86bdba429379dbb91c0952415eb "HTTP/1.1 307 Temporary Redirect"
-23:41:44 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/enterprise-explorers/oxford-pets/revision/2c628097f293a86bdba429379dbb91c0952415eb "HTTP/1.1 200 OK"
-23:41:44 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/pcuenq/oxford-pets/resolve/2c628097f293a86bdba429379dbb91c0952415eb/dataset_infos.json "HTTP/1.1 307 Temporary Redirect"
-23:41:44 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/enterprise-explorers/oxford-pets/resolve/2c628097f293a86bdba429379dbb91c0952415eb/dataset_infos.json "HTTP/1.1 307 Temporary Redirect"
-23:41:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/enterprise-explorers/oxford-pets/2c628097f293a86bdba429379dbb91c0952415eb/dataset_infos.json "HTTP/1.1 200 OK"
-23:41:45 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/enterprise-explorers/oxford-pets/2c628097f293a86bdba429379dbb91c0952415eb/dataset_infos.json "HTTP/1.1 200 OK"
-Generating dataset oxford-pets (/dev/shm/hf_cache/pcuenq___oxford-pets/default/0.0.0/2c628097f293a86bdba429379dbb91c0952415eb)
-23:41:45 | INFO  | __init__.py | Generating dataset oxford-pets (/dev/shm/hf_cache/pcuenq___oxford-pets/default/0.0.0/2c628097f293a86bdba429379dbb91c0952415eb)
-Downloading and preparing dataset oxford-pets/default (download: 223.20 MiB, generated: 223.84 MiB, post-processed: Unknown size, total: 447.04 MiB) to /dev/shm/hf_cache/pcuenq___oxford-pets/default/0.0.0/2c628097f293a86bdba429379dbb91c0952415eb...
-23:41:45 | INFO  | __init__.py | Downloading and preparing dataset oxford-pets/default (download: 223.20 MiB, generated: 223.84 MiB, post-processed: Unknown size, total: 447.04 MiB) to /dev/shm/hf_cache/pcuenq___oxford-pets/default/0.0.0/2c628097f293a86bdba429379dbb91c0952415eb...
-23:41:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/pcuenq/oxford-pets/resolve/2c628097f293a86bdba429379dbb91c0952415eb/data/train-00000-of-00001-ecc2afb43dedd5e0.parquet "HTTP/1.1 307 Temporary Redirect"
-23:41:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/enterprise-explorers/oxford-pets/resolve/2c628097f293a86bdba429379dbb91c0952415eb/data/train-00000-of-00001-ecc2afb43dedd5e0.parquet "HTTP/1.1 302 Found"
-23:41:45 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/enterprise-explorers/oxford-pets/xet-read-token/2c628097f293a86bdba429379dbb91c0952415eb "HTTP/1.1 200 OK"
-Downloading took 0.0 min
-23:41:49 | INFO  | __init__.py | Downloading took 0.0 min
-Checksum Computation took 0.0 min
-23:41:49 | INFO  | __init__.py | Checksum Computation took 0.0 min
-Generating train split
-23:41:49 | INFO  | __init__.py | Generating train split
-Generating train split:   0%|          | 0/7390 [00:00<?, ? examples/s]Generating train split: 100%|██████████| 7390/7390 [00:00<00:00, 9920.10 examples/s]Generating train split: 100%|██████████| 7390/7390 [00:00<00:00, 9357.81 examples/s]
-All the splits matched successfully.
-23:41:50 | INFO  | __init__.py | All the splits matched successfully.
-Dataset oxford-pets downloaded and prepared to /dev/shm/hf_cache/pcuenq___oxford-pets/default/0.0.0/2c628097f293a86bdba429379dbb91c0952415eb. Subsequent calls will reuse this data.
-23:41:50 | INFO  | __init__.py | Dataset oxford-pets downloaded and prepared to /dev/shm/hf_cache/pcuenq___oxford-pets/default/0.0.0/2c628097f293a86bdba429379dbb91c0952415eb. Subsequent calls will reuse this data.
-  ❌ SKIP Oxford Pets: too many dimensions 'str'
+  0%|          | 0.00/792M [00:00<?, ?B/s]  0%|          | 98.3k/792M [00:00<15:05, 874kB/s]  0%|          | 524k/792M [00:00<05:12, 2.53MB/s]  0%|          | 2.85M/792M [00:00<01:14, 10.6MB/s]  2%|▏         | 13.3M/792M [00:00<00:17, 44.3MB/s]  3%|▎         | 21.9M/792M [00:00<00:13, 57.0MB/s]  4%|▍         | 32.2M/792M [00:00<00:10, 71.9MB/s]  5%|▌         | 42.1M/792M [00:00<00:09, 76.5MB/s]  7%|▋         | 52.0M/792M [00:00<00:08, 83.0MB/s]  8%|▊         | 62.2M/792M [00:00<00:08, 88.8MB/s]  9%|▉         | 71.2M/792M [00:01<00:08, 86.7MB/s] 10%|█         | 81.8M/792M [00:01<00:07, 92.1MB/s] 11%|█▏        | 91.1M/792M [00:01<00:07, 88.9MB/s] 13%|█▎        | 102M/792M [00:01<00:07, 93.6MB/s]  14%|█▍        | 111M/792M [00:01<00:07, 90.0MB/s] 15%|█▌        | 121M/792M [00:01<00:07, 93.2MB/s] 17%|█▋        | 131M/792M [00:01<00:07, 90.8MB/s] 18%|█▊        | 142M/792M [00:01<00:06, 94.6MB/s] 19%|█▉        | 152M/792M [00:01<00:07, 91.0MB/s] 20%|██        | 162M/792M [00:02<00:06, 94.5MB/s] 22%|██▏       | 172M/792M [00:02<00:06, 91.4MB/s] 23%|██▎       | 182M/792M [00:02<00:06, 93.9MB/s] 24%|██▍       | 192M/792M [00:02<00:06, 91.1MB/s] 26%|██▌       | 203M/792M [00:02<00:06, 96.7MB/s] 27%|██▋       | 213M/792M [00:02<00:06, 91.3MB/s] 28%|██▊       | 223M/792M [00:02<00:05, 95.1MB/s] 29%|██▉       | 233M/792M [00:02<00:06, 91.0MB/s] 31%|███       | 243M/792M [00:02<00:05, 93.9MB/s] 32%|███▏      | 253M/792M [00:03<00:05, 90.6MB/s] 33%|███▎      | 263M/792M [00:03<00:05, 93.8MB/s] 34%|███▍      | 273M/792M [00:03<00:05, 91.1MB/s] 36%|███▌      | 283M/792M [00:03<00:05, 94.0MB/s] 37%|███▋      | 293M/792M [00:03<00:05, 91.1MB/s] 38%|███▊      | 303M/792M [00:03<00:05, 94.0MB/s] 40%|███▉      | 313M/792M [00:03<00:05, 90.9MB/s] 41%|████      | 323M/792M [00:03<00:05, 93.4MB/s] 42%|████▏     | 334M/792M [00:03<00:05, 91.0MB/s] 43%|████▎     | 344M/792M [00:04<00:04, 93.6MB/s] 45%|████▍     | 354M/792M [00:04<00:04, 91.5MB/s] 46%|████▌     | 364M/792M [00:04<00:04, 94.5MB/s] 47%|████▋     | 374M/792M [00:04<00:04, 91.6MB/s] 49%|████▊     | 384M/792M [00:04<00:04, 94.5MB/s] 50%|████▉     | 394M/792M [00:04<00:04, 91.6MB/s] 51%|█████     | 405M/792M [00:04<00:03, 97.1MB/s] 52%|█████▏    | 415M/792M [00:04<00:04, 91.9MB/s] 54%|█████▍    | 427M/792M [00:04<00:04, 91.2MB/s] 55%|█████▌    | 438M/792M [00:05<00:03, 96.0MB/s] 56%|█████▋    | 447M/792M [00:05<00:03, 91.2MB/s] 58%|█████▊    | 459M/792M [00:05<00:03, 91.2MB/s] 59%|█████▉    | 470M/792M [00:05<00:03, 96.9MB/s] 61%|██████    | 480M/792M [00:05<00:03, 91.4MB/s] 62%|██████▏   | 491M/792M [00:05<00:03, 95.6MB/s] 63%|██████▎   | 500M/792M [00:05<00:03, 91.5MB/s] 64%|██████▍   | 510M/792M [00:05<00:03, 87.9MB/s] 66%|██████▌   | 522M/792M [00:05<00:02, 95.9MB/s] 67%|██████▋   | 532M/792M [00:06<00:02, 90.4MB/s] 69%|██████▊   | 543M/792M [00:06<00:02, 89.5MB/s] 70%|██████▉   | 554M/792M [00:06<00:02, 95.5MB/s] 71%|███████   | 564M/792M [00:06<00:02, 90.8MB/s] 73%|███████▎  | 575M/792M [00:06<00:02, 96.9MB/s] 74%|███████▍  | 585M/792M [00:06<00:02, 90.6MB/s] 75%|███████▌  | 595M/792M [00:06<00:02, 88.8MB/s] 77%|███████▋  | 607M/792M [00:06<00:01, 95.9MB/s] 78%|███████▊  | 616M/792M [00:06<00:01, 90.6MB/s] 79%|███████▉  | 627M/792M [00:07<00:01, 89.7MB/s] 81%|████████  | 640M/792M [00:07<00:01, 91.0MB/s] 82%|████████▏ | 650M/792M [00:07<00:01, 94.8MB/s] 83%|████████▎ | 660M/792M [00:07<00:01, 89.4MB/s] 85%|████████▍ | 670M/792M [00:07<00:01, 94.1MB/s] 86%|████████▌ | 680M/792M [00:07<00:01, 88.9MB/s] 87%|████████▋ | 692M/792M [00:07<00:01, 96.9MB/s] 89%|████████▊ | 702M/792M [00:07<00:00, 90.9MB/s] 90%|████████▉ | 712M/792M [00:08<00:00, 88.9MB/s] 91%|█████████ | 722M/792M [00:08<00:00, 92.5MB/s] 92%|█████████▏| 732M/792M [00:08<00:00, 89.2MB/s] 94%|█████████▎| 742M/792M [00:08<00:00, 91.0MB/s] 95%|█████████▍| 752M/792M [00:08<00:00, 88.2MB/s] 96%|█████████▋| 764M/792M [00:08<00:00, 96.2MB/s] 98%|█████████▊| 773M/792M [00:08<00:00, 90.7MB/s] 99%|█████████▉| 784M/792M [00:08<00:00, 94.5MB/s]100%|██████████| 792M/792M [00:08<00:00, 89.3MB/s]
+  0%|          | 0.00/19.2M [00:00<?, ?B/s]  1%|          | 98.3k/19.2M [00:00<00:22, 832kB/s]  4%|▎         | 688k/19.2M [00:00<00:05, 3.14MB/s] 25%|██▌       | 4.88M/19.2M [00:00<00:00, 17.1MB/s] 75%|███████▍  | 14.4M/19.2M [00:00<00:00, 43.7MB/s]100%|██████████| 19.2M/19.2M [00:00<00:00, 36.6MB/s]
+    → torch.Size([3680, 768])
+  ▶ Trích xuất TEST embeddings ...
+    → torch.Size([3669, 768])
+  shots=  1  → 7.74%  (seeds=[0, 1, 2])
+  shots= 10  → 17.96%  (seeds=[0, 1, 2])
+  shots=all  → 30.17%
 
 === LeJEPA ViT-B (1ep IN-1K) — Few-Shot Linear Probe ===
 
-────────────────────────────────────────────────────────────────────────────────────────────────────────
- shots │      DTD │ Aircraft │     Cars │ CIFAR-10 │ CIFAR-10 │ Flowers1 │ Food-101 │ Oxford P │    avg.
-────────────────────────────────────────────────────────────────────────────────────────────────────────
-     1 │    10.98 │      nan │     1.81 │      nan │      nan │    19.74 │     4.09 │      nan │    9.16
-    10 │    25.25 │      nan │     5.32 │      nan │      nan │    49.51 │    13.98 │      nan │   23.52
-   all │    39.26 │      nan │    10.77 │      nan │      nan │    65.29 │    39.49 │      nan │   38.70
-────────────────────────────────────────────────────────────────────────────────────────────────────────
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ shots │         DTD │    Aircraft │        Cars │    CIFAR-10 │   CIFAR-100 │  Flowers102 │    Food-101 │ Oxford Pets │    avg.
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+     1 │         nan │        3.62 │         nan │       23.04 │        7.47 │         nan │         nan │        7.74 │   10.47
+    10 │         nan │        8.11 │         nan │       40.48 │       22.30 │         nan │         nan │       17.96 │   22.21
+   all │         nan │       16.05 │         nan │       71.76 │       49.90 │         nan │         nan │       30.17 │   41.97
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 

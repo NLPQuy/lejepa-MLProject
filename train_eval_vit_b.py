@@ -207,7 +207,7 @@ BACKBONE_NAME    = "vit_base_patch16_224"    # ViT-B/16, 86M params
 
 # Pretraining 
 PRETRAIN_DATASET = "ILSVRC/imagenet-1k"
-MAX_EPOCHS       = 1
+MAX_EPOCHS       = 10
 BATCH_SIZE       = 64
 GRAD_ACCUM_STEPS = 8                      # effective BS = 64 * 8 = 512
 LR               = 5e-4
@@ -252,9 +252,9 @@ NUM_WORKERS  = 8   # local SSD → có thể tăng workers
 PRECISION    = "bf16-mixed"
 ACCELERATOR  = "gpu"
 DEVICES      = "auto"
-CKPT_DIR     = Path(REPO_ROOT) / "checkpoints"
+CKPT_DIR     = Path("/workspace/checkpoints")
 LOG_DIR      = Path(REPO_ROOT) / "logs"
-CKPT_DIR.mkdir(exist_ok=True)
+CKPT_DIR.mkdir(parents=True, exist_ok=True)
 
 IMG_MEAN = (0.485, 0.456, 0.406)
 IMG_STD  = (0.229, 0.224, 0.225)

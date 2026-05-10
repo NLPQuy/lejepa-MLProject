@@ -1,4 +1,4 @@
 checkpoints/
 .hf_cache/
 *.bak
-logs/
+data/

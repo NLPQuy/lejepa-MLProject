@@ -1,0 +1,10 @@
+backbone: vit_base_patch16_224
+max_epochs: 1
+batch_size: 128
+lr: 0.0005
+weight_decay: 0.05
+lambda: 0.05
+n_slices: 1024
+system.working_dir: /workspace
+slurm.job_id: N/A
+slurm.task_id: N/A
