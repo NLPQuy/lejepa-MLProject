@@ -1,0 +1,4 @@
+\beamer@sectionintoc {1}{WHAT — Học biểu diễn là gì?}{3}{0}{1}
+\beamer@sectionintoc {2}{WHY — Tại sao JEPA thất bại?}{6}{0}{2}
+\beamer@sectionintoc {3}{HOW — Giải từ gốc rễ}{9}{0}{3}
+\beamer@sectionintoc {4}{Kết quả}{26}{0}{4}
