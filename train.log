@@ -1,3 +1,4 @@
+nohup: ignoring input
 [env] Loaded /workspace/.env
 [shm] /dev/shm free: 31.0 GB  →  cache dir: /dev/shm/hf_cache
 Note: Environment variable`HF_TOKEN` is set and is the current active token independently from the token you've just configured.
@@ -8,92 +9,92 @@ WARNING: typer 0.25.1 does not provide the extra 'all'
 ============================================================
 Phase 1 — LeJEPA Pretraining on ImageNet-1K (ViT-B/16)
 ============================================================
-[DDP] Using MASTER_PORT=38453
+[DDP] Using MASTER_PORT=33459
 [data] ImageNet-1K train: /workspace/imagenet/train
 [data] ImageNet-1K val:   /workspace/imagenet/val
 [data] train=1,527,212  val=50,000
-20:43:16 | INFO  | module.py   | Setting up DataModule
-20:43:16 | INFO  | utils.py    | ── Module ────────────────────────────────────────
-20:43:16 | WARN  | module.py   | ! No hyperparameters provided - hyperparameter logging is disabled.
-20:43:16 | INFO  | module.py   |   Setting custom forward method.
-20:43:16 | WARN  | module.py   | ! You didn't pass a forward method. This will fail unless you implemented your own Module class.
-20:43:16 | INFO  | module.py   |   No metrics configuration provided - automatic metric tracking is disabled.
-20:43:17 | INFO  | utils.py    | ── Module ────────────────────────────────────────
-20:43:17 | INFO  | module.py   |   Saving provided hyperparameters.
-20:43:17 | INFO  | module.py   |   Setting custom forward method.
-20:43:17 | INFO  | module.py   |   Setting attribute: self.model = <class 'stable_pretraining.methods.lejepa.LeJEPA'>
-20:43:17 | INFO  | module.py   |   Setting attribute: self.optim = <class 'dict'>
-20:43:17 | INFO  | module.py   |   No metrics configuration provided - automatic metric tracking is disabled.
-20:43:17 | INFO  | utils.py    |   wrapping configure_model
-20:43:17 | INFO  | utils.py    |   wrapping configure_optimizers
-20:43:17 | INFO  | utils.py    | ── OnlineProbe ───────────────────────────────────
-20:43:17 | INFO  | probe.py    |   name: inet_probe
-20:43:17 | INFO  | probe.py    |   input: embedding
-20:43:17 | INFO  | probe.py    |   target: label
-20:43:17 | INFO  | probe.py    |   accumulate_grad_batches: 1
-20:43:17 | INFO  | probe.py    |   wrapping forward
+21:11:02 | INFO  | module.py   | Setting up DataModule
+21:11:02 | INFO  | utils.py    | ── Module ────────────────────────────────────────
+21:11:02 | WARN  | module.py   | ! No hyperparameters provided - hyperparameter logging is disabled.
+21:11:02 | INFO  | module.py   |   Setting custom forward method.
+21:11:02 | WARN  | module.py   | ! You didn't pass a forward method. This will fail unless you implemented your own Module class.
+21:11:02 | INFO  | module.py   |   No metrics configuration provided - automatic metric tracking is disabled.
+21:11:03 | INFO  | utils.py    | ── Module ────────────────────────────────────────
+21:11:03 | INFO  | module.py   |   Saving provided hyperparameters.
+21:11:03 | INFO  | module.py   |   Setting custom forward method.
+21:11:03 | INFO  | module.py   |   Setting attribute: self.model = <class 'stable_pretraining.methods.lejepa.LeJEPA'>
+21:11:03 | INFO  | module.py   |   Setting attribute: self.optim = <class 'dict'>
+21:11:03 | INFO  | module.py   |   No metrics configuration provided - automatic metric tracking is disabled.
+21:11:03 | INFO  | utils.py    |   wrapping configure_model
+21:11:03 | INFO  | utils.py    |   wrapping configure_optimizers
+21:11:03 | INFO  | utils.py    | ── OnlineProbe ───────────────────────────────────
+21:11:03 | INFO  | probe.py    |   name: inet_probe
+21:11:03 | INFO  | probe.py    |   input: embedding
+21:11:03 | INFO  | probe.py    |   target: label
+21:11:03 | INFO  | probe.py    |   accumulate_grad_batches: 1
+21:11:03 | INFO  | probe.py    |   wrapping forward
 Using bfloat16 Automatic Mixed Precision (AMP)
-20:43:17 | INFO  | env_info.py |   EnvironmentDumpCallback initialized (filename=environment.json, async=True)
-20:43:17 | INFO  | utils.py    | ── HuggingFaceCheckpoint ─────────────────────────
-20:43:17 | INFO  | hf_models.py|   save_dir: <cyan>hf_exports</cyan>
+21:11:04 | INFO  | env_info.py |   EnvironmentDumpCallback initialized (filename=environment.json, async=True)
+21:11:04 | INFO  | utils.py    | ── HuggingFaceCheckpoint ─────────────────────────
+21:11:04 | INFO  | hf_models.py|   save_dir: <cyan>hf_exports</cyan>
 Adding 11 callbacks from entry point 'stablepretraining_callbacks': PrintProgressBar, ModuleRegistryCallback, LoggingCallback, EnvironmentDumpCallback, TrainerInfo, SklearnCheckpoint, WandbCheckpoint, ModuleSummary, SLURMInfo, LogUnusedParametersOnce, HuggingFaceCheckpointCallback
 GPU available: True (cuda), used: True
 TPU available: False, using: 0 TPU cores
 /workspace/jepa/lib/python3.11/site-packages/lightning/pytorch/trainer/connectors/logger_connector/logger_connector.py:76: Starting from v1.9.0, `tensorboardX` has been removed as a dependency of the `lightning.pytorch` package, due to potential conflicts with other packages in the ML ecosystem. For this reason, `logger=True` will use `CSVLogger` as the default logger, unless the `tensorboard` or `tensorboardX` packages are found. Please `pip install lightning[extra]` or one of them to enable TensorBoard support by default
 💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
-20:43:17 | WARN  | manager.py  | User didn't specify seed, runs won't be exactly reproducible!
-20:43:17 | INFO  | utils.py    | ── WorkingDirectory ──────────────────────────────
-20:43:17 | INFO  | manager.py  |   cwd: /workspace/lejepa-MLProject
-20:43:17 | INFO  | utils.py    | ── Seed ──────────────────────────────────────────
-20:43:17 | INFO  | manager.py  |   seed: None
+21:11:04 | WARN  | manager.py  | User didn't specify seed, runs won't be exactly reproducible!
+21:11:04 | INFO  | utils.py    | ── WorkingDirectory ──────────────────────────────
+21:11:04 | INFO  | manager.py  |   cwd: /workspace/lejepa-MLProject
+21:11:04 | INFO  | utils.py    | ── Seed ──────────────────────────────────────────
+21:11:04 | INFO  | manager.py  |   seed: None
 /workspace/jepa/lib/python3.11/site-packages/lightning/fabric/utilities/seed.py:44: No seed found, seed set to 0
 Seed set to 0
-20:43:18 | INFO  | utils.py    | ── CSVLogger ─────────────────────────────────────
-20:43:18 | INFO  | manager.py  |   root_dir: /workspace/lejepa-MLProject/logs/lightning_logs
-20:43:18 | INFO  | manager.py  |   save_dir: /workspace/lejepa-MLProject/logs
-20:43:18 | INFO  | manager.py  |   log_dir: /workspace/lejepa-MLProject/logs/lightning_logs/version_11
-20:43:18 | INFO  | utils.py    | ── SignalHandlers ────────────────────────────────
-20:43:18 | INFO  | manager.py  |   SIGUSR1: `0`
-20:43:18 | INFO  | manager.py  |   SIGUSR2: `0`
-20:43:18 | INFO  | manager.py  |   SIGCONT: `0`
-20:43:18 | INFO  | manager.py  |   SIGTERM: `0`
-20:43:18 | INFO  | utils.py    | ── Callbacks ─────────────────────────────────────
-20:43:18 | INFO  | manager.py  |   count: 19
-20:43:18 | INFO  | utils.py    | ── CheckpointingSetup ────────────────────────────
-20:43:18 | INFO  | manager.py  |   Checkpointing: A user-defined `ModelCheckpoint` callback was found. It will be used for saving checkpoints.
-20:43:18 | INFO  | manager.py  |   The `Manager` will not manage resuming from a specific path as `manager.ckpt_path` was not provided.
-20:43:18 | INFO  | utils.py    | ── TrainerFit ────────────────────────────────────
-20:43:18 | INFO  | manager.py  |   ckpt_path: None
-20:43:18 | INFO  | manager.py  |   resume_weights_only: False
-20:43:18 | OK    | module.py   | ✓ dataset for TrainerFn.FITTING loaded
-20:43:18 | INFO  | module.py   |   setup was done by user
-20:43:18 | INFO  | queue.py    |   no queue found for key 'embedding', creating new OnlineQueue with length=1000, dim=768, dtype=torch.float32
-20:43:18 | INFO  | utils.py    | ── OnlineQueue ───────────────────────────────────
-20:43:18 | INFO  | queue.py    |   key: embedding
-20:43:18 | INFO  | queue.py    |   requested_length: 1000
-20:43:18 | INFO  | queue.py    |   dim: 768
-20:43:18 | INFO  | queue.py    |   dtype: torch.float32
-20:43:18 | INFO  | queue.py    |   created shared queue for 'embedding' with size 1000
-20:43:18 | INFO  | rankme.py   |   target queue: embedding
-20:43:18 | INFO  | trainer_inf~|   linking trainer to DataModule
-20:43:18 | INFO  | utils.py    | ── EnvironmentDump ───────────────────────────────
-20:43:18 | INFO  | env_info.py |   log_dir: /workspace/lejepa-MLProject/logs
-20:43:18 | INFO  | env_info.py |   Running environment dump in background thread (non-blocking)
-20:43:18 | INFO  | env_info.py |   Collecting environment information...
-20:43:18 | OK    | env_info.py | ✓ Background thread started successfully
-20:43:18 | OK    | env_info.py | ✓ Python 3.11.10
-20:43:18 | INFO  | trainer_inf~|   linking trainer to DataModule
-20:43:18 | INFO  | utils.py    | ── SklearnCheckpoint ─────────────────────────────
-20:43:18 | INFO  | checkpoint_~|   Sklearn Modules:
-20:43:18 | INFO  | checkpoint_~| 
+21:11:04 | INFO  | utils.py    | ── CSVLogger ─────────────────────────────────────
+21:11:04 | INFO  | manager.py  |   root_dir: /workspace/lejepa-MLProject/logs/lightning_logs
+21:11:04 | INFO  | manager.py  |   save_dir: /workspace/lejepa-MLProject/logs
+21:11:04 | INFO  | manager.py  |   log_dir: /workspace/lejepa-MLProject/logs/lightning_logs/version_12
+21:11:04 | INFO  | utils.py    | ── SignalHandlers ────────────────────────────────
+21:11:04 | INFO  | manager.py  |   SIGUSR1: `0`
+21:11:04 | INFO  | manager.py  |   SIGUSR2: `0`
+21:11:04 | INFO  | manager.py  |   SIGCONT: `0`
+21:11:04 | INFO  | manager.py  |   SIGTERM: `0`
+21:11:04 | INFO  | utils.py    | ── Callbacks ─────────────────────────────────────
+21:11:04 | INFO  | manager.py  |   count: 19
+21:11:04 | INFO  | utils.py    | ── CheckpointingSetup ────────────────────────────
+21:11:04 | INFO  | manager.py  |   Checkpointing: A user-defined `ModelCheckpoint` callback was found. It will be used for saving checkpoints.
+21:11:04 | INFO  | manager.py  |   The `Manager` will not manage resuming from a specific path as `manager.ckpt_path` was not provided.
+21:11:04 | INFO  | utils.py    | ── TrainerFit ────────────────────────────────────
+21:11:04 | INFO  | manager.py  |   ckpt_path: None
+21:11:04 | INFO  | manager.py  |   resume_weights_only: False
+21:11:04 | OK    | module.py   | ✓ dataset for TrainerFn.FITTING loaded
+21:11:04 | INFO  | module.py   |   setup was done by user
+21:11:04 | INFO  | queue.py    |   no queue found for key 'embedding', creating new OnlineQueue with length=1000, dim=768, dtype=torch.float32
+21:11:04 | INFO  | utils.py    | ── OnlineQueue ───────────────────────────────────
+21:11:04 | INFO  | queue.py    |   key: embedding
+21:11:04 | INFO  | queue.py    |   requested_length: 1000
+21:11:04 | INFO  | queue.py    |   dim: 768
+21:11:04 | INFO  | queue.py    |   dtype: torch.float32
+21:11:04 | INFO  | queue.py    |   created shared queue for 'embedding' with size 1000
+21:11:04 | INFO  | rankme.py   |   target queue: embedding
+21:11:04 | INFO  | trainer_inf~|   linking trainer to DataModule
+21:11:04 | INFO  | utils.py    | ── EnvironmentDump ───────────────────────────────
+21:11:04 | INFO  | env_info.py |   log_dir: /workspace/lejepa-MLProject/logs
+21:11:04 | INFO  | env_info.py |   Running environment dump in background thread (non-blocking)
+21:11:04 | INFO  | env_info.py |   Collecting environment information...
+21:11:04 | OK    | env_info.py | ✓ Background thread started successfully
+21:11:04 | OK    | env_info.py | ✓ Python 3.11.10
+21:11:04 | INFO  | trainer_inf~|   linking trainer to DataModule
+21:11:04 | INFO  | utils.py    | ── SklearnCheckpoint ─────────────────────────────
+21:11:04 | INFO  | checkpoint_~|   Sklearn Modules:
+21:11:04 | INFO  | checkpoint_~| 
 ┏━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━┓
 ┃ Module   ┃ Name   ┃ Type   ┃
 ┣━━━━━━━━━━╋━━━━━━━━╋━━━━━━━━┫
 ┗━━━━━━━━━━┻━━━━━━━━┻━━━━━━━━┛
-20:43:18 | INFO  | utils.py    | ── WandbCheckpoint ───────────────────────────────
-20:43:18 | INFO  | utils.py    | ── PyTorch Modules ───────────────────────────────
-20:43:18 | WARN  | module.py   | ! You are calling self.parameters which also gives callbacks parameters, to remove them, pass `with_callbacks=False`
-20:43:18 | INFO  | trainer_inf~| \n+-------------------------------------------+----------------------+--------------------------+--------------------------+---------+
+21:11:04 | INFO  | utils.py    | ── WandbCheckpoint ───────────────────────────────
+21:11:04 | INFO  | utils.py    | ── PyTorch Modules ───────────────────────────────
+21:11:04 | WARN  | module.py   | ! You are calling self.parameters which also gives callbacks parameters, to remove them, pass `with_callbacks=False`
+21:11:04 | INFO  | trainer_inf~| \n+-------------------------------------------+----------------------+--------------------------+--------------------------+---------+
 | Module                                    | Trainable parameters | Non Trainable parameters | Uninitialized parameters | Buffers |
 +-------------------------------------------+----------------------+--------------------------+--------------------------+---------+
 |                                           |             92496640 |                        0 |                        0 |  777250 |
@@ -395,34 +396,34 @@ Seed set to 0
 | model.sigreg                              |                    0 |                        0 |                        0 |      52 |
 | model.sigreg.ep                           |                    0 |                        0 |                        0 |      51 |
 +-------------------------------------------+----------------------+--------------------------+--------------------------+---------+
-20:43:18 | INFO  | utils.py    | ── SLURM ─────────────────────────────────────────
-20:43:18 | INFO  | trainer_inf~|   Job ID: N/A
-20:43:18 | INFO  | trainer_inf~|   Task ID: N/A
-20:43:18 | INFO  | trainer_inf~|   Job Name: N/A
-20:43:18 | INFO  | trainer_inf~|   Nodes: N/A
-20:43:18 | INFO  | trainer_inf~|   Tasks: N/A
-20:43:18 | INFO  | trainer_inf~|   CPUs per node: N/A
-20:43:18 | INFO  | trainer_inf~|   CPUs per task: N/A
-20:43:18 | INFO  | trainer_inf~|   Memory per node: N/A
-20:43:18 | INFO  | trainer_inf~|   Memory per CPU: N/A
-20:43:18 | INFO  | trainer_inf~|   Time limit: N/A
-20:43:18 | INFO  | trainer_inf~|   Partition: N/A
-20:43:18 | INFO  | trainer_inf~|   Node List: N/A
-20:43:18 | INFO  | trainer_inf~|   Submit Directory: N/A
-20:43:18 | INFO  | utils.py    |   storing module in callbacks_modules
-20:43:18 | INFO  | utils.py    |   setting up metrics
+21:11:04 | OK    | env_info.py | ✓ System: Linux 6.8.0-100-generic (x86_64)
+21:11:04 | INFO  | utils.py    | ── SLURM ─────────────────────────────────────────
+21:11:04 | INFO  | env_info.py |   Hostname: 12383aa106df
+21:11:04 | INFO  | trainer_inf~|   Job ID: N/A
+21:11:04 | INFO  | trainer_inf~|   Task ID: N/A
+21:11:04 | INFO  | trainer_inf~|   Job Name: N/A
+21:11:04 | INFO  | trainer_inf~|   Nodes: N/A
+21:11:04 | INFO  | trainer_inf~|   Tasks: N/A
+21:11:04 | INFO  | trainer_inf~|   CPUs per node: N/A
+21:11:04 | INFO  | trainer_inf~|   CPUs per task: N/A
+21:11:04 | INFO  | trainer_inf~|   Memory per node: N/A
+21:11:04 | INFO  | trainer_inf~|   Memory per CPU: N/A
+21:11:04 | INFO  | trainer_inf~|   Time limit: N/A
+21:11:04 | INFO  | trainer_inf~|   Partition: N/A
+21:11:04 | INFO  | trainer_inf~|   Node List: N/A
+21:11:04 | INFO  | trainer_inf~|   Submit Directory: N/A
+21:11:04 | INFO  | utils.py    |   storing module in callbacks_modules
+21:11:04 | INFO  | utils.py    |   setting up metrics
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-20:43:18 | OK    | env_info.py | ✓ System: Linux 6.8.0-100-generic (x86_64)
-20:43:18 | INFO  | env_info.py |   Hostname: 12383aa106df
-20:43:18 | INFO  | utils.py    | ── Optimizers ────────────────────────────────────
-20:43:18 | INFO  | module.py   |   Configuring single optimizer.
+21:11:04 | INFO  | utils.py    | ── Optimizers ────────────────────────────────────
+21:11:04 | INFO  | module.py   |   Configuring single optimizer.
 Loading `train_dataloader` to estimate number of stepping batches.
-20:43:18 | WARN  | module.py   | could not set pl_trainer to train dataset
+21:11:04 | WARN  | module.py   | could not set pl_trainer to train dataset
 /workspace/jepa/lib/python3.11/site-packages/lightning/pytorch/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
-20:43:18 | INFO  | lr_schedule~| 	User provided a dict
-20:43:18 | INFO  | module.py   |   Configured AdamW optimizer with LinearWarmupCosineAnnealing scheduler.
-20:43:18 | INFO  | utils.py    |   using explicitly provided optimizer
-20:43:18 | INFO  | utils.py    |   no scheduler given, using default ConstantLR
+21:11:05 | INFO  | lr_schedule~| 	User provided a dict
+21:11:05 | INFO  | module.py   |   Configured AdamW optimizer with LinearWarmupCosineAnnealing scheduler.
+21:11:05 | INFO  | utils.py    |   using explicitly provided optimizer
+21:11:05 | INFO  | utils.py    |   no scheduler given, using default ConstantLR
 /workspace/jepa/lib/python3.11/site-packages/lightning/pytorch/utilities/model_summary/model_summary.py:242: Precision bf16-mixed is not supported by the model summary.  Estimated model size in MB will not be accurate. Using 32 bits instead.
 ┏━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
 ┃   ┃ Name              ┃ Type       ┃ Params ┃ Mode  ┃ FLOPs ┃
@@ -438,53 +439,48 @@ Total estimated model params size (MB): 373
 Modules in train mode: 303                                                      
 Modules in eval mode: 0                                                         
 Total FLOPs: 0                                                                  
-20:43:18 | WARN  | hf_models.py| ! No Hugging Face (PreTrainedModel) submodules found in LightningModule.
-20:43:18 | INFO  | utils.py    | ── Optimizers ────────────────────────────────────
-20:43:18 | INFO  | module.py   |   self.optimizers() gave us 2 optimizers
-20:43:18 | WARN  | module.py   | ! No clip val found for optimizer default_0
-20:43:18 | WARN  | module.py   | ! Will use the Trainer's value of None
-20:43:18 | WARN  | module.py   | ! No clip algorithm found for optimizer default_0
-20:43:18 | WARN  | module.py   | ! Will use the Trainer's value of None
-20:43:18 | OK    | module.py   | ✓ Optimizer check complete:
+21:11:05 | WARN  | hf_models.py| ! No Hugging Face (PreTrainedModel) submodules found in LightningModule.
+21:11:05 | INFO  | utils.py    | ── Optimizers ────────────────────────────────────
+21:11:05 | INFO  | module.py   |   self.optimizers() gave us 2 optimizers
+21:11:05 | WARN  | module.py   | ! No clip val found for optimizer default_0
+21:11:05 | WARN  | module.py   | ! Will use the Trainer's value of None
+21:11:05 | WARN  | module.py   | ! No clip algorithm found for optimizer default_0
+21:11:05 | WARN  | module.py   | ! Will use the Trainer's value of None
+21:11:05 | OK    | module.py   | ✓ Optimizer check complete:
 +------------+------------+----------------+-----------+-----------+
 | Opt. Index | Opt. name  |      opt       | clip val. | clip alg. |
 +------------+------------+----------------+-----------+-----------+
 |     0      | default_0  | LightningAdamW |    None   |    None   |
 |     1      | inet_probe | LightningAdamW |    None   |    norm   |
 +------------+------------+----------------+-----------+-----------+
-20:43:22 | INFO  | utils.py    | ── LogUnusedParametersOnce ───────────────────────
-20:43:22 | INFO  | unused_para~|   registered hooks on 164 leaf parameters
-20:43:23 | OK    | env_info.py | ✓ Packages: 123 packages collected in 5.16s
-20:43:23 | OK    | env_info.py | ✓ NVIDIA Driver: 580.126.16
-20:43:24 | OK    | env_info.py | ✓ Git: ml @ 76c85086
-20:43:24 | INFO  | env_info.py |   Remote: https://github.com/NLPQuy/lejepa-MLProject.git
-20:43:24 | WARN  | env_info.py | ! Working directory has uncommitted changes
-20:43:24 | OK    | env_info.py | ✓ Environment: 4 relevant variables captured
-20:43:24 | INFO  | env_info.py |   Serializing environment data...
-20:43:24 | INFO  | env_info.py |   File exists, using version 10: environment_v10.json
-20:43:24 | INFO  | env_info.py |   File exists, using version 10: requirements_frozen_v10.txt
-20:43:24 | INFO  | env_info.py |   Save directory: /workspace/lejepa-MLProject/logs
-20:43:24 | INFO  | env_info.py |   Writing environment to temp file...
-20:43:24 | INFO  | env_info.py |   Moving to: environment_v10.json
-20:43:24 | OK    | env_info.py | ✓ Environment file saved (9.3 KB)
-/workspace/jepa/lib/python3.11/site-packages/lightning/pytorch/utilities/data.py
-:79: Trying to infer the `batch_size` from an ambiguous collection. The batch 
-size we found is 64. To avoid any miscalculations, use `self.log(..., 
-batch_size=batch_size)`.
-20:43:24 | OK    | env_info.py | ✓ Requirements file saved (2.6 KB)
-20:43:26 | OK    | unused_para~| ✓ all tracked parameters received gradients on the first backward pass
-20:43:26 | INFO  | unused_para~|   hooks removed, callback disabled
-/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/callbacks/queu
-e.py:180: UserWarning: log('queue/embedding_fill_pct') called outside a 
-training/validation step — metric buffered for next step
+21:11:09 | INFO  | utils.py    | ── LogUnusedParametersOnce ───────────────────────
+21:11:09 | INFO  | unused_para~|   registered hooks on 164 leaf parameters
+21:11:09 | OK    | env_info.py | ✓ Packages: 123 packages collected in 4.55s
+21:11:09 | OK    | env_info.py | ✓ NVIDIA Driver: 580.126.16
+21:11:10 | OK    | env_info.py | ✓ Git: ml @ 42c25c3b
+21:11:10 | INFO  | env_info.py |   Remote: https://github.com/NLPQuy/lejepa-MLProject.git
+21:11:10 | WARN  | env_info.py | ! Working directory has uncommitted changes
+21:11:10 | OK    | env_info.py | ✓ Environment: 4 relevant variables captured
+21:11:10 | INFO  | env_info.py |   Serializing environment data...
+21:11:10 | INFO  | env_info.py |   File exists, using version 11: environment_v11.json
+21:11:10 | INFO  | env_info.py |   File exists, using version 11: requirements_frozen_v11.txt
+21:11:10 | INFO  | env_info.py |   Save directory: /workspace/lejepa-MLProject/logs
+21:11:10 | INFO  | env_info.py |   Writing environment to temp file...
+21:11:10 | INFO  | env_info.py |   Moving to: environment_v11.json
+21:11:10 | OK    | env_info.py | ✓ Environment file saved (7.6 KB)
+21:11:10 | OK    | env_info.py | ✓ Requirements file saved (2.6 KB)
+/workspace/jepa/lib/python3.11/site-packages/lightning/pytorch/utilities/data.py:79: Trying to infer the `batch_size` from an ambiguous collection. The batch size we found is 64. To avoid any miscalculations, use `self.log(..., batch_size=batch_size)`.
+21:11:12 | OK    | unused_para~| ✓ all tracked parameters received gradients on the first backward pass
+21:11:12 | INFO  | unused_para~|   hooks removed, callback disabled
+/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/callbacks/queue.py:180: UserWarning: log('queue/embedding_fill_pct') called outside a training/validation step — metric buffered for next step
   _spt_log(
-[Epoch 0/1] step 50/23862 (2.3 it/s)
-[Epoch 0/1] step 100/23862 (2.5 it/s)
-[Epoch 0/1] step 150/23862 (2.6 it/s)
+[Epoch 0/1] step 50/23862 (2.4 it/s)
+[Epoch 0/1] step 100/23862 (2.6 it/s)
+[Epoch 0/1] step 150/23862 (2.7 it/s)
 [Epoch 0/1] step 200/23862 (2.7 it/s)
-[Epoch 0/1] step 250/23862 (2.7 it/s)
-[Epoch 0/1] step 300/23862 (2.7 it/s)
-[Epoch 0/1] step 350/23862 (2.7 it/s)
+[Epoch 0/1] step 250/23862 (2.8 it/s)
+[Epoch 0/1] step 300/23862 (2.8 it/s)
+[Epoch 0/1] step 350/23862 (2.8 it/s)
 [Epoch 0/1] step 400/23862 (2.8 it/s)
 [Epoch 0/1] step 450/23862 (2.8 it/s)
 [Epoch 0/1] step 500/23862 (2.8 it/s)
@@ -522,11 +518,1043 @@ training/validation step — metric buffered for next step
 [Epoch 0/1] step 2100/23862 (2.8 it/s)
 [Epoch 0/1] step 2150/23862 (2.8 it/s)
 [Epoch 0/1] step 2200/23862 (2.8 it/s)
-[Epoch 0/1] step 2250/23862 (2.8 it/s)
-[Epoch 0/1] step 2300/23862 (2.8 it/s)
-[Epoch 0/1] step 2350/23862 (2.8 it/s)
-[Epoch 0/1] step 2400/23862 (2.8 it/s)
-[Epoch 0/1] step 2450/23862 (2.8 it/s)
-[Epoch 0/1] step 2500/23862 (2.8 it/s)
-[Epoch 0/1] step 2550/23862 (2.8 it/s)
-[Epoch 0/1] step 2600/23862 (2.8 it/s)
+[Epoch 0/1] step 2250/23862 (2.9 it/s)
+[Epoch 0/1] step 2300/23862 (2.9 it/s)
+[Epoch 0/1] step 2350/23862 (2.9 it/s)
+[Epoch 0/1] step 2400/23862 (2.9 it/s)
+[Epoch 0/1] step 2450/23862 (2.9 it/s)
+[Epoch 0/1] step 2500/23862 (2.9 it/s)
+[Epoch 0/1] step 2550/23862 (2.9 it/s)
+[Epoch 0/1] step 2600/23862 (2.9 it/s)
+[Epoch 0/1] step 2650/23862 (2.9 it/s)
+[Epoch 0/1] step 2700/23862 (2.9 it/s)
+[Epoch 0/1] step 2750/23862 (2.9 it/s)
+[Epoch 0/1] step 2800/23862 (2.9 it/s)
+[Epoch 0/1] step 2850/23862 (2.9 it/s)
+[Epoch 0/1] step 2900/23862 (2.9 it/s)
+[Epoch 0/1] step 2950/23862 (2.9 it/s)
+[Epoch 0/1] step 3000/23862 (2.9 it/s)
+[Epoch 0/1] step 3050/23862 (2.9 it/s)
+[Epoch 0/1] step 3100/23862 (2.9 it/s)
+[Epoch 0/1] step 3150/23862 (2.9 it/s)
+[Epoch 0/1] step 3200/23862 (2.9 it/s)
+[Epoch 0/1] step 3250/23862 (2.9 it/s)
+[Epoch 0/1] step 3300/23862 (2.9 it/s)
+[Epoch 0/1] step 3350/23862 (2.9 it/s)
+[Epoch 0/1] step 3400/23862 (2.9 it/s)
+[Epoch 0/1] step 3450/23862 (2.9 it/s)
+[Epoch 0/1] step 3500/23862 (2.9 it/s)
+[Epoch 0/1] step 3550/23862 (2.9 it/s)
+[Epoch 0/1] step 3600/23862 (2.9 it/s)
+[Epoch 0/1] step 3650/23862 (2.9 it/s)
+[Epoch 0/1] step 3700/23862 (2.9 it/s)
+[Epoch 0/1] step 3750/23862 (2.9 it/s)
+[Epoch 0/1] step 3800/23862 (2.9 it/s)
+[Epoch 0/1] step 3850/23862 (2.9 it/s)
+[Epoch 0/1] step 3900/23862 (2.9 it/s)
+[Epoch 0/1] step 3950/23862 (2.9 it/s)
+[Epoch 0/1] step 4000/23862 (2.9 it/s)
+[Epoch 0/1] step 4050/23862 (2.9 it/s)
+[Epoch 0/1] step 4100/23862 (2.9 it/s)
+[Epoch 0/1] step 4150/23862 (2.9 it/s)
+[Epoch 0/1] step 4200/23862 (2.9 it/s)
+[Epoch 0/1] step 4250/23862 (2.9 it/s)
+[Epoch 0/1] step 4300/23862 (2.9 it/s)
+[Epoch 0/1] step 4350/23862 (2.9 it/s)
+[Epoch 0/1] step 4400/23862 (2.9 it/s)
+[Epoch 0/1] step 4450/23862 (2.9 it/s)
+[Epoch 0/1] step 4500/23862 (2.9 it/s)
+[Epoch 0/1] step 4550/23862 (2.9 it/s)
+[Epoch 0/1] step 4600/23862 (2.9 it/s)
+[Epoch 0/1] step 4650/23862 (2.9 it/s)
+[Epoch 0/1] step 4700/23862 (2.9 it/s)
+[Epoch 0/1] step 4750/23862 (2.9 it/s)
+[Epoch 0/1] step 4800/23862 (2.9 it/s)
+[Epoch 0/1] step 4850/23862 (2.9 it/s)
+[Epoch 0/1] step 4900/23862 (2.9 it/s)
+[Epoch 0/1] step 4950/23862 (2.9 it/s)
+[Epoch 0/1] step 5000/23862 (2.9 it/s)
+[Epoch 0/1] step 5050/23862 (2.9 it/s)
+[Epoch 0/1] step 5100/23862 (2.8 it/s)
+[Epoch 0/1] step 5150/23862 (2.8 it/s)
+[Epoch 0/1] step 5200/23862 (2.8 it/s)
+[Epoch 0/1] step 5250/23862 (2.8 it/s)
+[Epoch 0/1] step 5300/23862 (2.8 it/s)
+[Epoch 0/1] step 5350/23862 (2.8 it/s)
+[Epoch 0/1] step 5400/23862 (2.8 it/s)
+[Epoch 0/1] step 5450/23862 (2.8 it/s)
+[Epoch 0/1] step 5500/23862 (2.8 it/s)
+[Epoch 0/1] step 5550/23862 (2.8 it/s)
+[Epoch 0/1] step 5600/23862 (2.8 it/s)
+[Epoch 0/1] step 5650/23862 (2.8 it/s)
+[Epoch 0/1] step 5700/23862 (2.8 it/s)
+[Epoch 0/1] step 5750/23862 (2.8 it/s)
+[Epoch 0/1] step 5800/23862 (2.8 it/s)
+[Epoch 0/1] step 5850/23862 (2.8 it/s)
+[Epoch 0/1] step 5900/23862 (2.8 it/s)
+[Epoch 0/1] step 5950/23862 (2.8 it/s)
+[Epoch 0/1] step 6000/23862 (2.8 it/s)
+[Epoch 0/1] step 6050/23862 (2.8 it/s)
+[Epoch 0/1] step 6100/23862 (2.8 it/s)
+[Epoch 0/1] step 6150/23862 (2.8 it/s)
+[Epoch 0/1] step 6200/23862 (2.8 it/s)
+[Epoch 0/1] step 6250/23862 (2.8 it/s)
+[Epoch 0/1] step 6300/23862 (2.8 it/s)
+[Epoch 0/1] step 6350/23862 (2.8 it/s)
+[Epoch 0/1] step 6400/23862 (2.8 it/s)
+[Epoch 0/1] step 6450/23862 (2.8 it/s)
+[Epoch 0/1] step 6500/23862 (2.8 it/s)
+[Epoch 0/1] step 6550/23862 (2.8 it/s)
+[Epoch 0/1] step 6600/23862 (2.8 it/s)
+[Epoch 0/1] step 6650/23862 (2.8 it/s)
+[Epoch 0/1] step 6700/23862 (2.8 it/s)
+[Epoch 0/1] step 6750/23862 (2.8 it/s)
+[Epoch 0/1] step 6800/23862 (2.8 it/s)
+[Epoch 0/1] step 6850/23862 (2.8 it/s)
+[Epoch 0/1] step 6900/23862 (2.8 it/s)
+[Epoch 0/1] step 6950/23862 (2.8 it/s)
+[Epoch 0/1] step 7000/23862 (2.8 it/s)
+[Epoch 0/1] step 7050/23862 (2.8 it/s)
+[Epoch 0/1] step 7100/23862 (2.8 it/s)
+[Epoch 0/1] step 7150/23862 (2.8 it/s)
+[Epoch 0/1] step 7200/23862 (2.8 it/s)
+[Epoch 0/1] step 7250/23862 (2.8 it/s)
+[Epoch 0/1] step 7300/23862 (2.8 it/s)
+[Epoch 0/1] step 7350/23862 (2.8 it/s)
+[Epoch 0/1] step 7400/23862 (2.8 it/s)
+[Epoch 0/1] step 7450/23862 (2.8 it/s)
+[Epoch 0/1] step 7500/23862 (2.8 it/s)
+[Epoch 0/1] step 7550/23862 (2.8 it/s)
+[Epoch 0/1] step 7600/23862 (2.8 it/s)
+[Epoch 0/1] step 7650/23862 (2.8 it/s)
+[Epoch 0/1] step 7700/23862 (2.8 it/s)
+[Epoch 0/1] step 7750/23862 (2.8 it/s)
+[Epoch 0/1] step 7800/23862 (2.8 it/s)
+[Epoch 0/1] step 7850/23862 (2.8 it/s)
+[Epoch 0/1] step 7900/23862 (2.8 it/s)
+[Epoch 0/1] step 7950/23862 (2.8 it/s)
+[Epoch 0/1] step 8000/23862 (2.8 it/s)
+[Epoch 0/1] step 8050/23862 (2.8 it/s)
+[Epoch 0/1] step 8100/23862 (2.8 it/s)
+[Epoch 0/1] step 8150/23862 (2.8 it/s)
+[Epoch 0/1] step 8200/23862 (2.8 it/s)
+[Epoch 0/1] step 8250/23862 (2.8 it/s)
+[Epoch 0/1] step 8300/23862 (2.8 it/s)
+[Epoch 0/1] step 8350/23862 (2.8 it/s)
+[Epoch 0/1] step 8400/23862 (2.8 it/s)
+[Epoch 0/1] step 8450/23862 (2.8 it/s)
+[Epoch 0/1] step 8500/23862 (2.8 it/s)
+[Epoch 0/1] step 8550/23862 (2.8 it/s)
+[Epoch 0/1] step 8600/23862 (2.8 it/s)
+[Epoch 0/1] step 8650/23862 (2.8 it/s)
+[Epoch 0/1] step 8700/23862 (2.8 it/s)
+[Epoch 0/1] step 8750/23862 (2.8 it/s)
+[Epoch 0/1] step 8800/23862 (2.8 it/s)
+[Epoch 0/1] step 8850/23862 (2.8 it/s)
+[Epoch 0/1] step 8900/23862 (2.8 it/s)
+[Epoch 0/1] step 8950/23862 (2.8 it/s)
+[Epoch 0/1] step 9000/23862 (2.8 it/s)
+[Epoch 0/1] step 9050/23862 (2.8 it/s)
+[Epoch 0/1] step 9100/23862 (2.8 it/s)
+[Epoch 0/1] step 9150/23862 (2.8 it/s)
+[Epoch 0/1] step 9200/23862 (2.8 it/s)
+[Epoch 0/1] step 9250/23862 (2.8 it/s)
+[Epoch 0/1] step 9300/23862 (2.8 it/s)
+[Epoch 0/1] step 9350/23862 (2.8 it/s)
+[Epoch 0/1] step 9400/23862 (2.8 it/s)
+[Epoch 0/1] step 9450/23862 (2.8 it/s)
+[Epoch 0/1] step 9500/23862 (2.8 it/s)
+[Epoch 0/1] step 9550/23862 (2.8 it/s)
+[Epoch 0/1] step 9600/23862 (2.8 it/s)
+[Epoch 0/1] step 9650/23862 (2.8 it/s)
+[Epoch 0/1] step 9700/23862 (2.8 it/s)
+[Epoch 0/1] step 9750/23862 (2.8 it/s)
+[Epoch 0/1] step 9800/23862 (2.8 it/s)
+[Epoch 0/1] step 9850/23862 (2.8 it/s)
+[Epoch 0/1] step 9900/23862 (2.8 it/s)
+[Epoch 0/1] step 9950/23862 (2.8 it/s)
+[Epoch 0/1] step 10000/23862 (2.8 it/s)
+[Epoch 0/1] step 10050/23862 (2.8 it/s)
+[Epoch 0/1] step 10100/23862 (2.8 it/s)
+[Epoch 0/1] step 10150/23862 (2.8 it/s)
+[Epoch 0/1] step 10200/23862 (2.8 it/s)
+[Epoch 0/1] step 10250/23862 (2.8 it/s)
+[Epoch 0/1] step 10300/23862 (2.8 it/s)
+[Epoch 0/1] step 10350/23862 (2.8 it/s)
+[Epoch 0/1] step 10400/23862 (2.8 it/s)
+[Epoch 0/1] step 10450/23862 (2.8 it/s)
+[Epoch 0/1] step 10500/23862 (2.8 it/s)
+[Epoch 0/1] step 10550/23862 (2.8 it/s)
+[Epoch 0/1] step 10600/23862 (2.8 it/s)
+[Epoch 0/1] step 10650/23862 (2.8 it/s)
+[Epoch 0/1] step 10700/23862 (2.8 it/s)
+[Epoch 0/1] step 10750/23862 (2.8 it/s)
+[Epoch 0/1] step 10800/23862 (2.8 it/s)
+[Epoch 0/1] step 10850/23862 (2.8 it/s)
+[Epoch 0/1] step 10900/23862 (2.8 it/s)
+[Epoch 0/1] step 10950/23862 (2.8 it/s)
+[Epoch 0/1] step 11000/23862 (2.8 it/s)
+[Epoch 0/1] step 11050/23862 (2.8 it/s)
+[Epoch 0/1] step 11100/23862 (2.8 it/s)
+[Epoch 0/1] step 11150/23862 (2.8 it/s)
+[Epoch 0/1] step 11200/23862 (2.8 it/s)
+[Epoch 0/1] step 11250/23862 (2.8 it/s)
+[Epoch 0/1] step 11300/23862 (2.8 it/s)
+[Epoch 0/1] step 11350/23862 (2.8 it/s)
+[Epoch 0/1] step 11400/23862 (2.8 it/s)
+[Epoch 0/1] step 11450/23862 (2.8 it/s)
+[Epoch 0/1] step 11500/23862 (2.9 it/s)
+[Epoch 0/1] step 11550/23862 (2.9 it/s)
+[Epoch 0/1] step 11600/23862 (2.9 it/s)
+[Epoch 0/1] step 11650/23862 (2.9 it/s)
+[Epoch 0/1] step 11700/23862 (2.9 it/s)
+[Epoch 0/1] step 11750/23862 (2.9 it/s)
+[Epoch 0/1] step 11800/23862 (2.9 it/s)
+[Epoch 0/1] step 11850/23862 (2.9 it/s)
+[Epoch 0/1] step 11900/23862 (2.9 it/s)
+[Epoch 0/1] step 11950/23862 (2.9 it/s)
+[Epoch 0/1] step 12000/23862 (2.9 it/s)
+[Epoch 0/1] step 12050/23862 (2.9 it/s)
+[Epoch 0/1] step 12100/23862 (2.9 it/s)
+[Epoch 0/1] step 12150/23862 (2.9 it/s)
+[Epoch 0/1] step 12200/23862 (2.9 it/s)
+[Epoch 0/1] step 12250/23862 (2.9 it/s)
+[Epoch 0/1] step 12300/23862 (2.9 it/s)
+[Epoch 0/1] step 12350/23862 (2.9 it/s)
+[Epoch 0/1] step 12400/23862 (2.9 it/s)
+[Epoch 0/1] step 12450/23862 (2.9 it/s)
+[Epoch 0/1] step 12500/23862 (2.9 it/s)
+[Epoch 0/1] step 12550/23862 (2.9 it/s)
+[Epoch 0/1] step 12600/23862 (2.9 it/s)
+[Epoch 0/1] step 12650/23862 (2.9 it/s)
+[Epoch 0/1] step 12700/23862 (2.9 it/s)
+[Epoch 0/1] step 12750/23862 (2.9 it/s)
+[Epoch 0/1] step 12800/23862 (2.9 it/s)
+[Epoch 0/1] step 12850/23862 (2.9 it/s)
+[Epoch 0/1] step 12900/23862 (2.9 it/s)
+[Epoch 0/1] step 12950/23862 (2.9 it/s)
+[Epoch 0/1] step 13000/23862 (2.9 it/s)
+[Epoch 0/1] step 13050/23862 (2.9 it/s)
+[Epoch 0/1] step 13100/23862 (2.9 it/s)
+[Epoch 0/1] step 13150/23862 (2.9 it/s)
+[Epoch 0/1] step 13200/23862 (2.9 it/s)
+[Epoch 0/1] step 13250/23862 (2.9 it/s)
+[Epoch 0/1] step 13300/23862 (2.9 it/s)
+[Epoch 0/1] step 13350/23862 (2.9 it/s)
+[Epoch 0/1] step 13400/23862 (2.9 it/s)
+[Epoch 0/1] step 13450/23862 (2.9 it/s)
+[Epoch 0/1] step 13500/23862 (2.9 it/s)
+[Epoch 0/1] step 13550/23862 (2.9 it/s)
+[Epoch 0/1] step 13600/23862 (2.9 it/s)
+[Epoch 0/1] step 13650/23862 (2.9 it/s)
+[Epoch 0/1] step 13700/23862 (2.9 it/s)
+[Epoch 0/1] step 13750/23862 (2.9 it/s)
+[Epoch 0/1] step 13800/23862 (2.9 it/s)
+[Epoch 0/1] step 13850/23862 (2.9 it/s)
+[Epoch 0/1] step 13900/23862 (2.9 it/s)
+[Epoch 0/1] step 13950/23862 (2.9 it/s)
+[Epoch 0/1] step 14000/23862 (2.9 it/s)
+[Epoch 0/1] step 14050/23862 (2.8 it/s)
+[Epoch 0/1] step 14100/23862 (2.8 it/s)
+[Epoch 0/1] step 14150/23862 (2.8 it/s)
+[Epoch 0/1] step 14200/23862 (2.8 it/s)
+[Epoch 0/1] step 14250/23862 (2.8 it/s)
+[Epoch 0/1] step 14300/23862 (2.8 it/s)
+[Epoch 0/1] step 14350/23862 (2.8 it/s)
+[Epoch 0/1] step 14400/23862 (2.8 it/s)
+[Epoch 0/1] step 14450/23862 (2.8 it/s)
+[Epoch 0/1] step 14500/23862 (2.8 it/s)
+[Epoch 0/1] step 14550/23862 (2.8 it/s)
+[Epoch 0/1] step 14600/23862 (2.8 it/s)
+[Epoch 0/1] step 14650/23862 (2.8 it/s)
+[Epoch 0/1] step 14700/23862 (2.8 it/s)
+[Epoch 0/1] step 14750/23862 (2.8 it/s)
+[Epoch 0/1] step 14800/23862 (2.8 it/s)
+[Epoch 0/1] step 14850/23862 (2.8 it/s)
+[Epoch 0/1] step 14900/23862 (2.8 it/s)
+[Epoch 0/1] step 14950/23862 (2.8 it/s)
+[Epoch 0/1] step 15000/23862 (2.8 it/s)
+[Epoch 0/1] step 15050/23862 (2.8 it/s)
+[Epoch 0/1] step 15100/23862 (2.8 it/s)
+[Epoch 0/1] step 15150/23862 (2.8 it/s)
+[Epoch 0/1] step 15200/23862 (2.8 it/s)
+[Epoch 0/1] step 15250/23862 (2.8 it/s)
+[Epoch 0/1] step 15300/23862 (2.8 it/s)
+[Epoch 0/1] step 15350/23862 (2.8 it/s)
+[Epoch 0/1] step 15400/23862 (2.8 it/s)
+[Epoch 0/1] step 15450/23862 (2.8 it/s)
+[Epoch 0/1] step 15500/23862 (2.8 it/s)
+[Epoch 0/1] step 15550/23862 (2.8 it/s)
+[Epoch 0/1] step 15600/23862 (2.8 it/s)
+[Epoch 0/1] step 15650/23862 (2.8 it/s)
+[Epoch 0/1] step 15700/23862 (2.8 it/s)
+[Epoch 0/1] step 15750/23862 (2.8 it/s)
+[Epoch 0/1] step 15800/23862 (2.8 it/s)
+[Epoch 0/1] step 15850/23862 (2.8 it/s)
+[Epoch 0/1] step 15900/23862 (2.8 it/s)
+[Epoch 0/1] step 15950/23862 (2.8 it/s)
+[Epoch 0/1] step 16000/23862 (2.8 it/s)
+[Epoch 0/1] step 16050/23862 (2.8 it/s)
+[Epoch 0/1] step 16100/23862 (2.8 it/s)
+[Epoch 0/1] step 16150/23862 (2.8 it/s)
+[Epoch 0/1] step 16200/23862 (2.8 it/s)
+[Epoch 0/1] step 16250/23862 (2.8 it/s)
+[Epoch 0/1] step 16300/23862 (2.8 it/s)
+[Epoch 0/1] step 16350/23862 (2.8 it/s)
+[Epoch 0/1] step 16400/23862 (2.8 it/s)
+[Epoch 0/1] step 16450/23862 (2.8 it/s)
+[Epoch 0/1] step 16500/23862 (2.8 it/s)
+[Epoch 0/1] step 16550/23862 (2.8 it/s)
+[Epoch 0/1] step 16600/23862 (2.8 it/s)
+[Epoch 0/1] step 16650/23862 (2.8 it/s)
+[Epoch 0/1] step 16700/23862 (2.8 it/s)
+[Epoch 0/1] step 16750/23862 (2.8 it/s)
+[Epoch 0/1] step 16800/23862 (2.8 it/s)
+[Epoch 0/1] step 16850/23862 (2.8 it/s)
+[Epoch 0/1] step 16900/23862 (2.8 it/s)
+[Epoch 0/1] step 16950/23862 (2.8 it/s)
+[Epoch 0/1] step 17000/23862 (2.8 it/s)
+[Epoch 0/1] step 17050/23862 (2.8 it/s)
+[Epoch 0/1] step 17100/23862 (2.8 it/s)
+[Epoch 0/1] step 17150/23862 (2.8 it/s)
+[Epoch 0/1] step 17200/23862 (2.8 it/s)
+[Epoch 0/1] step 17250/23862 (2.8 it/s)
+[Epoch 0/1] step 17300/23862 (2.8 it/s)
+[Epoch 0/1] step 17350/23862 (2.8 it/s)
+[Epoch 0/1] step 17400/23862 (2.8 it/s)
+[Epoch 0/1] step 17450/23862 (2.8 it/s)
+[Epoch 0/1] step 17500/23862 (2.8 it/s)
+[Epoch 0/1] step 17550/23862 (2.8 it/s)
+[Epoch 0/1] step 17600/23862 (2.8 it/s)
+[Epoch 0/1] step 17650/23862 (2.8 it/s)
+[Epoch 0/1] step 17700/23862 (2.8 it/s)
+[Epoch 0/1] step 17750/23862 (2.8 it/s)
+[Epoch 0/1] step 17800/23862 (2.8 it/s)
+[Epoch 0/1] step 17850/23862 (2.8 it/s)
+[Epoch 0/1] step 17900/23862 (2.8 it/s)
+[Epoch 0/1] step 17950/23862 (2.8 it/s)
+[Epoch 0/1] step 18000/23862 (2.8 it/s)
+[Epoch 0/1] step 18050/23862 (2.8 it/s)
+[Epoch 0/1] step 18100/23862 (2.8 it/s)
+[Epoch 0/1] step 18150/23862 (2.8 it/s)
+[Epoch 0/1] step 18200/23862 (2.8 it/s)
+[Epoch 0/1] step 18250/23862 (2.8 it/s)
+[Epoch 0/1] step 18300/23862 (2.8 it/s)
+[Epoch 0/1] step 18350/23862 (2.8 it/s)
+[Epoch 0/1] step 18400/23862 (2.8 it/s)
+[Epoch 0/1] step 18450/23862 (2.8 it/s)
+[Epoch 0/1] step 18500/23862 (2.8 it/s)
+[Epoch 0/1] step 18550/23862 (2.8 it/s)
+[Epoch 0/1] step 18600/23862 (2.8 it/s)
+[Epoch 0/1] step 18650/23862 (2.8 it/s)
+[Epoch 0/1] step 18700/23862 (2.8 it/s)
+[Epoch 0/1] step 18750/23862 (2.8 it/s)
+[Epoch 0/1] step 18800/23862 (2.8 it/s)
+[Epoch 0/1] step 18850/23862 (2.8 it/s)
+[Epoch 0/1] step 18900/23862 (2.8 it/s)
+[Epoch 0/1] step 18950/23862 (2.8 it/s)
+[Epoch 0/1] step 19000/23862 (2.8 it/s)
+[Epoch 0/1] step 19050/23862 (2.8 it/s)
+[Epoch 0/1] step 19100/23862 (2.8 it/s)
+[Epoch 0/1] step 19150/23862 (2.8 it/s)
+[Epoch 0/1] step 19200/23862 (2.8 it/s)
+[Epoch 0/1] step 19250/23862 (2.8 it/s)
+[Epoch 0/1] step 19300/23862 (2.8 it/s)
+[Epoch 0/1] step 19350/23862 (2.8 it/s)
+[Epoch 0/1] step 19400/23862 (2.8 it/s)
+[Epoch 0/1] step 19450/23862 (2.8 it/s)
+[Epoch 0/1] step 19500/23862 (2.8 it/s)
+[Epoch 0/1] step 19550/23862 (2.8 it/s)
+[Epoch 0/1] step 19600/23862 (2.8 it/s)
+[Epoch 0/1] step 19650/23862 (2.8 it/s)
+[Epoch 0/1] step 19700/23862 (2.8 it/s)
+[Epoch 0/1] step 19750/23862 (2.8 it/s)
+[Epoch 0/1] step 19800/23862 (2.8 it/s)
+[Epoch 0/1] step 19850/23862 (2.8 it/s)
+[Epoch 0/1] step 19900/23862 (2.8 it/s)
+[Epoch 0/1] step 19950/23862 (2.8 it/s)
+[Epoch 0/1] step 20000/23862 (2.8 it/s)
+[Epoch 0/1] step 20050/23862 (2.8 it/s)
+[Epoch 0/1] step 20100/23862 (2.8 it/s)
+[Epoch 0/1] step 20150/23862 (2.8 it/s)
+[Epoch 0/1] step 20200/23862 (2.8 it/s)
+[Epoch 0/1] step 20250/23862 (2.8 it/s)
+[Epoch 0/1] step 20300/23862 (2.8 it/s)
+[Epoch 0/1] step 20350/23862 (2.8 it/s)
+[Epoch 0/1] step 20400/23862 (2.8 it/s)
+[Epoch 0/1] step 20450/23862 (2.8 it/s)
+[Epoch 0/1] step 20500/23862 (2.8 it/s)
+[Epoch 0/1] step 20550/23862 (2.8 it/s)
+[Epoch 0/1] step 20600/23862 (2.8 it/s)
+[Epoch 0/1] step 20650/23862 (2.8 it/s)
+[Epoch 0/1] step 20700/23862 (2.8 it/s)
+[Epoch 0/1] step 20750/23862 (2.8 it/s)
+[Epoch 0/1] step 20800/23862 (2.8 it/s)
+[Epoch 0/1] step 20850/23862 (2.8 it/s)
+[Epoch 0/1] step 20900/23862 (2.8 it/s)
+[Epoch 0/1] step 20950/23862 (2.8 it/s)
+[Epoch 0/1] step 21000/23862 (2.8 it/s)
+[Epoch 0/1] step 21050/23862 (2.8 it/s)
+[Epoch 0/1] step 21100/23862 (2.8 it/s)
+[Epoch 0/1] step 21150/23862 (2.8 it/s)
+[Epoch 0/1] step 21200/23862 (2.8 it/s)
+[Epoch 0/1] step 21250/23862 (2.8 it/s)
+[Epoch 0/1] step 21300/23862 (2.8 it/s)
+[Epoch 0/1] step 21350/23862 (2.8 it/s)
+[Epoch 0/1] step 21400/23862 (2.8 it/s)
+[Epoch 0/1] step 21450/23862 (2.8 it/s)
+[Epoch 0/1] step 21500/23862 (2.8 it/s)
+[Epoch 0/1] step 21550/23862 (2.8 it/s)
+[Epoch 0/1] step 21600/23862 (2.8 it/s)
+[Epoch 0/1] step 21650/23862 (2.8 it/s)
+[Epoch 0/1] step 21700/23862 (2.8 it/s)
+[Epoch 0/1] step 21750/23862 (2.8 it/s)
+[Epoch 0/1] step 21800/23862 (2.8 it/s)
+[Epoch 0/1] step 21850/23862 (2.8 it/s)
+[Epoch 0/1] step 21900/23862 (2.8 it/s)
+[Epoch 0/1] step 21950/23862 (2.8 it/s)
+[Epoch 0/1] step 22000/23862 (2.8 it/s)
+[Epoch 0/1] step 22050/23862 (2.8 it/s)
+[Epoch 0/1] step 22100/23862 (2.8 it/s)
+[Epoch 0/1] step 22150/23862 (2.8 it/s)
+[Epoch 0/1] step 22200/23862 (2.8 it/s)
+[Epoch 0/1] step 22250/23862 (2.8 it/s)
+[Epoch 0/1] step 22300/23862 (2.8 it/s)
+[Epoch 0/1] step 22350/23862 (2.8 it/s)
+[Epoch 0/1] step 22400/23862 (2.8 it/s)
+[Epoch 0/1] step 22450/23862 (2.8 it/s)
+[Epoch 0/1] step 22500/23862 (2.8 it/s)
+[Epoch 0/1] step 22550/23862 (2.8 it/s)
+[Epoch 0/1] step 22600/23862 (2.8 it/s)
+[Epoch 0/1] step 22650/23862 (2.8 it/s)
+[Epoch 0/1] step 22700/23862 (2.8 it/s)
+[Epoch 0/1] step 22750/23862 (2.8 it/s)
+[Epoch 0/1] step 22800/23862 (2.8 it/s)
+[Epoch 0/1] step 22850/23862 (2.8 it/s)
+[Epoch 0/1] step 22900/23862 (2.8 it/s)
+[Epoch 0/1] step 22950/23862 (2.8 it/s)
+[Epoch 0/1] step 23000/23862 (2.8 it/s)
+[Epoch 0/1] step 23050/23862 (2.8 it/s)
+[Epoch 0/1] step 23100/23862 (2.8 it/s)
+[Epoch 0/1] step 23150/23862 (2.8 it/s)
+[Epoch 0/1] step 23200/23862 (2.8 it/s)
+[Epoch 0/1] step 23250/23862 (2.8 it/s)
+[Epoch 0/1] step 23300/23862 (2.8 it/s)
+[Epoch 0/1] step 23350/23862 (2.8 it/s)
+[Epoch 0/1] step 23400/23862 (2.8 it/s)
+[Epoch 0/1] step 23450/23862 (2.8 it/s)
+[Epoch 0/1] step 23500/23862 (2.8 it/s)
+[Epoch 0/1] step 23550/23862 (2.8 it/s)
+[Epoch 0/1] step 23600/23862 (2.8 it/s)
+[Epoch 0/1] step 23650/23862 (2.8 it/s)
+[Epoch 0/1] step 23700/23862 (2.8 it/s)
+[Epoch 0/1] step 23750/23862 (2.8 it/s)
+[Epoch 0/1] step 23800/23862 (2.8 it/s)
+[Epoch 0/1] step 23850/23862 (2.8 it/s)
+[Epoch 0/1] done in 8606.8s
+23:34:32 | INFO  | checkpoint_~|   Checking for non PyTorch modules to save
+23:34:32 | INFO  | checkpoint_~|   Checking for Wandb params to save
+23:34:32 | OK    | checkpoint_~| ✓ Wandb params save check complete
+23:34:36 | INFO  | checkpoint_~|   Checking for non PyTorch modules to save
+23:34:36 | INFO  | checkpoint_~|   Checking for Wandb params to save
+23:34:36 | OK    | checkpoint_~| ✓ Wandb params save check complete
+`Trainer.fit` stopped: `max_epochs=1` reached.
+Epoch 0/0  ━━━━━━━━━━━━━━━━━ 23862/23862 2:23:26 •        2.76it/s v_num: 12.000
+                                         0:00:00                                
+/workspace/jepa/lib/python3.11/site-packages/lightning/pytorch/trainer/call.py:228: 1 buffered metric(s) were dropped at teardown because no valid logging step occurred after they were buffered
+
+✓ Pretraining done. Best checkpoint: /workspace/lejepa-MLProject/checkpoints/lejepa-vitb-epepoch=000.ckpt
+
+============================================================
+Phase 2+3 — Embedding Extraction + Few-Shot Linear Probe
+============================================================
+23:34:41 | INFO  | utils.py    | ── Module ────────────────────────────────────────
+23:34:41 | WARN  | module.py   | ! No hyperparameters provided - hyperparameter logging is disabled.
+23:34:41 | INFO  | module.py   |   Setting custom forward method.
+23:34:41 | WARN  | module.py   | ! You didn't pass a forward method. This will fail unless you implemented your own Module class.
+23:34:41 | INFO  | module.py   |   No metrics configuration provided - automatic metric tracking is disabled.
+✓ Loaded LeJEPA (vit_base_patch16_224) from /workspace/lejepa-MLProject/checkpoints/lejepa-vitb-epepoch=000.ckpt
+
+============================================================
+  DTD  (tanganke/dtd)
+============================================================
+  ▶ Trích xuất TRAIN embeddings ...
+23:34:43 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'tanganke/dtd' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:34:43 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'tanganke/dtd' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:34:44 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+23:34:44 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/tanganke/dtd/d2afa97d9f335b1a6b3b09c637aef667f98f966e/README.md "HTTP/1.1 200 OK"
+23:34:44 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/tanganke/dtd/d2afa97d9f335b1a6b3b09c637aef667f98f966e/README.md "HTTP/1.1 200 OK"
+23:34:44 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/d2afa97d9f335b1a6b3b09c637aef667f98f966e/dtd.py "HTTP/1.1 404 Not Found"
+23:34:45 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/tanganke/dtd/tanganke/dtd.py "HTTP/1.1 404 Not Found"
+23:34:45 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/dtd/revision/d2afa97d9f335b1a6b3b09c637aef667f98f966e "HTTP/1.1 200 OK"
+23:34:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/d2afa97d9f335b1a6b3b09c637aef667f98f966e/.huggingface.yaml "HTTP/1.1 404 Not Found"
+23:34:45 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=tanganke/dtd "HTTP/1.1 200 OK"
+23:34:46 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/dtd/revision/d2afa97d9f335b1a6b3b09c637aef667f98f966e "HTTP/1.1 200 OK"
+23:34:46 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/dtd/tree/d2afa97d9f335b1a6b3b09c637aef667f98f966e/data?recursive=true&expand=false "HTTP/1.1 200 OK"
+23:34:46 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/dtd/tree/d2afa97d9f335b1a6b3b09c637aef667f98f966e?recursive=false&expand=false "HTTP/1.1 200 OK"
+23:34:46 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/d2afa97d9f335b1a6b3b09c637aef667f98f966e/dataset_infos.json "HTTP/1.1 404 Not Found"
+Generating dataset dtd (/dev/shm/hf_cache/tanganke___dtd/default/0.0.0/d2afa97d9f335b1a6b3b09c637aef667f98f966e)
+23:34:47 | INFO  | __init__.py | Generating dataset dtd (/dev/shm/hf_cache/tanganke___dtd/default/0.0.0/d2afa97d9f335b1a6b3b09c637aef667f98f966e)
+Downloading and preparing dataset dtd/default to /dev/shm/hf_cache/tanganke___dtd/default/0.0.0/d2afa97d9f335b1a6b3b09c637aef667f98f966e...
+23:34:47 | INFO  | __init__.py | Downloading and preparing dataset dtd/default to /dev/shm/hf_cache/tanganke___dtd/default/0.0.0/d2afa97d9f335b1a6b3b09c637aef667f98f966e...
+23:34:47 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/d2afa97d9f335b1a6b3b09c637aef667f98f966e/data/train-00000-of-00001.parquet "HTTP/1.1 302 Found"
+23:34:47 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/dtd/xet-read-token/d2afa97d9f335b1a6b3b09c637aef667f98f966e "HTTP/1.1 200 OK"
+23:34:52 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/d2afa97d9f335b1a6b3b09c637aef667f98f966e/data/test-00000-of-00001.parquet "HTTP/1.1 302 Found"
+Downloading took 0.0 min
+23:34:54 | INFO  | __init__.py | Downloading took 0.0 min
+Checksum Computation took 0.0 min
+23:34:54 | INFO  | __init__.py | Checksum Computation took 0.0 min
+Generating train split
+23:34:54 | INFO  | __init__.py | Generating train split
+Generating train split:   0%|          | 0/3760 [00:00<?, ? examples/s]Generating train split:   3%|▎         | 100/3760 [00:00<00:08, 437.32 examples/s]Generating train split:  11%|█         | 400/3760 [00:00<00:02, 1393.66 examples/s]Generating train split:  29%|██▉       | 1100/3760 [00:00<00:00, 2972.30 examples/s]Generating train split:  48%|████▊     | 1800/3760 [00:00<00:00, 3922.40 examples/s]Generating train split:  64%|██████▍   | 2400/3760 [00:00<00:00, 4462.59 examples/s]Generating train split:  88%|████████▊ | 3300/3760 [00:00<00:00, 5213.90 examples/s]Generating train split: 100%|██████████| 3760/3760 [00:00<00:00, 4017.50 examples/s]
+Generating test split
+23:34:55 | INFO  | __init__.py | Generating test split
+Generating test split:   0%|          | 0/1880 [00:00<?, ? examples/s]Generating test split:  32%|███▏      | 600/1880 [00:00<00:00, 5057.07 examples/s]Generating test split:  80%|███████▉  | 1500/1880 [00:00<00:00, 6911.75 examples/s]Generating test split: 100%|██████████| 1880/1880 [00:00<00:00, 6917.03 examples/s]
+All the splits matched successfully.
+23:34:55 | INFO  | __init__.py | All the splits matched successfully.
+Dataset dtd downloaded and prepared to /dev/shm/hf_cache/tanganke___dtd/default/0.0.0/d2afa97d9f335b1a6b3b09c637aef667f98f966e. Subsequent calls will reuse this data.
+23:34:55 | INFO  | __init__.py | Dataset dtd downloaded and prepared to /dev/shm/hf_cache/tanganke___dtd/default/0.0.0/d2afa97d9f335b1a6b3b09c637aef667f98f966e. Subsequent calls will reuse this data.
+    → torch.Size([3760, 768])
+  ▶ Trích xuất TEST embeddings ...
+23:35:05 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'tanganke/dtd' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:35:05 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'tanganke/dtd' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:35:05 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+23:35:05 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/tanganke/dtd/d2afa97d9f335b1a6b3b09c637aef667f98f966e/README.md "HTTP/1.1 200 OK"
+23:35:05 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/d2afa97d9f335b1a6b3b09c637aef667f98f966e/dtd.py "HTTP/1.1 404 Not Found"
+23:35:05 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/tanganke/dtd/tanganke/dtd.py "HTTP/1.1 404 Not Found"
+23:35:05 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/d2afa97d9f335b1a6b3b09c637aef667f98f966e/.huggingface.yaml "HTTP/1.1 404 Not Found"
+23:35:06 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=tanganke/dtd "HTTP/1.1 200 OK"
+23:35:06 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/d2afa97d9f335b1a6b3b09c637aef667f98f966e/dataset_infos.json "HTTP/1.1 404 Not Found"
+Found cached dataset dtd (/dev/shm/hf_cache/tanganke___dtd/default/0.0.0/d2afa97d9f335b1a6b3b09c637aef667f98f966e)
+23:35:06 | INFO  | __init__.py | Found cached dataset dtd (/dev/shm/hf_cache/tanganke___dtd/default/0.0.0/d2afa97d9f335b1a6b3b09c637aef667f98f966e)
+    → torch.Size([1880, 768])
+  shots=  1  → 10.98%  (seeds=[0, 1, 2])
+  shots= 10  → 25.25%  (seeds=[0, 1, 2])
+  shots=all  → 39.26%
+
+============================================================
+  Aircraft  (Multimodal-Fatima/FGVC_dataset)
+============================================================
+  ▶ Trích xuất TRAIN embeddings ...
+23:35:13 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'Multimodal-Fatima/FGVC_dataset' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:35:13 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'Multimodal-Fatima/FGVC_dataset' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:35:13 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/Multimodal-Fatima/FGVC_dataset/resolve/main/README.md "HTTP/1.1 404 Not Found"
+  ❌ SKIP Aircraft: Dataset 'Multimodal-Fatima/FGVC_dataset' doesn't exist on the Hub or cannot be accessed.
+
+============================================================
+  Cars  (tanganke/stanford_cars)
+============================================================
+  ▶ Trích xuất TRAIN embeddings ...
+23:35:13 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'tanganke/stanford_cars' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:35:13 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'tanganke/stanford_cars' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:35:13 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+23:35:13 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/tanganke/stanford_cars/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/README.md "HTTP/1.1 200 OK"
+23:35:13 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/tanganke/stanford_cars/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/README.md "HTTP/1.1 200 OK"
+23:35:14 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/stanford_cars.py "HTTP/1.1 404 Not Found"
+23:35:14 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/tanganke/stanford_cars/tanganke/stanford_cars.py "HTTP/1.1 404 Not Found"
+23:35:14 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/stanford_cars/revision/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40 "HTTP/1.1 200 OK"
+23:35:15 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/.huggingface.yaml "HTTP/1.1 404 Not Found"
+23:35:15 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=tanganke/stanford_cars "HTTP/1.1 200 OK"
+23:35:15 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/stanford_cars/revision/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40 "HTTP/1.1 200 OK"
+23:35:15 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/stanford_cars/tree/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data?recursive=true&expand=false "HTTP/1.1 200 OK"
+23:35:15 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/stanford_cars/tree/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40?recursive=false&expand=false "HTTP/1.1 200 OK"
+23:35:15 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/dataset_infos.json "HTTP/1.1 404 Not Found"
+Generating dataset stanford_cars (/dev/shm/hf_cache/tanganke___stanford_cars/default/0.0.0/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40)
+23:35:15 | INFO  | __init__.py | Generating dataset stanford_cars (/dev/shm/hf_cache/tanganke___stanford_cars/default/0.0.0/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40)
+Downloading and preparing dataset stanford_cars/default to /dev/shm/hf_cache/tanganke___stanford_cars/default/0.0.0/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40...
+23:35:15 | INFO  | __init__.py | Downloading and preparing dataset stanford_cars/default to /dev/shm/hf_cache/tanganke___stanford_cars/default/0.0.0/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40...
+23:35:16 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/train-00000-of-00002.parquet "HTTP/1.1 302 Found"
+23:35:16 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/tanganke/stanford_cars/xet-read-token/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40 "HTTP/1.1 200 OK"
+23:35:25 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/train-00001-of-00002.parquet "HTTP/1.1 302 Found"
+23:35:30 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/test-00000-of-00002.parquet "HTTP/1.1 302 Found"
+23:35:38 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/test-00001-of-00002.parquet "HTTP/1.1 302 Found"
+23:35:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/contrast-00000-of-00001.parquet "HTTP/1.1 302 Found"
+23:35:47 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/gaussian_noise-00000-of-00002.parquet "HTTP/1.1 302 Found"
+23:35:49 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/gaussian_noise-00001-of-00002.parquet "HTTP/1.1 302 Found"
+23:35:51 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/impulse_noise-00000-of-00002.parquet "HTTP/1.1 302 Found"
+23:35:54 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/impulse_noise-00001-of-00002.parquet "HTTP/1.1 302 Found"
+23:35:56 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/jpeg_compression-00000-of-00001.parquet "HTTP/1.1 302 Found"
+23:35:58 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/motion_blur-00000-of-00001.parquet "HTTP/1.1 302 Found"
+23:36:00 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/pixelate-00000-of-00001.parquet "HTTP/1.1 302 Found"
+23:36:01 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/spatter-00000-of-00002.parquet "HTTP/1.1 302 Found"
+23:36:03 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/data/spatter-00001-of-00002.parquet "HTTP/1.1 302 Found"
+Downloading took 0.0 min
+23:36:04 | INFO  | __init__.py | Downloading took 0.0 min
+Checksum Computation took 0.0 min
+23:36:04 | INFO  | __init__.py | Checksum Computation took 0.0 min
+Generating train split
+23:36:05 | INFO  | __init__.py | Generating train split
+Generating train split:   0%|          | 0/8144 [00:00<?, ? examples/s]Generating train split:   4%|▎         | 300/8144 [00:00<00:03, 2588.36 examples/s]Generating train split:  16%|█▌        | 1300/8144 [00:00<00:01, 5277.59 examples/s]Generating train split:  25%|██▍       | 2000/8144 [00:00<00:01, 5791.64 examples/s]Generating train split:  37%|███▋      | 3000/8144 [00:00<00:01, 5140.85 examples/s]Generating train split:  47%|████▋     | 3800/8144 [00:00<00:01, 3944.31 examples/s]Generating train split:  57%|█████▋    | 4672/8144 [00:00<00:00, 4722.59 examples/s]Generating train split:  72%|███████▏  | 5872/8144 [00:01<00:00, 6160.33 examples/s]Generating train split:  87%|████████▋ | 7072/8144 [00:01<00:00, 6466.25 examples/s]Generating train split:  99%|█████████▉| 8072/8144 [00:01<00:00, 6991.47 examples/s]Generating train split: 100%|██████████| 8144/8144 [00:01<00:00, 5776.27 examples/s]
+Generating test split
+23:36:06 | INFO  | __init__.py | Generating test split
+Generating test split:   0%|          | 0/8041 [00:00<?, ? examples/s]Generating test split:  19%|█▊        | 1500/8041 [00:00<00:00, 13193.51 examples/s]Generating test split:  39%|███▊      | 3100/8041 [00:00<00:00, 7782.24 examples/s] Generating test split:  52%|█████▏    | 4221/8041 [00:00<00:00, 7395.17 examples/s]Generating test split:  66%|██████▌   | 5321/8041 [00:00<00:00, 7792.57 examples/s]Generating test split:  79%|███████▊  | 6321/8041 [00:00<00:00, 7645.18 examples/s]Generating test split:  96%|█████████▌| 7721/8041 [00:00<00:00, 9067.92 examples/s]Generating test split: 100%|██████████| 8041/8041 [00:00<00:00, 8377.85 examples/s]
+Generating contrast split
+23:36:07 | INFO  | __init__.py | Generating contrast split
+Generating contrast split:   0%|          | 0/8041 [00:00<?, ? examples/s]Generating contrast split:  41%|████      | 3300/8041 [00:00<00:00, 32342.89 examples/s]Generating contrast split:  99%|█████████▉| 8000/8041 [00:00<00:00, 30439.34 examples/s]Generating contrast split: 100%|██████████| 8041/8041 [00:00<00:00, 29972.89 examples/s]
+Generating gaussian_noise split
+23:36:07 | INFO  | __init__.py | Generating gaussian_noise split
+Generating gaussian_noise split:   0%|          | 0/8041 [00:00<?, ? examples/s]Generating gaussian_noise split:  20%|█▉        | 1600/8041 [00:00<00:00, 13790.62 examples/s]Generating gaussian_noise split:  37%|███▋      | 3000/8041 [00:00<00:00, 7384.57 examples/s] Generating gaussian_noise split:  49%|████▊     | 3900/8041 [00:00<00:00, 7837.69 examples/s]Generating gaussian_noise split:  61%|██████    | 4921/8041 [00:00<00:00, 8349.52 examples/s]Generating gaussian_noise split:  77%|███████▋  | 6221/8041 [00:00<00:00, 9497.22 examples/s]Generating gaussian_noise split:  91%|█████████ | 7321/8041 [00:00<00:00, 9844.12 examples/s]Generating gaussian_noise split: 100%|██████████| 8041/8041 [00:00<00:00, 9409.32 examples/s]
+Generating impulse_noise split
+23:36:08 | INFO  | __init__.py | Generating impulse_noise split
+Generating impulse_noise split:   0%|          | 0/8041 [00:00<?, ? examples/s]Generating impulse_noise split:  16%|█▌        | 1300/8041 [00:00<00:00, 10695.43 examples/s]Generating impulse_noise split:  36%|███▌      | 2900/8041 [00:00<00:00, 9238.63 examples/s] Generating impulse_noise split:  51%|█████     | 4121/8041 [00:00<00:00, 7989.78 examples/s]Generating impulse_noise split:  69%|██████▊   | 5521/8041 [00:00<00:00, 8232.69 examples/s]Generating impulse_noise split:  80%|███████▉  | 6421/8041 [00:00<00:00, 8197.86 examples/s]Generating impulse_noise split:  97%|█████████▋| 7821/8041 [00:00<00:00, 9343.10 examples/s]Generating impulse_noise split: 100%|██████████| 8041/8041 [00:00<00:00, 8918.51 examples/s]
+Generating jpeg_compression split
+23:36:09 | INFO  | __init__.py | Generating jpeg_compression split
+Generating jpeg_compression split:   0%|          | 0/8041 [00:00<?, ? examples/s]Generating jpeg_compression split:  27%|██▋       | 2200/8041 [00:00<00:00, 20932.41 examples/s]Generating jpeg_compression split:  53%|█████▎    | 4300/8041 [00:00<00:00, 19855.74 examples/s]Generating jpeg_compression split:  81%|████████  | 6500/8041 [00:00<00:00, 20536.60 examples/s]Generating jpeg_compression split: 100%|██████████| 8041/8041 [00:00<00:00, 20886.84 examples/s]
+Generating motion_blur split
+23:36:09 | INFO  | __init__.py | Generating motion_blur split
+Generating motion_blur split:   0%|          | 0/8041 [00:00<?, ? examples/s]Generating motion_blur split:  27%|██▋       | 2200/8041 [00:00<00:00, 21400.40 examples/s]Generating motion_blur split:  61%|██████    | 4900/8041 [00:00<00:00, 18620.54 examples/s]Generating motion_blur split:  88%|████████▊ | 7100/8041 [00:00<00:00, 19723.04 examples/s]Generating motion_blur split: 100%|██████████| 8041/8041 [00:00<00:00, 19591.46 examples/s]
+Generating pixelate split
+23:36:10 | INFO  | __init__.py | Generating pixelate split
+Generating pixelate split:   0%|          | 0/8041 [00:00<?, ? examples/s]Generating pixelate split: 100%|██████████| 8041/8041 [00:00<00:00, 163705.28 examples/s]
+Generating spatter split
+23:36:10 | INFO  | __init__.py | Generating spatter split
+Generating spatter split:   0%|          | 0/8041 [00:00<?, ? examples/s]Generating spatter split:  17%|█▋        | 1400/8041 [00:00<00:00, 13248.86 examples/s]Generating spatter split:  40%|███▉      | 3200/8041 [00:00<00:00, 11234.53 examples/s]Generating spatter split:  60%|█████▉    | 4821/8041 [00:00<00:00, 10682.83 examples/s]Generating spatter split:  76%|███████▌  | 6121/8041 [00:00<00:00, 11085.13 examples/s]Generating spatter split:  94%|█████████▎| 7521/8041 [00:00<00:00, 11566.02 examples/s]Generating spatter split: 100%|██████████| 8041/8041 [00:00<00:00, 11397.05 examples/s]
+All the splits matched successfully.
+23:36:10 | INFO  | __init__.py | All the splits matched successfully.
+Dataset stanford_cars downloaded and prepared to /dev/shm/hf_cache/tanganke___stanford_cars/default/0.0.0/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40. Subsequent calls will reuse this data.
+23:36:10 | INFO  | __init__.py | Dataset stanford_cars downloaded and prepared to /dev/shm/hf_cache/tanganke___stanford_cars/default/0.0.0/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40. Subsequent calls will reuse this data.
+    → torch.Size([8144, 768])
+  ▶ Trích xuất TEST embeddings ...
+23:36:22 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'tanganke/stanford_cars' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:36:22 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'tanganke/stanford_cars' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:36:22 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+23:36:23 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/tanganke/stanford_cars/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/README.md "HTTP/1.1 200 OK"
+23:36:23 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/stanford_cars.py "HTTP/1.1 404 Not Found"
+23:36:23 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/tanganke/stanford_cars/tanganke/stanford_cars.py "HTTP/1.1 404 Not Found"
+23:36:23 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/.huggingface.yaml "HTTP/1.1 404 Not Found"
+23:36:23 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=tanganke/stanford_cars "HTTP/1.1 200 OK"
+23:36:24 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40/dataset_infos.json "HTTP/1.1 404 Not Found"
+Found cached dataset stanford_cars (/dev/shm/hf_cache/tanganke___stanford_cars/default/0.0.0/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40)
+23:36:24 | INFO  | __init__.py | Found cached dataset stanford_cars (/dev/shm/hf_cache/tanganke___stanford_cars/default/0.0.0/9abf6cf7d6dfa7b95152a0d6e791ea9435b47a40)
+    → torch.Size([8041, 768])
+  shots=  1  → 1.81%  (seeds=[0, 1, 2])
+  shots= 10  → 5.32%  (seeds=[0, 1, 2])
+  shots=all  → 10.77%
+
+============================================================
+  CIFAR-10  (cifar10)
+============================================================
+  ▶ Trích xuất TRAIN embeddings ...
+23:36:43 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'cifar10' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:36:43 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'cifar10' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:36:43 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar10/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+23:36:43 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar10/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+23:36:44 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/uoft-cs/cifar10/0b2714987fa478483af9968de7c934580d0bb9a2/README.md "HTTP/1.1 200 OK"
+23:36:44 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/uoft-cs/cifar10/0b2714987fa478483af9968de7c934580d0bb9a2/README.md "HTTP/1.1 200 OK"
+23:36:44 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/cifar10.py "HTTP/1.1 307 Temporary Redirect"
+23:36:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/cifar10.py "HTTP/1.1 404 Not Found"
+23:36:45 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/cifar10/cifar10.py "HTTP/1.1 404 Not Found"
+23:36:45 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/cifar10/revision/0b2714987fa478483af9968de7c934580d0bb9a2 "HTTP/1.1 307 Temporary Redirect"
+23:36:45 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar10/revision/0b2714987fa478483af9968de7c934580d0bb9a2 "HTTP/1.1 200 OK"
+23:36:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/.huggingface.yaml "HTTP/1.1 307 Temporary Redirect"
+23:36:46 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/.huggingface.yaml "HTTP/1.1 404 Not Found"
+23:36:46 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=cifar10 "HTTP/1.1 404 Not Found"
+23:36:46 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/cifar10/revision/0b2714987fa478483af9968de7c934580d0bb9a2 "HTTP/1.1 307 Temporary Redirect"
+23:36:46 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar10/revision/0b2714987fa478483af9968de7c934580d0bb9a2 "HTTP/1.1 200 OK"
+23:36:46 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/cifar10/tree/0b2714987fa478483af9968de7c934580d0bb9a2/plain_text?recursive=true&expand=false "HTTP/1.1 307 Temporary Redirect"
+23:36:46 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar10/tree/0b2714987fa478483af9968de7c934580d0bb9a2/plain_text?recursive=true&expand=false "HTTP/1.1 200 OK"
+23:36:47 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/cifar10/tree/0b2714987fa478483af9968de7c934580d0bb9a2?recursive=false&expand=false "HTTP/1.1 307 Temporary Redirect"
+23:36:47 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar10/tree/0b2714987fa478483af9968de7c934580d0bb9a2?recursive=false&expand=false "HTTP/1.1 200 OK"
+23:36:47 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/dataset_infos.json "HTTP/1.1 307 Temporary Redirect"
+23:36:47 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/dataset_infos.json "HTTP/1.1 404 Not Found"
+Generating dataset cifar10 (/dev/shm/hf_cache/cifar10/plain_text/0.0.0/0b2714987fa478483af9968de7c934580d0bb9a2)
+23:36:47 | INFO  | __init__.py | Generating dataset cifar10 (/dev/shm/hf_cache/cifar10/plain_text/0.0.0/0b2714987fa478483af9968de7c934580d0bb9a2)
+Downloading and preparing dataset cifar10/plain_text to /dev/shm/hf_cache/cifar10/plain_text/0.0.0/0b2714987fa478483af9968de7c934580d0bb9a2...
+23:36:47 | INFO  | __init__.py | Downloading and preparing dataset cifar10/plain_text to /dev/shm/hf_cache/cifar10/plain_text/0.0.0/0b2714987fa478483af9968de7c934580d0bb9a2...
+23:36:47 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/plain_text/train-00000-of-00001.parquet "HTTP/1.1 307 Temporary Redirect"
+23:36:47 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/plain_text/train-00000-of-00001.parquet "HTTP/1.1 302 Found"
+23:36:48 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar10/xet-read-token/0b2714987fa478483af9968de7c934580d0bb9a2 "HTTP/1.1 200 OK"
+23:36:49 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/plain_text/test-00000-of-00001.parquet "HTTP/1.1 307 Temporary Redirect"
+23:36:49 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar10/resolve/0b2714987fa478483af9968de7c934580d0bb9a2/plain_text/test-00000-of-00001.parquet "HTTP/1.1 302 Found"
+Downloading took 0.0 min
+23:36:49 | INFO  | __init__.py | Downloading took 0.0 min
+Checksum Computation took 0.0 min
+23:36:49 | INFO  | __init__.py | Checksum Computation took 0.0 min
+Generating train split
+23:36:49 | INFO  | __init__.py | Generating train split
+Generating train split:   0%|          | 0/50000 [00:00<?, ? examples/s]Generating train split:  40%|████      | 20200/50000 [00:00<00:00, 201172.82 examples/s]Generating train split:  99%|█████████▊| 49300/50000 [00:00<00:00, 253587.65 examples/s]Generating train split: 100%|██████████| 50000/50000 [00:00<00:00, 245253.11 examples/s]
+Generating test split
+23:36:49 | INFO  | __init__.py | Generating test split
+Generating test split:   0%|          | 0/10000 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 10000/10000 [00:00<00:00, 269421.76 examples/s]
+All the splits matched successfully.
+23:36:49 | INFO  | __init__.py | All the splits matched successfully.
+Dataset cifar10 downloaded and prepared to /dev/shm/hf_cache/cifar10/plain_text/0.0.0/0b2714987fa478483af9968de7c934580d0bb9a2. Subsequent calls will reuse this data.
+23:36:49 | INFO  | __init__.py | Dataset cifar10 downloaded and prepared to /dev/shm/hf_cache/cifar10/plain_text/0.0.0/0b2714987fa478483af9968de7c934580d0bb9a2. Subsequent calls will reuse this data.
+  ❌ SKIP CIFAR-10: Caught KeyError in DataLoader worker process 0.
+Original Traceback (most recent call last):
+  File "/workspace/jepa/lib/python3.11/site-packages/torch/utils/data/_utils/worker.py", line 358, in _worker_loop
+    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/jepa/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 54, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/jepa/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 54, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+            ~~~~~~~~~~~~^^^^^
+  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/datasets.py", line 222, in __getitem__
+    return self.process_sample(self.dataset[idx], **extra)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/datasets.py", line 77, in process_sample
+    sample = self.transform(sample)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/transforms.py", line 1005, in __call__
+    sample = a(sample)
+             ^^^^^^^^^
+  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/transforms.py", line 596, in __call__
+    x, F.grayscale_to_rgb(self.nested_get(x, self.source)), self.target
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/transforms.py", line 33, in nested_get
+    return self.single_nested_get(v, name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/transforms.py", line 28, in single_nested_get
+    return self.single_nested_get(v[i[0]], ".".join(i[1:]))
+                                  ~^^^^^^
+KeyError: 'image'
+
+
+============================================================
+  CIFAR-100  (cifar100)
+============================================================
+  ▶ Trích xuất TRAIN embeddings ...
+23:37:31 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'cifar100' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:37:31 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'cifar100' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:37:31 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar100/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+23:37:31 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar100/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+23:37:31 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/uoft-cs/cifar100/aadb3af77e9048adbea6b47c21a81e47dd092ae5/README.md "HTTP/1.1 200 OK"
+23:37:32 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/uoft-cs/cifar100/aadb3af77e9048adbea6b47c21a81e47dd092ae5/README.md "HTTP/1.1 200 OK"
+23:37:32 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/cifar100.py "HTTP/1.1 307 Temporary Redirect"
+23:37:32 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/cifar100.py "HTTP/1.1 404 Not Found"
+23:37:32 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/cifar100/cifar100.py "HTTP/1.1 404 Not Found"
+23:37:32 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/cifar100/revision/aadb3af77e9048adbea6b47c21a81e47dd092ae5 "HTTP/1.1 307 Temporary Redirect"
+23:37:33 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar100/revision/aadb3af77e9048adbea6b47c21a81e47dd092ae5 "HTTP/1.1 200 OK"
+23:37:33 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/.huggingface.yaml "HTTP/1.1 307 Temporary Redirect"
+23:37:34 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/.huggingface.yaml "HTTP/1.1 404 Not Found"
+23:37:34 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=cifar100 "HTTP/1.1 404 Not Found"
+23:37:34 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/cifar100/revision/aadb3af77e9048adbea6b47c21a81e47dd092ae5 "HTTP/1.1 307 Temporary Redirect"
+23:37:35 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar100/revision/aadb3af77e9048adbea6b47c21a81e47dd092ae5 "HTTP/1.1 200 OK"
+23:37:35 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/cifar100/tree/aadb3af77e9048adbea6b47c21a81e47dd092ae5/cifar100?recursive=true&expand=false "HTTP/1.1 307 Temporary Redirect"
+23:37:35 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar100/tree/aadb3af77e9048adbea6b47c21a81e47dd092ae5/cifar100?recursive=true&expand=false "HTTP/1.1 200 OK"
+23:37:35 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/cifar100/tree/aadb3af77e9048adbea6b47c21a81e47dd092ae5?recursive=false&expand=false "HTTP/1.1 307 Temporary Redirect"
+23:37:35 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar100/tree/aadb3af77e9048adbea6b47c21a81e47dd092ae5?recursive=false&expand=false "HTTP/1.1 200 OK"
+23:37:36 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/dataset_infos.json "HTTP/1.1 307 Temporary Redirect"
+23:37:36 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/dataset_infos.json "HTTP/1.1 404 Not Found"
+Generating dataset cifar100 (/dev/shm/hf_cache/cifar100/cifar100/0.0.0/aadb3af77e9048adbea6b47c21a81e47dd092ae5)
+23:37:36 | INFO  | __init__.py | Generating dataset cifar100 (/dev/shm/hf_cache/cifar100/cifar100/0.0.0/aadb3af77e9048adbea6b47c21a81e47dd092ae5)
+Downloading and preparing dataset cifar100/cifar100 to /dev/shm/hf_cache/cifar100/cifar100/0.0.0/aadb3af77e9048adbea6b47c21a81e47dd092ae5...
+23:37:36 | INFO  | __init__.py | Downloading and preparing dataset cifar100/cifar100 to /dev/shm/hf_cache/cifar100/cifar100/0.0.0/aadb3af77e9048adbea6b47c21a81e47dd092ae5...
+23:37:36 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/cifar100/train-00000-of-00001.parquet "HTTP/1.1 307 Temporary Redirect"
+23:37:36 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/cifar100/train-00000-of-00001.parquet "HTTP/1.1 302 Found"
+23:37:36 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/uoft-cs/cifar100/xet-read-token/aadb3af77e9048adbea6b47c21a81e47dd092ae5 "HTTP/1.1 200 OK"
+23:37:38 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/cifar100/test-00000-of-00001.parquet "HTTP/1.1 307 Temporary Redirect"
+23:37:38 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/uoft-cs/cifar100/resolve/aadb3af77e9048adbea6b47c21a81e47dd092ae5/cifar100/test-00000-of-00001.parquet "HTTP/1.1 302 Found"
+Downloading took 0.0 min
+23:37:41 | INFO  | __init__.py | Downloading took 0.0 min
+Checksum Computation took 0.0 min
+23:37:41 | INFO  | __init__.py | Checksum Computation took 0.0 min
+Generating train split
+23:37:41 | INFO  | __init__.py | Generating train split
+Generating train split:   0%|          | 0/50000 [00:00<?, ? examples/s]Generating train split:  30%|██▉       | 14800/50000 [00:00<00:00, 146919.86 examples/s]Generating train split:  73%|███████▎  | 36300/50000 [00:00<00:00, 186262.60 examples/s]Generating train split: 100%|██████████| 50000/50000 [00:00<00:00, 192450.65 examples/s]
+Generating test split
+23:37:41 | INFO  | __init__.py | Generating test split
+Generating test split:   0%|          | 0/10000 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 10000/10000 [00:00<00:00, 156136.26 examples/s]
+All the splits matched successfully.
+23:37:41 | INFO  | __init__.py | All the splits matched successfully.
+Dataset cifar100 downloaded and prepared to /dev/shm/hf_cache/cifar100/cifar100/0.0.0/aadb3af77e9048adbea6b47c21a81e47dd092ae5. Subsequent calls will reuse this data.
+23:37:41 | INFO  | __init__.py | Dataset cifar100 downloaded and prepared to /dev/shm/hf_cache/cifar100/cifar100/0.0.0/aadb3af77e9048adbea6b47c21a81e47dd092ae5. Subsequent calls will reuse this data.
+  ❌ SKIP CIFAR-100: Caught KeyError in DataLoader worker process 0.
+Original Traceback (most recent call last):
+  File "/workspace/jepa/lib/python3.11/site-packages/torch/utils/data/_utils/worker.py", line 358, in _worker_loop
+    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/jepa/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 54, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/jepa/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 54, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+            ~~~~~~~~~~~~^^^^^
+  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/datasets.py", line 222, in __getitem__
+    return self.process_sample(self.dataset[idx], **extra)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/datasets.py", line 77, in process_sample
+    sample = self.transform(sample)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/transforms.py", line 1005, in __call__
+    sample = a(sample)
+             ^^^^^^^^^
+  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/transforms.py", line 596, in __call__
+    x, F.grayscale_to_rgb(self.nested_get(x, self.source)), self.target
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/transforms.py", line 33, in nested_get
+    return self.single_nested_get(v, name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/data/transforms.py", line 28, in single_nested_get
+    return self.single_nested_get(v[i[0]], ".".join(i[1:]))
+                                  ~^^^^^^
+KeyError: 'image'
+
+
+============================================================
+  Flowers102  (nelorth/oxford-flowers)
+============================================================
+  ▶ Trích xuất TRAIN embeddings ...
+23:37:42 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'nelorth/oxford-flowers' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:38:22 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'nelorth/oxford-flowers' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:38:22 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+23:38:23 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+23:38:23 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/nkirschi/oxford-flowers/a37b1891609c0376fa81eced756e7863e1bd873b/README.md "HTTP/1.1 200 OK"
+23:38:23 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/nkirschi/oxford-flowers/a37b1891609c0376fa81eced756e7863e1bd873b/README.md "HTTP/1.1 200 OK"
+23:38:23 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/oxford-flowers.py "HTTP/1.1 307 Temporary Redirect"
+23:38:23 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/oxford-flowers.py "HTTP/1.1 404 Not Found"
+23:38:24 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/nelorth/oxford-flowers/nelorth/oxford-flowers.py "HTTP/1.1 404 Not Found"
+23:38:24 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nelorth/oxford-flowers/revision/a37b1891609c0376fa81eced756e7863e1bd873b "HTTP/1.1 307 Temporary Redirect"
+23:38:24 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nkirschi/oxford-flowers/revision/a37b1891609c0376fa81eced756e7863e1bd873b "HTTP/1.1 200 OK"
+23:38:24 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/.huggingface.yaml "HTTP/1.1 307 Temporary Redirect"
+23:38:25 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/.huggingface.yaml "HTTP/1.1 404 Not Found"
+23:38:25 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=nelorth/oxford-flowers "HTTP/1.1 404 Not Found"
+23:38:25 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nelorth/oxford-flowers/revision/a37b1891609c0376fa81eced756e7863e1bd873b "HTTP/1.1 307 Temporary Redirect"
+23:38:25 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nkirschi/oxford-flowers/revision/a37b1891609c0376fa81eced756e7863e1bd873b "HTTP/1.1 200 OK"
+23:38:25 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nelorth/oxford-flowers/tree/a37b1891609c0376fa81eced756e7863e1bd873b/data?recursive=true&expand=false "HTTP/1.1 307 Temporary Redirect"
+23:38:25 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nkirschi/oxford-flowers/tree/a37b1891609c0376fa81eced756e7863e1bd873b/data?recursive=true&expand=false "HTTP/1.1 200 OK"
+23:38:25 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nelorth/oxford-flowers/tree/a37b1891609c0376fa81eced756e7863e1bd873b?recursive=false&expand=false "HTTP/1.1 307 Temporary Redirect"
+23:38:26 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nkirschi/oxford-flowers/tree/a37b1891609c0376fa81eced756e7863e1bd873b?recursive=false&expand=false "HTTP/1.1 200 OK"
+23:38:26 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/dataset_infos.json "HTTP/1.1 307 Temporary Redirect"
+23:38:26 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/dataset_infos.json "HTTP/1.1 404 Not Found"
+Generating dataset oxford-flowers (/dev/shm/hf_cache/nelorth___oxford-flowers/default/0.0.0/a37b1891609c0376fa81eced756e7863e1bd873b)
+23:38:26 | INFO  | __init__.py | Generating dataset oxford-flowers (/dev/shm/hf_cache/nelorth___oxford-flowers/default/0.0.0/a37b1891609c0376fa81eced756e7863e1bd873b)
+Downloading and preparing dataset oxford-flowers/default to /dev/shm/hf_cache/nelorth___oxford-flowers/default/0.0.0/a37b1891609c0376fa81eced756e7863e1bd873b...
+23:38:26 | INFO  | __init__.py | Downloading and preparing dataset oxford-flowers/default to /dev/shm/hf_cache/nelorth___oxford-flowers/default/0.0.0/a37b1891609c0376fa81eced756e7863e1bd873b...
+23:38:26 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/data/train-00000-of-00001-12de94e121bdbead.parquet "HTTP/1.1 307 Temporary Redirect"
+23:38:26 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/data/train-00000-of-00001-12de94e121bdbead.parquet "HTTP/1.1 302 Found"
+23:38:26 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/nkirschi/oxford-flowers/xet-read-token/a37b1891609c0376fa81eced756e7863e1bd873b "HTTP/1.1 200 OK"
+23:38:31 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/data/test-00000-of-00001-96eeec628415add6.parquet "HTTP/1.1 307 Temporary Redirect"
+23:38:32 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/data/test-00000-of-00001-96eeec628415add6.parquet "HTTP/1.1 302 Found"
+Downloading took 0.0 min
+23:38:34 | INFO  | __init__.py | Downloading took 0.0 min
+Checksum Computation took 0.0 min
+23:38:34 | INFO  | __init__.py | Checksum Computation took 0.0 min
+Generating train split
+23:38:34 | INFO  | __init__.py | Generating train split
+Generating train split:   0%|          | 0/7169 [00:00<?, ? examples/s]Generating train split:  14%|█▍        | 1000/7169 [00:00<00:02, 2891.49 examples/s]Generating train split:  28%|██▊       | 2000/7169 [00:00<00:01, 4398.29 examples/s]Generating train split:  42%|████▏     | 3000/7169 [00:00<00:00, 5563.09 examples/s]Generating train split:  56%|█████▌    | 4000/7169 [00:00<00:00, 6162.12 examples/s]Generating train split:  70%|██████▉   | 5000/7169 [00:00<00:00, 6282.18 examples/s]Generating train split:  84%|████████▎ | 6000/7169 [00:01<00:00, 6510.28 examples/s]Generating train split: 100%|██████████| 7169/7169 [00:01<00:00, 6642.77 examples/s]
+Generating test split
+23:38:35 | INFO  | __init__.py | Generating test split
+Generating test split:   0%|          | 0/1020 [00:00<?, ? examples/s]Generating test split:  98%|█████████▊| 1000/1020 [00:00<00:00, 5874.76 examples/s]Generating test split: 100%|██████████| 1020/1020 [00:00<00:00, 5789.64 examples/s]
+All the splits matched successfully.
+23:38:35 | INFO  | __init__.py | All the splits matched successfully.
+Dataset oxford-flowers downloaded and prepared to /dev/shm/hf_cache/nelorth___oxford-flowers/default/0.0.0/a37b1891609c0376fa81eced756e7863e1bd873b. Subsequent calls will reuse this data.
+23:38:35 | INFO  | __init__.py | Dataset oxford-flowers downloaded and prepared to /dev/shm/hf_cache/nelorth___oxford-flowers/default/0.0.0/a37b1891609c0376fa81eced756e7863e1bd873b. Subsequent calls will reuse this data.
+    → torch.Size([7169, 768])
+  ▶ Trích xuất TEST embeddings ...
+23:38:44 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'nelorth/oxford-flowers' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:38:44 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'nelorth/oxford-flowers' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:38:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+23:38:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+23:38:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/nkirschi/oxford-flowers/a37b1891609c0376fa81eced756e7863e1bd873b/README.md "HTTP/1.1 200 OK"
+23:38:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/oxford-flowers.py "HTTP/1.1 307 Temporary Redirect"
+23:38:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/oxford-flowers.py "HTTP/1.1 404 Not Found"
+23:38:46 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/nelorth/oxford-flowers/nelorth/oxford-flowers.py "HTTP/1.1 404 Not Found"
+23:38:46 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/.huggingface.yaml "HTTP/1.1 307 Temporary Redirect"
+23:38:46 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/.huggingface.yaml "HTTP/1.1 404 Not Found"
+23:38:46 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=nelorth/oxford-flowers "HTTP/1.1 404 Not Found"
+23:38:46 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/dataset_infos.json "HTTP/1.1 307 Temporary Redirect"
+23:38:46 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nkirschi/oxford-flowers/resolve/a37b1891609c0376fa81eced756e7863e1bd873b/dataset_infos.json "HTTP/1.1 404 Not Found"
+Found cached dataset oxford-flowers (/dev/shm/hf_cache/nelorth___oxford-flowers/default/0.0.0/a37b1891609c0376fa81eced756e7863e1bd873b)
+23:38:46 | INFO  | __init__.py | Found cached dataset oxford-flowers (/dev/shm/hf_cache/nelorth___oxford-flowers/default/0.0.0/a37b1891609c0376fa81eced756e7863e1bd873b)
+    → torch.Size([1020, 768])
+  shots=  1  → 19.74%  (seeds=[0, 1, 2])
+  shots= 10  → 49.51%  (seeds=[0, 1, 2])
+  shots=all  → 65.29%
+
+============================================================
+  Food-101  (ethz/food101)
+============================================================
+  ▶ Trích xuất TRAIN embeddings ...
+23:38:56 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'ethz/food101' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:38:56 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'ethz/food101' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:38:56 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+23:38:56 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/ethz/food101/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/README.md "HTTP/1.1 200 OK"
+23:38:56 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/ethz/food101/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/README.md "HTTP/1.1 200 OK"
+23:38:56 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/food101.py "HTTP/1.1 404 Not Found"
+23:38:57 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/ethz/food101/ethz/food101.py "HTTP/1.1 404 Not Found"
+23:38:57 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/ethz/food101/revision/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9 "HTTP/1.1 200 OK"
+23:38:57 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/.huggingface.yaml "HTTP/1.1 404 Not Found"
+23:38:57 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=ethz/food101 "HTTP/1.1 200 OK"
+23:38:58 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/ethz/food101/revision/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9 "HTTP/1.1 200 OK"
+23:38:58 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/ethz/food101/tree/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data?recursive=true&expand=false "HTTP/1.1 200 OK"
+23:38:58 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/ethz/food101/tree/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9?recursive=false&expand=false "HTTP/1.1 200 OK"
+23:38:58 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/ethz/food101/revision/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9 "HTTP/1.1 200 OK"
+23:38:58 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/ethz/food101/revision/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9 "HTTP/1.1 200 OK"
+23:38:58 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/dataset_infos.json "HTTP/1.1 404 Not Found"
+Generating dataset food101 (/dev/shm/hf_cache/ethz___food101/default/0.0.0/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9)
+23:38:58 | INFO  | __init__.py | Generating dataset food101 (/dev/shm/hf_cache/ethz___food101/default/0.0.0/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9)
+Downloading and preparing dataset food101/default to /dev/shm/hf_cache/ethz___food101/default/0.0.0/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9...
+23:38:58 | INFO  | __init__.py | Downloading and preparing dataset food101/default to /dev/shm/hf_cache/ethz___food101/default/0.0.0/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9...
+23:38:59 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/train-00000-of-00008.parquet "HTTP/1.1 302 Found"
+23:38:59 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/ethz/food101/xet-read-token/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9 "HTTP/1.1 200 OK"
+23:39:01 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/train-00001-of-00008.parquet "HTTP/1.1 302 Found"
+23:39:03 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/train-00002-of-00008.parquet "HTTP/1.1 302 Found"
+23:39:05 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/train-00003-of-00008.parquet "HTTP/1.1 302 Found"
+23:39:09 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/train-00004-of-00008.parquet "HTTP/1.1 302 Found"
+23:39:11 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/train-00005-of-00008.parquet "HTTP/1.1 302 Found"
+23:39:13 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/train-00006-of-00008.parquet "HTTP/1.1 302 Found"
+23:39:18 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/train-00007-of-00008.parquet "HTTP/1.1 302 Found"
+23:39:20 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/validation-00000-of-00003.parquet "HTTP/1.1 302 Found"
+23:39:22 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/validation-00001-of-00003.parquet "HTTP/1.1 302 Found"
+23:39:27 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/data/validation-00002-of-00003.parquet "HTTP/1.1 302 Found"
+Downloading took 0.0 min
+23:39:28 | INFO  | __init__.py | Downloading took 0.0 min
+Checksum Computation took 0.0 min
+23:39:28 | INFO  | __init__.py | Checksum Computation took 0.0 min
+Generating train split
+23:39:28 | INFO  | __init__.py | Generating train split
+Generating train split:   0%|          | 0/75750 [00:00<?, ? examples/s]Generating train split:   1%|          | 600/75750 [00:00<00:14, 5085.25 examples/s]Generating train split:   3%|▎         | 1900/75750 [00:00<00:08, 9189.26 examples/s]Generating train split:   5%|▌         | 3900/75750 [00:00<00:05, 12874.59 examples/s]Generating train split:   7%|▋         | 5600/75750 [00:00<00:04, 14228.45 examples/s]Generating train split:  10%|▉         | 7200/75750 [00:00<00:04, 13816.36 examples/s]Generating train split:  13%|█▎        | 9569/75750 [00:00<00:04, 13787.35 examples/s]Generating train split:  16%|█▌        | 12069/75750 [00:00<00:03, 16665.01 examples/s]Generating train split:  19%|█▉        | 14269/75750 [00:00<00:03, 17896.96 examples/s]Generating train split:  22%|██▏       | 16469/75750 [00:01<00:03, 18986.68 examples/s]Generating train split:  25%|██▍       | 18769/75750 [00:01<00:02, 19701.35 examples/s]Generating train split:  29%|██▉       | 21838/75750 [00:01<00:02, 19625.63 examples/s]Generating train split:  32%|███▏      | 23938/75750 [00:01<00:02, 19904.88 examples/s]Generating train split:  34%|███▍      | 26038/75750 [00:01<00:02, 20000.51 examples/s]Generating train split:  38%|███▊      | 28507/75750 [00:01<00:02, 17984.99 examples/s]Generating train split:  41%|████      | 31207/75750 [00:01<00:02, 20167.26 examples/s]Generating train split:  44%|████▍     | 33607/75750 [00:01<00:02, 20975.13 examples/s]Generating train split:  48%|████▊     | 36007/75750 [00:01<00:01, 21617.65 examples/s]Generating train split:  51%|█████     | 38676/75750 [00:02<00:01, 19846.84 examples/s]Generating train split:  55%|█████▍    | 41376/75750 [00:02<00:01, 21466.60 examples/s]Generating train split:  58%|█████▊    | 43976/75750 [00:02<00:01, 22591.94 examples/s]Generating train split:  61%|██████▏   | 46476/75750 [00:02<00:01, 23142.70 examples/s]Generating train split:  66%|██████▌   | 49945/75750 [00:02<00:01, 22634.44 examples/s]Generating train split:  69%|██████▉   | 52545/75750 [00:02<00:00, 23324.73 examples/s]Generating train split:  73%|███████▎  | 55645/75750 [00:02<00:00, 22158.54 examples/s]Generating train split:  78%|███████▊  | 58914/75750 [00:03<00:00, 21680.43 examples/s]Generating train split:  81%|████████▏ | 61614/75750 [00:03<00:00, 22865.59 examples/s]Generating train split:  85%|████████▍ | 64114/75750 [00:03<00:00, 23004.29 examples/s]Generating train split:  90%|████████▉ | 67982/75750 [00:03<00:00, 23685.63 examples/s]Generating train split:  93%|█████████▎| 70682/75750 [00:03<00:00, 24150.35 examples/s]Generating train split:  97%|█████████▋| 73482/75750 [00:03<00:00, 24801.34 examples/s]Generating train split: 100%|██████████| 75750/75750 [00:03<00:00, 20375.19 examples/s]
+Generating validation split
+23:39:32 | INFO  | __init__.py | Generating validation split
+Generating validation split:   0%|          | 0/25250 [00:00<?, ? examples/s]Generating validation split:  11%|█         | 2700/25250 [00:00<00:00, 26699.44 examples/s]Generating validation split:  22%|██▏       | 5500/25250 [00:00<00:00, 27287.83 examples/s]Generating validation split:  33%|███▎      | 8300/25250 [00:00<00:00, 26827.90 examples/s]Generating validation split:  48%|████▊     | 12217/25250 [00:00<00:00, 26279.88 examples/s]Generating validation split:  59%|█████▉    | 14917/25250 [00:00<00:00, 26115.55 examples/s]Generating validation split:  75%|███████▍  | 18834/25250 [00:00<00:00, 25734.69 examples/s]Generating validation split:  85%|████████▌ | 21534/25250 [00:00<00:00, 25726.88 examples/s]Generating validation split:  96%|█████████▋| 24334/25250 [00:00<00:00, 25926.73 examples/s]Generating validation split: 100%|██████████| 25250/25250 [00:00<00:00, 25904.02 examples/s]
+All the splits matched successfully.
+23:39:33 | INFO  | __init__.py | All the splits matched successfully.
+Dataset food101 downloaded and prepared to /dev/shm/hf_cache/ethz___food101/default/0.0.0/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9. Subsequent calls will reuse this data.
+23:39:33 | INFO  | __init__.py | Dataset food101 downloaded and prepared to /dev/shm/hf_cache/ethz___food101/default/0.0.0/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9. Subsequent calls will reuse this data.
+/workspace/jepa/lib/python3.11/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+    → torch.Size([75750, 768])
+  ▶ Trích xuất TEST embeddings ...
+23:40:37 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'ethz/food101' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:40:37 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'ethz/food101' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:40:37 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+23:40:37 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/ethz/food101/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/README.md "HTTP/1.1 200 OK"
+23:40:37 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/food101.py "HTTP/1.1 404 Not Found"
+23:40:38 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/ethz/food101/ethz/food101.py "HTTP/1.1 404 Not Found"
+23:40:38 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/.huggingface.yaml "HTTP/1.1 404 Not Found"
+23:40:38 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=ethz/food101 "HTTP/1.1 200 OK"
+23:40:38 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9/dataset_infos.json "HTTP/1.1 404 Not Found"
+Found cached dataset food101 (/dev/shm/hf_cache/ethz___food101/default/0.0.0/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9)
+23:40:39 | INFO  | __init__.py | Found cached dataset food101 (/dev/shm/hf_cache/ethz___food101/default/0.0.0/83488de741c1bd1ce27aa6a2b33e19c7bdf92ca9)
+/workspace/jepa/lib/python3.11/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+/workspace/jepa/lib/python3.11/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+    → torch.Size([25250, 768])
+  shots=  1  → 4.09%  (seeds=[0, 1, 2])
+  shots= 10  → 13.98%  (seeds=[0, 1, 2])
+  shots=all  → 39.49%
+
+============================================================
+  Oxford Pets  (pcuenq/oxford-pets)
+============================================================
+  ▶ Trích xuất TRAIN embeddings ...
+23:41:39 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'pcuenq/oxford-pets' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:41:39 | ERROR | __init__.py | `trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'pcuenq/oxford-pets' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+23:41:40 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/pcuenq/oxford-pets/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+23:41:40 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/enterprise-explorers/oxford-pets/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+23:41:40 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/enterprise-explorers/oxford-pets/2c628097f293a86bdba429379dbb91c0952415eb/README.md "HTTP/1.1 200 OK"
+23:41:40 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/enterprise-explorers/oxford-pets/2c628097f293a86bdba429379dbb91c0952415eb/README.md "HTTP/1.1 200 OK"
+23:41:40 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/pcuenq/oxford-pets/resolve/2c628097f293a86bdba429379dbb91c0952415eb/oxford-pets.py "HTTP/1.1 307 Temporary Redirect"
+23:41:41 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/enterprise-explorers/oxford-pets/resolve/2c628097f293a86bdba429379dbb91c0952415eb/oxford-pets.py "HTTP/1.1 404 Not Found"
+23:41:41 | INFO  | __init__.py | HTTP Request: HEAD https://s3.amazonaws.com/datasets.huggingface.co/datasets/datasets/pcuenq/oxford-pets/pcuenq/oxford-pets.py "HTTP/1.1 404 Not Found"
+23:41:41 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/pcuenq/oxford-pets/revision/2c628097f293a86bdba429379dbb91c0952415eb "HTTP/1.1 307 Temporary Redirect"
+23:41:42 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/enterprise-explorers/oxford-pets/revision/2c628097f293a86bdba429379dbb91c0952415eb "HTTP/1.1 200 OK"
+23:41:42 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/pcuenq/oxford-pets/resolve/2c628097f293a86bdba429379dbb91c0952415eb/.huggingface.yaml "HTTP/1.1 307 Temporary Redirect"
+23:41:42 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/enterprise-explorers/oxford-pets/resolve/2c628097f293a86bdba429379dbb91c0952415eb/.huggingface.yaml "HTTP/1.1 404 Not Found"
+23:41:42 | INFO  | __init__.py | HTTP Request: GET https://datasets-server.huggingface.co/info?dataset=pcuenq/oxford-pets "HTTP/1.1 404 Not Found"
+23:41:42 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/pcuenq/oxford-pets/revision/2c628097f293a86bdba429379dbb91c0952415eb "HTTP/1.1 307 Temporary Redirect"
+23:41:43 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/enterprise-explorers/oxford-pets/revision/2c628097f293a86bdba429379dbb91c0952415eb "HTTP/1.1 200 OK"
+23:41:43 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/pcuenq/oxford-pets/tree/2c628097f293a86bdba429379dbb91c0952415eb/data?recursive=true&expand=false "HTTP/1.1 307 Temporary Redirect"
+23:41:43 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/enterprise-explorers/oxford-pets/tree/2c628097f293a86bdba429379dbb91c0952415eb/data?recursive=true&expand=false "HTTP/1.1 200 OK"
+23:41:43 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/pcuenq/oxford-pets/tree/2c628097f293a86bdba429379dbb91c0952415eb?recursive=false&expand=false "HTTP/1.1 307 Temporary Redirect"
+23:41:43 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/enterprise-explorers/oxford-pets/tree/2c628097f293a86bdba429379dbb91c0952415eb?recursive=false&expand=false "HTTP/1.1 200 OK"
+23:41:43 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/pcuenq/oxford-pets/revision/2c628097f293a86bdba429379dbb91c0952415eb "HTTP/1.1 307 Temporary Redirect"
+23:41:44 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/enterprise-explorers/oxford-pets/revision/2c628097f293a86bdba429379dbb91c0952415eb "HTTP/1.1 200 OK"
+23:41:44 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/pcuenq/oxford-pets/resolve/2c628097f293a86bdba429379dbb91c0952415eb/dataset_infos.json "HTTP/1.1 307 Temporary Redirect"
+23:41:44 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/enterprise-explorers/oxford-pets/resolve/2c628097f293a86bdba429379dbb91c0952415eb/dataset_infos.json "HTTP/1.1 307 Temporary Redirect"
+23:41:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/datasets/enterprise-explorers/oxford-pets/2c628097f293a86bdba429379dbb91c0952415eb/dataset_infos.json "HTTP/1.1 200 OK"
+23:41:45 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/resolve-cache/datasets/enterprise-explorers/oxford-pets/2c628097f293a86bdba429379dbb91c0952415eb/dataset_infos.json "HTTP/1.1 200 OK"
+Generating dataset oxford-pets (/dev/shm/hf_cache/pcuenq___oxford-pets/default/0.0.0/2c628097f293a86bdba429379dbb91c0952415eb)
+23:41:45 | INFO  | __init__.py | Generating dataset oxford-pets (/dev/shm/hf_cache/pcuenq___oxford-pets/default/0.0.0/2c628097f293a86bdba429379dbb91c0952415eb)
+Downloading and preparing dataset oxford-pets/default (download: 223.20 MiB, generated: 223.84 MiB, post-processed: Unknown size, total: 447.04 MiB) to /dev/shm/hf_cache/pcuenq___oxford-pets/default/0.0.0/2c628097f293a86bdba429379dbb91c0952415eb...
+23:41:45 | INFO  | __init__.py | Downloading and preparing dataset oxford-pets/default (download: 223.20 MiB, generated: 223.84 MiB, post-processed: Unknown size, total: 447.04 MiB) to /dev/shm/hf_cache/pcuenq___oxford-pets/default/0.0.0/2c628097f293a86bdba429379dbb91c0952415eb...
+23:41:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/pcuenq/oxford-pets/resolve/2c628097f293a86bdba429379dbb91c0952415eb/data/train-00000-of-00001-ecc2afb43dedd5e0.parquet "HTTP/1.1 307 Temporary Redirect"
+23:41:45 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/enterprise-explorers/oxford-pets/resolve/2c628097f293a86bdba429379dbb91c0952415eb/data/train-00000-of-00001-ecc2afb43dedd5e0.parquet "HTTP/1.1 302 Found"
+23:41:45 | INFO  | __init__.py | HTTP Request: GET https://huggingface.co/api/datasets/enterprise-explorers/oxford-pets/xet-read-token/2c628097f293a86bdba429379dbb91c0952415eb "HTTP/1.1 200 OK"
+Downloading took 0.0 min
+23:41:49 | INFO  | __init__.py | Downloading took 0.0 min
+Checksum Computation took 0.0 min
+23:41:49 | INFO  | __init__.py | Checksum Computation took 0.0 min
+Generating train split
+23:41:49 | INFO  | __init__.py | Generating train split
+Generating train split:   0%|          | 0/7390 [00:00<?, ? examples/s]Generating train split: 100%|██████████| 7390/7390 [00:00<00:00, 9920.10 examples/s]Generating train split: 100%|██████████| 7390/7390 [00:00<00:00, 9357.81 examples/s]
+All the splits matched successfully.
+23:41:50 | INFO  | __init__.py | All the splits matched successfully.
+Dataset oxford-pets downloaded and prepared to /dev/shm/hf_cache/pcuenq___oxford-pets/default/0.0.0/2c628097f293a86bdba429379dbb91c0952415eb. Subsequent calls will reuse this data.
+23:41:50 | INFO  | __init__.py | Dataset oxford-pets downloaded and prepared to /dev/shm/hf_cache/pcuenq___oxford-pets/default/0.0.0/2c628097f293a86bdba429379dbb91c0952415eb. Subsequent calls will reuse this data.
+  ❌ SKIP Oxford Pets: too many dimensions 'str'
+
+=== LeJEPA ViT-B (1ep IN-1K) — Few-Shot Linear Probe ===
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+ shots │      DTD │ Aircraft │     Cars │ CIFAR-10 │ CIFAR-10 │ Flowers1 │ Food-101 │ Oxford P │    avg.
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+     1 │    10.98 │      nan │     1.81 │      nan │      nan │    19.74 │     4.09 │      nan │    9.16
+    10 │    25.25 │      nan │     5.32 │      nan │      nan │    49.51 │    13.98 │      nan │   23.52
+   all │    39.26 │      nan │    10.77 │      nan │      nan │    65.29 │    39.49 │      nan │   38.70
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+

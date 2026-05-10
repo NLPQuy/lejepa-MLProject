@@ -178,6 +178,8 @@ import torch.nn.functional as F
 import torchmetrics
 import torchvision
 from torch.utils.data import DataLoader, Subset, TensorDataset
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 # ── Tensor Core precision (recommended for H100 / A100) 
 torch.set_float32_matmul_precision("high")
@@ -223,13 +225,13 @@ SIGREG_N_POINTS  = 17
 # (hf_dataset_name, n_classes, split_train, split_test, label_column)
 EVAL_DATASETS = [
     ("tanganke/dtd",                     47,  "train", "test",       "label"),
-    ("Multimodal-Fatima/FGVC_dataset",  100,  "train", "test",       "label"),   # Aircraft
+    ("HuggingFaceM4/FGVC-Aircraft",     100,  "trainval", "test",    "variant"), # Aircraft
     ("tanganke/stanford_cars",          196,  "train", "test",       "label"),
     ("cifar10",                          10,  "train", "test",       "label"),
     ("cifar100",                        100,  "train", "test",       "fine_label"),
     ("nelorth/oxford-flowers",          102,  "train", "test",       "label"),
     ("ethz/food101",                    101,  "train", "validation", "label"),
-    ("pcuenq/oxford-pets",               37,  "train", "test",       "label"),
+    ("pcuenq/oxford-pets",               37,  "trainval", "test",    "label"),
 ]
 EVAL_DATASET_LABELS = [
     "DTD", "Aircraft", "Cars", "CIFAR-10",
@@ -589,25 +591,63 @@ def extract_embeddings(
 
     Embedding = CLS token của last layer (model.eval() → model.backbone(x)).
     """
-    rename = {label_column: "label"} if label_column != "label" else None
-    ds = HFDataset(
-        hf_dataset_name,
-        split=split,
-        transform=make_val_transform(),
-        trust_remote_code=True,
-        rename_columns=rename,
-    )
+    if hf_dataset_name in ["cifar10", "cifar100", "HuggingFaceM4/FGVC-Aircraft", "pcuenq/oxford-pets"]:
+        from stable_pretraining.data.datasets import FromTorchDataset
+        is_train = split in ["train", "trainval"]
+        
+        if hf_dataset_name == "cifar10":
+            tv_ds = torchvision.datasets.CIFAR10(root="./data", train=is_train, download=True)
+        elif hf_dataset_name == "cifar100":
+            tv_ds = torchvision.datasets.CIFAR100(root="./data", train=is_train, download=True)
+        elif hf_dataset_name == "HuggingFaceM4/FGVC-Aircraft":
+            tv_split = "trainval" if is_train else "test"
+            tv_ds = torchvision.datasets.FGVCAircraft(root="./data", split=tv_split, download=True)
+        else: # pcuenq/oxford-pets
+            tv_split = "trainval" if is_train else "test"
+            tv_ds = torchvision.datasets.OxfordIIITPet(root="./data", split=tv_split, download=True)
+            
+        ds = FromTorchDataset(tv_ds, names=["image", "label"], transform=make_val_transform())
+    else:
+        rename = {label_column: "label"} if label_column != "label" else None
+        ds = HFDataset(
+            hf_dataset_name,
+            split=split,
+            transform=make_val_transform(),
+            rename_columns=rename,
+        )
+        
+    # Sửa lỗi CUDA initialization trong worker bằng cách dùng num_workers=0 cho eval DataLoader
     loader = DataLoader(ds, batch_size=batch_size, shuffle=False,
-                        num_workers=NUM_WORKERS, pin_memory=True)
+                        num_workers=0, pin_memory=True)
 
     model = model.to(device).eval()
     all_embs, all_labels = [], []
+    
+    global _GLOBAL_STR_MAPPING
+    if "_GLOBAL_STR_MAPPING" not in globals():
+        _GLOBAL_STR_MAPPING = {}
 
     for batch in loader:
         imgs   = batch["image"].to(device, non_blocking=True)
         output = model(images=imgs)
         all_embs.append(output.embedding.cpu())
         lbl = batch["label"]
+        
+        # Handle string labels for datasets like Oxford Pets
+        if isinstance(lbl, (list, tuple)) and len(lbl) > 0 and isinstance(lbl[0], str):
+            feat = None
+            if hasattr(ds, "dataset") and hasattr(ds.dataset, "features"):
+                feat = ds.dataset.features.get("label")
+            if feat and hasattr(feat, "str2int"):
+                lbl = [feat.str2int(x) for x in lbl]
+            else:
+                mapped_lbl = []
+                for x in lbl:
+                    if x not in _GLOBAL_STR_MAPPING:
+                        _GLOBAL_STR_MAPPING[x] = len(_GLOBAL_STR_MAPPING)
+                    mapped_lbl.append(_GLOBAL_STR_MAPPING[x])
+                lbl = mapped_lbl
+
         # đảm bảo label luôn là 1D LongTensor
         if not isinstance(lbl, torch.Tensor):
             lbl = torch.tensor(lbl)
@@ -766,13 +806,13 @@ def print_results_table(results: dict):
     ds_order    = EVAL_DATASET_LABELS
     shots_order = ["1", "10", "all"]
 
-    header = f"{'shots':>6} │ " + " │ ".join(f"{d[:8]:>8}" for d in ds_order) + " │    avg."
+    header = f"{'shots':>6} │ " + " │ ".join(f"{d[:11]:>11}" for d in ds_order) + " │    avg."
     sep    = "─" * len(header)
     print(f"\n{sep}\n{header}\n{sep}")
     for shot in shots_order:
         row = [results.get(d, {}).get(shot, float("nan")) for d in ds_order]
         avg = sum(v for v in row if not math.isnan(v)) / max(1, sum(1 for v in row if not math.isnan(v)))
-        print(f"{shot:>6} │ " + " │ ".join(f"{v:>8.2f}" for v in row) + f" │ {avg:>7.2f}")
+        print(f"{shot:>6} │ " + " │ ".join(f"{v:>11.2f}" for v in row) + f" │ {avg:>7.2f}")
     print(sep + "\n")
 
 
