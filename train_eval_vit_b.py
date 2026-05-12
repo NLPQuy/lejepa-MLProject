@@ -40,35 +40,39 @@ if os.path.isfile(_env_file):
     print(f"[env] Loaded {_env_file}")
 
 
-# ── RAM cache cho HuggingFace datasets (/dev/shm = tmpfs, nằm trong RAM) ──────
-# Kaggle có 230 GiB RAM, ImageNet-1K ~150 GB → vừa đủ cache vào RAM.
-# Phải set TRƯỚC khi import bất kỳ thư viện HuggingFace nào.
-_SHM_CACHE = "/dev/shm/hf_cache"
+_SHM_CACHE = "/workspace/hf_cache"
 os.makedirs(_SHM_CACHE, exist_ok=True)
 os.environ["HF_DATASETS_CACHE"] = _SHM_CACHE
-os.environ["HF_HOME"]           = _SHM_CACHE   # tokenizers / hub cache cũng vào RAM
-os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")  # giảm fragmentation
+os.environ["HF_HOME"]           = _SHM_CACHE
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+if "--skip-pretrain" in sys.argv:
+    os.environ["SPT_LIGHT_IMPORT"] = "1"
+else:
+    os.environ["SPT_LIGHT_IMPORT"] = "0"
 
 _shm_stat = os.statvfs("/dev/shm")
 _shm_free_gb = _shm_stat.f_bfree * _shm_stat.f_frsize / 1e9
 print(f"[shm] /dev/shm free: {_shm_free_gb:.1f} GB  →  cache dir: {_SHM_CACHE}")
 
 # ── Cấu hình repo ─────────────────────────────────────────────────────────────
-GITHUB_TOKEN  = os.environ.get("GITHUB_TOKEN", "")   # ← set bằng Kaggle Secret hoặc env var
+GITHUB_TOKEN  = os.environ.get("GITHUB_TOKEN", "") 
 GITHUB_REPO   = "https://github.com/NLPQuy/lejepa-MLProject.git"
 CLONE_DIR     = "/workspace/lejepa-MLProject"  # RunPod write dir
 
-from huggingface_hub import login
-try:
-    _hf_token = os.environ.get("HF_TOKEN", "")
-    if _hf_token:
-        login(token=_hf_token)
-        print("[hf] Logged in to HuggingFace.")
-    else:
-        print("[hf] HF_TOKEN not set — skipping login (OK for local ImageNet training).")
-except Exception as _hf_e:
-    print(f"[hf] WARNING: HuggingFace login failed ({_hf_e}). Continuing without HF auth.")
-    print("[hf] Training on local ImageNet will proceed normally.")
+if os.environ.get("LEJEPA_SKIP_HF_LOGIN", "1") == "1":
+    print("[hf] Skip HuggingFace login (LEJEPA_SKIP_HF_LOGIN=1).")
+else:
+    from huggingface_hub import login
+    try:
+        _hf_token = os.environ.get("HF_TOKEN", "")
+        if _hf_token:
+            login(token=_hf_token)
+            print("[hf] Logged in to HuggingFace.")
+        else:
+            print("[hf] HF_TOKEN not set — skipping login (OK for local ImageNet training).")
+    except BaseException as _hf_e:
+        print(f"[hf] WARNING: HuggingFace login failed ({_hf_e}). Continuing without HF auth.")
+        print("[hf] Training on local ImageNet will proceed normally.")
 
 def _run(cmd: str, **kwargs) -> int:
     """Chạy shell command, in output, trả về return code."""
@@ -128,14 +132,21 @@ else:
         if _p not in sys.path:
             sys.path.insert(0, _p)
 
-# Cài stable_pretraining từ source đã có trong repo 
-# Luôn chạy pip install -e: sinh _version.py + cài tất cả deps từ pyproject.toml
-# (pip tự bỏ qua nếu package + deps đã up-to-date)
-_spt_src = os.path.join(CLONE_DIR, "stable-pretraining")
-print(f"[install] pip install -e {_spt_src}")
-# SETUPTOOLS_SCM_PRETEND_VERSION: bắt buộc vì .git đã bị xóa khỏi repo
-_env = {**os.environ, "SETUPTOOLS_SCM_PRETEND_VERSION": "0.0.0"}
-_run(f"{sys.executable} -m pip install -q -e '{_spt_src}'", env=_env)
+# Cài stable_pretraining từ source nếu chưa import được
+def _ensure_stable_pretraining():
+    try:
+        import stable_pretraining  # noqa: F401
+        return
+    except Exception:
+        pass
+
+    _spt_src = os.path.join(CLONE_DIR, "stable-pretraining")
+    print(f"[install] pip install -e {_spt_src}")
+    # SETUPTOOLS_SCM_PRETEND_VERSION: bắt buộc vì .git đã bị xóa khỏi repo
+    _env = {**os.environ, "SETUPTOOLS_SCM_PRETEND_VERSION": "0.0.0"}
+    _run(f"{sys.executable} -m pip install -q -e '{_spt_src}'", env=_env)
+
+
 
 # %% [markdown]
 # # LeJEPA ViT-B — Pretraining (IN-1K) + Few-Shot Linear Probe Evaluation
@@ -177,6 +188,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torchmetrics
 import torchvision
+import timm
+from torchvision.transforms import v2 as tv2
+from torchvision.transforms.functional import InterpolationMode
 from torch.utils.data import DataLoader, Subset, TensorDataset
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -185,18 +199,7 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 torch.set_float32_matmul_precision("high")
 
 # ── stable_pretraining 
-import stable_pretraining as spt
-from stable_pretraining.data import transforms          # spt transforms (dict-based)
-from stable_pretraining.data.module import DataModule
-from stable_pretraining.data.datasets import HFDataset
 
-# ── lejepa core (từ stable_pretraining.methods) ───────────────────────────────
-from stable_pretraining.methods.lejepa import (
-    LeJEPA,           # backbone + projector + SIGReg, tất cả trong 1 class
-    LeJEPAOutput,     # dataclass: loss, embedding, inv_loss, sigreg_loss
-    SlicedEppsPulley, # SIGReg multivariate test (dùng nếu cần standalone)
-    EppsPulley,       # Epps-Pulley univariate test (1D)
-)
 
 # %% [markdown]
 # ## 1. Hyperparameters
@@ -207,7 +210,7 @@ BACKBONE_NAME    = "vit_base_patch16_224"    # ViT-B/16, 86M params
 
 # Pretraining 
 PRETRAIN_DATASET = "ILSVRC/imagenet-1k"
-MAX_EPOCHS       = 10
+MAX_EPOCHS       = 5
 BATCH_SIZE       = 64
 GRAD_ACCUM_STEPS = 8                      # effective BS = 64 * 8 = 512
 LR               = 5e-4
@@ -248,7 +251,7 @@ EVAL_BS      = 256
 IMAGENET_ROOT = "/workspace/imagenet"
 
 # ── Misc
-NUM_WORKERS  = 8   # local SSD → có thể tăng workers
+NUM_WORKERS  = 16   # local SSD → có thể tăng workers
 PRECISION    = "bf16-mixed"
 ACCELERATOR  = "gpu"
 DEVICES      = "auto"
@@ -263,50 +266,78 @@ IMG_STD  = (0.229, 0.224, 0.225)
 # ## 2. Data Augmentation (Multi-Crop, theo README)
 
 # %%
+def _spt_transforms():
+    from stable_pretraining.data import transforms as spt_transforms
+
+    return spt_transforms
+
+
 def _photometric_transforms() -> list:
     """Shared color augmentations cho cả global và local views."""
+    t = _spt_transforms()
     return [
-        transforms.RandomHorizontalFlip(p=0.5),
-        transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.2, hue=0.1, p=0.8),
-        transforms.RandomGrayscale(p=0.2),
-        transforms.GaussianBlur(kernel_size=23, sigma=(0.1, 2.0), p=0.5),
-        transforms.RandomSolarize(threshold=128, p=0.2),
+        t.RandomHorizontalFlip(p=0.5),
+        t.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.2, hue=0.1, p=0.8),
+        t.RandomGrayscale(p=0.2),
+        t.GaussianBlur(kernel_size=23, sigma=(0.1, 2.0), p=0.5),
+        t.RandomSolarize(threshold=128, p=0.2),
     ]
 
 
 def make_global_transform():
     """Global view: 224×224, scale (0.3, 1.0)."""
-    return transforms.Compose(
-        transforms.RGB(),
-        transforms.RandomResizedCrop((224, 224), scale=(0.3, 1.0)),
+    t = _spt_transforms()
+    return t.Compose(
+        t.RGB(),
+        t.RandomResizedCrop((224, 224), scale=(0.3, 1.0)),
         *_photometric_transforms(),
-        transforms.ToImage(mean=IMG_MEAN, std=IMG_STD),
+        t.ToImage(mean=IMG_MEAN, std=IMG_STD),
     )
 
 
 def make_local_transform():
     """Local view: 98×98, scale (0.05, 0.3)."""
-    return transforms.Compose(
-        transforms.RGB(),
-        transforms.RandomResizedCrop((96, 96), scale=(0.05, 0.3)),
+    t = _spt_transforms()
+    return t.Compose(
+        t.RGB(),
+        t.RandomResizedCrop((96, 96), scale=(0.05, 0.3)),
         *_photometric_transforms(),
-        transforms.ToImage(mean=IMG_MEAN, std=IMG_STD),
+        t.ToImage(mean=IMG_MEAN, std=IMG_STD),
     )
 
 
 def make_val_transform():
     """Standard center-crop cho validation / embedding extraction."""
-    return transforms.Compose(
-        transforms.RGB(),
-        transforms.Resize((256, 256)),
-        transforms.CenterCrop((224, 224)),
-        transforms.ToImage(mean=IMG_MEAN, std=IMG_STD),
+    t = _spt_transforms()
+    return t.Compose(
+        t.RGB(),
+        t.Resize((256, 256)),
+        t.CenterCrop((224, 224)),
+        t.ToImage(mean=IMG_MEAN, std=IMG_STD),
     )
+
+
+def make_val_transform_eval():
+    """Eval-only center-crop transform (không phụ thuộc stable_pretraining)."""
+    t = tv2.Compose([
+        tv2.ToImage(),
+        tv2.Resize((256, 256), interpolation=InterpolationMode.BICUBIC),
+        tv2.CenterCrop((224, 224)),
+        tv2.ToDtype(torch.float32, scale=True),
+        tv2.Normalize(mean=IMG_MEAN, std=IMG_STD),
+    ])
+
+    def _apply(sample: dict) -> dict:
+        sample["image"] = t(sample["image"])
+        return sample
+
+    return _apply
 
 
 def make_train_transform(n_global: int = N_GLOBAL_VIEWS, n_local: int = N_LOCAL_VIEWS):
     """Multi-crop dict transform: keys 'global_i' và 'local_j'."""
-    return transforms.MultiViewTransform({
+    t = _spt_transforms()
+    return t.MultiViewTransform({
         **{f"global_{i}": make_global_transform() for i in range(n_global)},
         **{f"local_{j}":  make_local_transform()  for j in range(n_local)},
     })
@@ -339,7 +370,7 @@ def lejepa_forward(self, batch: dict, stage: str) -> dict:
             if k.startswith("global") or k.startswith("local")
         )
 
-        output: LeJEPAOutput = self.model(
+        output = self.model(
             global_views=global_views,
             local_views=local_views,
             images=images,
@@ -347,7 +378,7 @@ def lejepa_forward(self, batch: dict, stage: str) -> dict:
         out["label"] = labels.repeat(len(global_views))
 
     else:
-        output: LeJEPAOutput = self.model(images=images)
+        output = self.model(images=images)
         out["label"] = batch["label"].long()
 
     out["loss"]      = output.loss
@@ -392,7 +423,29 @@ class KaggleImageNetDataset(torch.utils.data.Dataset):
                 idx = (idx + 1) % len(self.folder)
 
 
-def build_pretrain_datamodule() -> DataModule:
+class DictWrapDataset(torch.utils.data.Dataset):
+    """Wrap any dataset to return dicts with optional transform."""
+
+    def __init__(self, dataset, transform=None):
+        self.dataset = dataset
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.dataset)
+
+    def __getitem__(self, idx):
+        sample = self.dataset[idx]
+        if isinstance(sample, dict):
+            item = sample
+        else:
+            image, label = sample
+            item = {"image": image, "label": label}
+        if self.transform is not None:
+            item = self.transform(item)
+        return item
+
+
+def build_pretrain_datamodule() -> "DataModule":
     """DataModule dùng ImageNet-1K trên RunPod server.
 
     Train dir và val dir đều có class subfolders → ImageFolder hoạt động tốt.
@@ -406,6 +459,8 @@ def build_pretrain_datamodule() -> DataModule:
     val_ds   = KaggleImageNetDataset(val_root,   transform=make_val_transform())
 
     print(f"[data] train={len(train_ds):,}  val={len(val_ds):,}")
+
+    from stable_pretraining.data.module import DataModule
 
     return DataModule(
         train=DataLoader(
@@ -423,8 +478,13 @@ def build_pretrain_datamodule() -> DataModule:
     )
 
 
-def build_pretrain_module() -> tuple[spt.Module, list]:
+def build_pretrain_module() -> tuple["SPTModule", list]:
     """Tạo spt.Module bọc LeJEPA (ViT-B) + các callbacks."""
+    from stable_pretraining.module import Module as SPTModule
+    from stable_pretraining.callbacks.probe import OnlineProbe
+    from stable_pretraining.callbacks.rankme import RankMe
+    from stable_pretraining.methods.lejepa import LeJEPA
+
     # LeJEPA tự tạo backbone (timm ViT-B), projector MLP, và SlicedEppsPulley
     model = LeJEPA(
         encoder_name   = BACKBONE_NAME,
@@ -440,7 +500,7 @@ def build_pretrain_module() -> tuple[spt.Module, list]:
     total_steps     = (inet_train_size // BATCH_SIZE // GRAD_ACCUM_STEPS) * MAX_EPOCHS
     warmup_steps    = int(total_steps * WARMUP_RATIO)
 
-    module = spt.Module(
+    module = SPTModule(
         forward=lejepa_forward,
         model=model,
         hparams={
@@ -471,7 +531,7 @@ def build_pretrain_module() -> tuple[spt.Module, list]:
     )
 
     # Online linear probe trên IN-1K (theo dõi training quality)
-    inet_probe = spt.OnlineProbe(
+    inet_probe = OnlineProbe(
         module=module,
         name="inet_probe",
         input="embedding",
@@ -485,7 +545,7 @@ def build_pretrain_module() -> tuple[spt.Module, list]:
         },
     )
 
-    rankme = spt.RankMe(
+    rankme = RankMe(
         name="rankme",
         target="embedding",
         queue_length=1000,
@@ -513,6 +573,8 @@ def run_pretraining(resume_ckpt: str = None) -> str:
     Returns:
         Path đến best checkpoint.
     """
+    _ensure_stable_pretraining()
+
     # Pick a free port for DDP rendezvous to avoid EADDRINUSE
     # from a previously crashed training session in the same kernel.
     free_port = _find_free_port()
@@ -522,6 +584,9 @@ def run_pretraining(resume_ckpt: str = None) -> str:
 
     dm             = build_pretrain_datamodule()
     module, cbs    = build_pretrain_module()
+
+    from stable_pretraining.callbacks.trainer_info import LoggingCallback, TrainerInfo
+    from stable_pretraining.manager import Manager
 
     ckpt_cb = pl.callbacks.ModelCheckpoint(
         dirpath=str(CKPT_DIR),
@@ -556,8 +621,8 @@ def run_pretraining(resume_ckpt: str = None) -> str:
         accumulate_grad_batches=GRAD_ACCUM_STEPS,
         callbacks=cbs + [
             ckpt_cb,
-            spt.TrainerInfo(),
-            spt.LoggingCallback(),
+            TrainerInfo(),
+            LoggingCallback(),
             pl.callbacks.LearningRateMonitor(logging_interval="step"),
         ],
         log_every_n_steps=50,
@@ -566,7 +631,7 @@ def run_pretraining(resume_ckpt: str = None) -> str:
         default_root_dir=str(LOG_DIR),
     )
 
-    manager = spt.Manager(trainer=trainer, module=module, data=dm, ckpt_path=resume_ckpt)
+    manager = Manager(trainer=trainer, module=module, data=dm, ckpt_path=resume_ckpt)
     manager()
 
     best = ckpt_cb.best_model_path or ckpt_cb.last_model_path
@@ -580,7 +645,7 @@ def run_pretraining(resume_ckpt: str = None) -> str:
 # %%
 @torch.no_grad()
 def extract_embeddings(
-    model:            LeJEPA,
+    backbone:         nn.Module,
     hf_dataset_name:  str,
     split:            str,
     label_column:     str,
@@ -589,12 +654,11 @@ def extract_embeddings(
 ) -> tuple[torch.Tensor, torch.Tensor]:
     """Load dataset, extract frozen embeddings từ backbone LeJEPA.
 
-    Embedding = CLS token của last layer (model.eval() → model.backbone(x)).
+    Embedding = concat(CLS[-2], CLS[-1]) theo paper spec (CLAUDE.md, line 172).
     """
     if hf_dataset_name in ["cifar10", "cifar100", "HuggingFaceM4/FGVC-Aircraft", "pcuenq/oxford-pets"]:
-        from stable_pretraining.data.datasets import FromTorchDataset
         is_train = split in ["train", "trainval"]
-        
+
         if hf_dataset_name == "cifar10":
             tv_ds = torchvision.datasets.CIFAR10(root="./data", train=is_train, download=True)
         elif hf_dataset_name == "cifar100":
@@ -602,56 +666,78 @@ def extract_embeddings(
         elif hf_dataset_name == "HuggingFaceM4/FGVC-Aircraft":
             tv_split = "trainval" if is_train else "test"
             tv_ds = torchvision.datasets.FGVCAircraft(root="./data", split=tv_split, download=True)
-        else: # pcuenq/oxford-pets
+        else:  # pcuenq/oxford-pets
             tv_split = "trainval" if is_train else "test"
             tv_ds = torchvision.datasets.OxfordIIITPet(root="./data", split=tv_split, download=True)
-            
-        ds = FromTorchDataset(tv_ds, names=["image", "label"], transform=make_val_transform())
+
+        ds = DictWrapDataset(tv_ds, transform=make_val_transform_eval())
     else:
-        rename = {label_column: "label"} if label_column != "label" else None
-        ds = HFDataset(
-            hf_dataset_name,
-            split=split,
-            transform=make_val_transform(),
-            rename_columns=rename,
-        )
-        
-    # Sửa lỗi CUDA initialization trong worker bằng cách dùng num_workers=0 cho eval DataLoader
+        from datasets import load_dataset
+
+        ds = load_dataset(hf_dataset_name, split=split)
+        if label_column != "label":
+            ds = ds.rename_column(label_column, "label")
+        if "image" not in ds.column_names:
+            raise ValueError(f"Dataset {hf_dataset_name} thiếu cột 'image': {ds.column_names}")
+        ds = DictWrapDataset(ds, transform=make_val_transform_eval())
+
     loader = DataLoader(ds, batch_size=batch_size, shuffle=False,
-                        num_workers=0, pin_memory=True)
+                        num_workers=0, pin_memory=False)
 
-    model = model.to(device).eval()
+    backbone = backbone.to(device).eval()
     all_embs, all_labels = [], []
-    
-    global _GLOBAL_STR_MAPPING
-    if "_GLOBAL_STR_MAPPING" not in globals():
-        _GLOBAL_STR_MAPPING = {}
 
-    for batch in loader:
-        imgs   = batch["image"].to(device, non_blocking=True)
-        output = model(images=imgs)
-        all_embs.append(output.embedding.cpu())
-        lbl = batch["label"]
-        
-        # Handle string labels for datasets like Oxford Pets
-        if isinstance(lbl, (list, tuple)) and len(lbl) > 0 and isinstance(lbl[0], str):
-            feat = None
-            if hasattr(ds, "dataset") and hasattr(ds.dataset, "features"):
-                feat = ds.dataset.features.get("label")
-            if feat and hasattr(feat, "str2int"):
-                lbl = [feat.str2int(x) for x in lbl]
+    str_mapping: dict = {}
+
+    _penultimate_cls: list = []
+
+    def _penultimate_hook(module, inp, out):
+        # out: [B, seq_len, D] — lấy CLS token (index 0)
+        _penultimate_cls.append(out[:, 0].detach().cpu())
+
+    n_blocks = len(backbone.blocks)
+    _hook_handle = backbone.blocks[n_blocks - 2].register_forward_hook(
+        _penultimate_hook
+    )
+
+    try:
+        for batch in loader:
+            imgs = batch["image"].to(device, non_blocking=True)
+            _penultimate_cls.clear()
+
+            last_cls = backbone(imgs).cpu()       # [B, D]  — CLS from final block
+            pen_cls  = _penultimate_cls[-1]       # [B, D]  — CLS from penultimate block
+            emb = torch.cat([pen_cls, last_cls], dim=-1)  # [B, 2D]
+            all_embs.append(emb)
+
+            lbl = batch["label"]
+
+            # ── Chuẩn hóa label về 1-D LongTensor ────────────────────────────
+            if isinstance(lbl, torch.Tensor):
+                pass  # already an integer tensor from collation
+            elif isinstance(lbl, (list, tuple)):
+                first = lbl[0] if len(lbl) > 0 else 0
+                if isinstance(first, str):
+                    # HF ClassLabel.str2int nếu có, ngược lại dùng local mapping
+                    feat = None
+                    if hasattr(ds, "dataset") and hasattr(ds.dataset, "features"):
+                        feat = ds.dataset.features.get("label")
+                    if feat is not None and hasattr(feat, "str2int"):
+                        lbl = [feat.str2int(x) for x in lbl]
+                    else:
+                        mapped = []
+                        for x in lbl:
+                            if x not in str_mapping:
+                                str_mapping[x] = len(str_mapping)
+                            mapped.append(str_mapping[x])
+                        lbl = mapped
+                lbl = torch.tensor(lbl)
             else:
-                mapped_lbl = []
-                for x in lbl:
-                    if x not in _GLOBAL_STR_MAPPING:
-                        _GLOBAL_STR_MAPPING[x] = len(_GLOBAL_STR_MAPPING)
-                    mapped_lbl.append(_GLOBAL_STR_MAPPING[x])
-                lbl = mapped_lbl
+                lbl = torch.tensor([int(lbl)])
 
-        # đảm bảo label luôn là 1D LongTensor
-        if not isinstance(lbl, torch.Tensor):
-            lbl = torch.tensor(lbl)
-        all_labels.append(lbl.reshape(-1).long())
+            all_labels.append(lbl.reshape(-1).long())
+    finally:
+        _hook_handle.remove()  # luôn gỡ hook dù có exception
 
     if not all_embs:
         raise ValueError(f"Dataset rỗng — không có đủ embeddings từ split='{split}'.")
@@ -697,13 +783,14 @@ def train_linear_probe(
 ) -> float:
     """Train LayerNorm → Linear probe với AdamW + cosine LR (theo README).
 
+    in_dim = 2*embed_dim (concat of 2 CLS tokens).
     Returns:
         top-1 accuracy (%) trên val set.
     """
     if len(train_emb) == 0:
         raise ValueError("train_emb rỗng — không có đủ sample để train probe.")
 
-    in_dim = train_emb.shape[-1]
+    in_dim = train_emb.shape[-1]  # 2*embed_dim after dual-CLS concat
     probe  = nn.Sequential(nn.LayerNorm(in_dim), nn.Linear(in_dim, n_classes)).to(device)
 
     train_dl = DataLoader(TensorDataset(train_emb, train_lbl.long()),
@@ -742,23 +829,34 @@ def run_evaluation(checkpoint_path: str) -> dict:
         { dataset_label: { "1": acc, "10": acc, "all": acc } }
     """
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"[eval] device = {device}")
 
-    # Tái tạo model và load weights
-    model = LeJEPA(
-        encoder_name=BACKBONE_NAME, n_slices=SIGREG_SLICES,
-        n_points=SIGREG_N_POINTS, lamb=SIGREG_LAMBDA, pretrained=False,
+    # ── Tái tạo backbone và load weights ─────────────────────────────────────
+    # drop_path_rate=0.0 phải khớp với lúc train để load_state_dict không lỗi.
+    backbone = timm.create_model(
+        BACKBONE_NAME,
+        pretrained=False,
+        num_classes=0,
+        **({"dynamic_img_size": True} if "vit" in BACKBONE_NAME else {}),
+        drop_path_rate=0.0,
     )
     ckpt  = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
     state = ckpt.get("state_dict", ckpt)
-    model_state = {k.removeprefix("model."): v
-                   for k, v in state.items() if k.startswith("model.")}
-    if not model_state:
+
+    # Lọc chỉ lấy keys bắt đầu bằng "model.backbone." (bỏ projector/callbacks)
+    backbone_state = {k.removeprefix("model.backbone."): v
+                      for k, v in state.items() if k.startswith("model.backbone.")}
+    if not backbone_state:
         raise RuntimeError(
-            f"Không tìm thấy key 'model.*' trong checkpoint: {checkpoint_path}\n"
+            f"Không tìm thấy key 'model.backbone.*' trong checkpoint: {checkpoint_path}\n"
             f"Các key có trong checkpoint: {list(state.keys())[:10]}"
         )
-    model.load_state_dict(model_state, strict=True)
-    print(f"✓ Loaded LeJEPA ({BACKBONE_NAME}) from {checkpoint_path}")
+    missing, unexpected = backbone.load_state_dict(backbone_state, strict=False)
+    if missing:
+        raise RuntimeError(f"Missing backbone keys khi load checkpoint: {missing[:5]}")
+    if unexpected:
+        print(f"[eval] ⚠ Unexpected keys (ignored): {unexpected[:5]}")
+    print(f"✓ Loaded backbone ({BACKBONE_NAME}) from {checkpoint_path}")
 
     results = {}
 
@@ -768,12 +866,21 @@ def run_evaluation(checkpoint_path: str) -> dict:
         print(f"\n{'='*60}\n  {ds_label}  ({hf_name})\n{'='*60}")
         try:
             print("  ▶ Trích xuất TRAIN embeddings ...")
-            tr_emb, tr_lbl = extract_embeddings(model, hf_name, split_tr, lbl_col, device)
+            tr_emb, tr_lbl = extract_embeddings(backbone, hf_name, split_tr, lbl_col, device)
             print(f"    → {tr_emb.shape}")
 
             print("  ▶ Trích xuất TEST embeddings ...")
-            te_emb, te_lbl = extract_embeddings(model, hf_name, split_te, lbl_col, device)
+            te_emb, te_lbl = extract_embeddings(backbone, hf_name, split_te, lbl_col, device)
             print(f"    → {te_emb.shape}")
+
+            # Chuẩn hóa labels về [0, n_classes-1] (tránh case label 1-based)
+            tr_lbl = tr_lbl.long().cpu()
+            te_lbl = te_lbl.long().cpu()
+            uniq = torch.unique(torch.cat([tr_lbl, te_lbl])).sort().values
+            if len(uniq) != n_cls:
+                print(f"  ⚠ label count mismatch: uniq={len(uniq)} vs n_classes={n_cls}")
+            tr_lbl = torch.searchsorted(uniq, tr_lbl)
+            te_lbl = torch.searchsorted(uniq, te_lbl)
 
             results[ds_label] = {}
 
@@ -831,7 +938,10 @@ def main(skip_pretrain: bool = False, checkpoint_path: str = None):
         print("=" * 60)
         print("Phase 1 — LeJEPA Pretraining on ImageNet-1K (ViT-B/16)")
         print("=" * 60)
-        ckpt = run_pretraining()
+        # Train từ đầu (scratch) — KHÔNG resume từ checkpoint cũ.
+        # Theo yêu cầu pipeline: chỉ train 10 epochs hoàn toàn mới.
+        print("Training from scratch (no resume).")
+        ckpt = run_pretraining(resume_ckpt=None)
     else:
         assert checkpoint_path, "Cần --checkpoint khi --skip-pretrain"
         ckpt = checkpoint_path
@@ -856,6 +966,10 @@ def main(skip_pretrain: bool = False, checkpoint_path: str = None):
 def _is_notebook() -> bool:
     """True nếu đang chạy trong Jupyter / Kaggle / Colab kernel."""
     return any(s in sys.argv[0] for s in ("ipykernel", "colab_kernel", "pydev"))
+
+
+if os.environ.get("LEJEPA_DEBUG_MAIN") == "1":
+    print(f"[debug] __name__={__name__} _is_notebook={_is_notebook()}")
 
 
 if __name__ == "__main__" and not _is_notebook():

@@ -1,1069 +1,0 @@
-[env] Loaded /workspace/.env
-[shm] /dev/shm free: 31.0 GB  →  cache dir: /dev/shm/hf_cache
-[hf] WARNING: HuggingFace login failed (Invalid user token. The token from HF_TOKEN environment variable is invalid. Note that HF_TOKEN takes precedence over `hf auth login`.). Continuing without HF auth.
-[hf] Training on local ImageNet will proceed normally.
-[install] pip install -e /workspace/lejepa-MLProject/stable-pretraining
-  $ /workspace/jepa/bin/python -m pip install -q -e '/workspace/lejepa-MLProject/stable-pretraining'
-WARNING: typer 0.25.1 does not provide the extra 'all'
-============================================================
-Phase 1 — LeJEPA Pretraining on ImageNet-1K (ViT-B/16)
-============================================================
-[DDP] Using MASTER_PORT=38159
-[data] ImageNet-1K train: /workspace/imagenet/train
-[data] ImageNet-1K val:   /workspace/imagenet/val
-[data] train=1,527,212  val=50,000
-12:50:49 | INFO  | module.py   | Setting up DataModule
-12:50:49 | INFO  | utils.py    | ── Module ────────────────────────────────────────
-12:50:49 | WARN  | module.py   | ! No hyperparameters provided - hyperparameter logging is disabled.
-12:50:49 | INFO  | module.py   |   Setting custom forward method.
-12:50:49 | WARN  | module.py   | ! You didn't pass a forward method. This will fail unless you implemented your own Module class.
-12:50:49 | INFO  | module.py   |   No metrics configuration provided - automatic metric tracking is disabled.
-12:50:50 | INFO  | utils.py    | ── Module ────────────────────────────────────────
-12:50:50 | INFO  | module.py   |   Saving provided hyperparameters.
-12:50:50 | INFO  | module.py   |   Setting custom forward method.
-12:50:50 | INFO  | module.py   |   Setting attribute: self.model = <class 'stable_pretraining.methods.lejepa.LeJEPA'>
-12:50:50 | INFO  | module.py   |   Setting attribute: self.optim = <class 'dict'>
-12:50:50 | INFO  | module.py   |   No metrics configuration provided - automatic metric tracking is disabled.
-12:50:50 | INFO  | utils.py    |   wrapping configure_model
-12:50:50 | INFO  | utils.py    |   wrapping configure_optimizers
-12:50:50 | INFO  | utils.py    | ── OnlineProbe ───────────────────────────────────
-12:50:50 | INFO  | probe.py    |   name: inet_probe
-12:50:50 | INFO  | probe.py    |   input: embedding
-12:50:50 | INFO  | probe.py    |   target: label
-12:50:50 | INFO  | probe.py    |   accumulate_grad_batches: 1
-12:50:50 | INFO  | probe.py    |   wrapping forward
-Using bfloat16 Automatic Mixed Precision (AMP)
-12:50:51 | INFO  | env_info.py |   EnvironmentDumpCallback initialized (filename=environment.json, async=True)
-12:50:51 | INFO  | utils.py    | ── HuggingFaceCheckpoint ─────────────────────────
-12:50:51 | INFO  | hf_models.py|   save_dir: <cyan>hf_exports</cyan>
-Adding 11 callbacks from entry point 'stablepretraining_callbacks': PrintProgressBar, ModuleRegistryCallback, LoggingCallback, EnvironmentDumpCallback, TrainerInfo, SklearnCheckpoint, WandbCheckpoint, ModuleSummary, SLURMInfo, LogUnusedParametersOnce, HuggingFaceCheckpointCallback
-GPU available: True (cuda), used: True
-TPU available: False, using: 0 TPU cores
-/workspace/jepa/lib/python3.11/site-packages/lightning/pytorch/trainer/connectors/logger_connector/logger_connector.py:76: Starting from v1.9.0, `tensorboardX` has been removed as a dependency of the `lightning.pytorch` package, due to potential conflicts with other packages in the ML ecosystem. For this reason, `logger=True` will use `CSVLogger` as the default logger, unless the `tensorboard` or `tensorboardX` packages are found. Please `pip install lightning[extra]` or one of them to enable TensorBoard support by default
-💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
-12:50:51 | WARN  | manager.py  | User didn't specify seed, runs won't be exactly reproducible!
-12:50:51 | INFO  | utils.py    | ── WorkingDirectory ──────────────────────────────
-12:50:51 | INFO  | manager.py  |   cwd: /workspace/lejepa-MLProject
-12:50:51 | INFO  | utils.py    | ── Seed ──────────────────────────────────────────
-12:50:51 | INFO  | manager.py  |   seed: None
-/workspace/jepa/lib/python3.11/site-packages/lightning/fabric/utilities/seed.py:44: No seed found, seed set to 0
-Seed set to 0
-12:50:51 | INFO  | utils.py    | ── CSVLogger ─────────────────────────────────────
-12:50:51 | INFO  | manager.py  |   root_dir: /workspace/lejepa-MLProject/logs/lightning_logs
-12:50:51 | INFO  | manager.py  |   save_dir: /workspace/lejepa-MLProject/logs
-12:50:51 | INFO  | manager.py  |   log_dir: /workspace/lejepa-MLProject/logs/lightning_logs/version_12
-12:50:51 | INFO  | utils.py    | ── SignalHandlers ────────────────────────────────
-12:50:51 | INFO  | manager.py  |   SIGUSR1: `0`
-12:50:51 | INFO  | manager.py  |   SIGUSR2: `0`
-12:50:51 | INFO  | manager.py  |   SIGCONT: `0`
-12:50:51 | INFO  | manager.py  |   SIGTERM: `0`
-12:50:51 | INFO  | utils.py    | ── Callbacks ─────────────────────────────────────
-12:50:51 | INFO  | manager.py  |   count: 19
-12:50:51 | INFO  | utils.py    | ── CheckpointingSetup ────────────────────────────
-12:50:51 | INFO  | manager.py  |   Checkpointing: A user-defined `ModelCheckpoint` callback was found. It will be used for saving checkpoints.
-12:50:51 | INFO  | manager.py  |   The `Manager` will not manage resuming from a specific path as `manager.ckpt_path` was not provided.
-12:50:51 | INFO  | utils.py    | ── TrainerFit ────────────────────────────────────
-12:50:51 | INFO  | manager.py  |   ckpt_path: None
-12:50:51 | INFO  | manager.py  |   resume_weights_only: False
-12:50:51 | OK    | module.py   | ✓ dataset for TrainerFn.FITTING loaded
-12:50:51 | INFO  | module.py   |   setup was done by user
-12:50:51 | INFO  | queue.py    |   no queue found for key 'embedding', creating new OnlineQueue with length=1000, dim=768, dtype=torch.float32
-12:50:51 | INFO  | utils.py    | ── OnlineQueue ───────────────────────────────────
-12:50:51 | INFO  | queue.py    |   key: embedding
-12:50:51 | INFO  | queue.py    |   requested_length: 1000
-12:50:51 | INFO  | queue.py    |   dim: 768
-12:50:51 | INFO  | queue.py    |   dtype: torch.float32
-12:50:51 | INFO  | queue.py    |   created shared queue for 'embedding' with size 1000
-12:50:51 | INFO  | rankme.py   |   target queue: embedding
-12:50:51 | INFO  | trainer_inf~|   linking trainer to DataModule
-12:50:51 | INFO  | utils.py    | ── EnvironmentDump ───────────────────────────────
-12:50:51 | INFO  | env_info.py |   log_dir: /workspace/lejepa-MLProject/logs
-12:50:51 | INFO  | env_info.py |   Running environment dump in background thread (non-blocking)
-12:50:51 | INFO  | env_info.py |   Collecting environment information...
-12:50:51 | OK    | env_info.py | ✓ Background thread started successfully
-12:50:51 | OK    | env_info.py | ✓ Python 3.11.10
-12:50:51 | INFO  | trainer_inf~|   linking trainer to DataModule
-12:50:51 | INFO  | utils.py    | ── SklearnCheckpoint ─────────────────────────────
-12:50:51 | INFO  | checkpoint_~|   Sklearn Modules:
-12:50:51 | INFO  | checkpoint_~| 
-┏━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━┓
-┃ Module   ┃ Name   ┃ Type   ┃
-┣━━━━━━━━━━╋━━━━━━━━╋━━━━━━━━┫
-┗━━━━━━━━━━┻━━━━━━━━┻━━━━━━━━┛
-12:50:51 | INFO  | utils.py    | ── WandbCheckpoint ───────────────────────────────
-12:50:51 | INFO  | utils.py    | ── PyTorch Modules ───────────────────────────────
-12:50:51 | WARN  | module.py   | ! You are calling self.parameters which also gives callbacks parameters, to remove them, pass `with_callbacks=False`
-12:50:51 | INFO  | trainer_inf~| \n+-------------------------------------------+----------------------+--------------------------+--------------------------+---------+
-| Module                                    | Trainable parameters | Non Trainable parameters | Uninitialized parameters | Buffers |
-+-------------------------------------------+----------------------+--------------------------+--------------------------+---------+
-|                                           |             92496640 |                        0 |                        0 |  777250 |
-| callbacks_modules                         |                    0 |                        0 |                        0 |  769004 |
-| callbacks_modules.ordered_queue_embedding |                    0 |                        0 |                        0 |  769004 |
-| callbacks_metrics                         |                    0 |                        0 |                        0 |       0 |
-| model                                     |             92496640 |                        0 |                        0 |    8246 |
-| model.callbacks_modules                   |                    0 |                        0 |                        0 |       0 |
-| model.callbacks_metrics                   |                    0 |                        0 |                        0 |       0 |
-| model.backbone                            |             85798656 |                        0 |                        0 |       0 |
-| model.backbone.patch_embed                |               590592 |                        0 |                        0 |       0 |
-| model.backbone.patch_embed.proj           |               590592 |                        0 |                        0 |       0 |
-| model.backbone.patch_embed.norm           |                    0 |                        0 |                        0 |       0 |
-| model.backbone.pos_drop                   |                    0 |                        0 |                        0 |       0 |
-| model.backbone.patch_drop                 |                    0 |                        0 |                        0 |       0 |
-| model.backbone.norm_pre                   |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks                     |             85054464 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0                   |              7087872 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.norm1             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.attn              |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.attn.qkv          |              1771776 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.attn.q_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.attn.k_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.attn.attn_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.attn.norm         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.attn.proj         |               590592 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.attn.proj_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.ls1               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.drop_path1        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.norm2             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.mlp               |              4722432 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.mlp.fc1           |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.mlp.act           |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.mlp.drop1         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.mlp.norm          |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.mlp.fc2           |              2360064 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.mlp.drop2         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.ls2               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.0.drop_path2        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1                   |              7087872 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.norm1             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.attn              |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.attn.qkv          |              1771776 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.attn.q_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.attn.k_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.attn.attn_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.attn.norm         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.attn.proj         |               590592 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.attn.proj_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.ls1               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.drop_path1        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.norm2             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.mlp               |              4722432 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.mlp.fc1           |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.mlp.act           |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.mlp.drop1         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.mlp.norm          |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.mlp.fc2           |              2360064 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.mlp.drop2         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.ls2               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.1.drop_path2        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2                   |              7087872 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.norm1             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.attn              |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.attn.qkv          |              1771776 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.attn.q_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.attn.k_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.attn.attn_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.attn.norm         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.attn.proj         |               590592 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.attn.proj_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.ls1               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.drop_path1        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.norm2             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.mlp               |              4722432 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.mlp.fc1           |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.mlp.act           |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.mlp.drop1         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.mlp.norm          |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.mlp.fc2           |              2360064 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.mlp.drop2         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.ls2               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.2.drop_path2        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3                   |              7087872 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.norm1             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.attn              |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.attn.qkv          |              1771776 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.attn.q_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.attn.k_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.attn.attn_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.attn.norm         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.attn.proj         |               590592 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.attn.proj_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.ls1               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.drop_path1        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.norm2             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.mlp               |              4722432 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.mlp.fc1           |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.mlp.act           |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.mlp.drop1         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.mlp.norm          |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.mlp.fc2           |              2360064 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.mlp.drop2         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.ls2               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.3.drop_path2        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4                   |              7087872 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.norm1             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.attn              |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.attn.qkv          |              1771776 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.attn.q_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.attn.k_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.attn.attn_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.attn.norm         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.attn.proj         |               590592 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.attn.proj_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.ls1               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.drop_path1        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.norm2             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.mlp               |              4722432 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.mlp.fc1           |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.mlp.act           |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.mlp.drop1         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.mlp.norm          |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.mlp.fc2           |              2360064 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.mlp.drop2         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.ls2               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.4.drop_path2        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5                   |              7087872 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.norm1             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.attn              |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.attn.qkv          |              1771776 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.attn.q_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.attn.k_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.attn.attn_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.attn.norm         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.attn.proj         |               590592 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.attn.proj_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.ls1               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.drop_path1        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.norm2             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.mlp               |              4722432 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.mlp.fc1           |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.mlp.act           |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.mlp.drop1         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.mlp.norm          |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.mlp.fc2           |              2360064 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.mlp.drop2         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.ls2               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.5.drop_path2        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6                   |              7087872 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.norm1             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.attn              |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.attn.qkv          |              1771776 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.attn.q_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.attn.k_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.attn.attn_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.attn.norm         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.attn.proj         |               590592 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.attn.proj_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.ls1               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.drop_path1        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.norm2             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.mlp               |              4722432 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.mlp.fc1           |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.mlp.act           |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.mlp.drop1         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.mlp.norm          |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.mlp.fc2           |              2360064 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.mlp.drop2         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.ls2               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.6.drop_path2        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7                   |              7087872 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.norm1             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.attn              |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.attn.qkv          |              1771776 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.attn.q_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.attn.k_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.attn.attn_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.attn.norm         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.attn.proj         |               590592 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.attn.proj_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.ls1               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.drop_path1        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.norm2             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.mlp               |              4722432 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.mlp.fc1           |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.mlp.act           |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.mlp.drop1         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.mlp.norm          |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.mlp.fc2           |              2360064 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.mlp.drop2         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.ls2               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.7.drop_path2        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8                   |              7087872 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.norm1             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.attn              |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.attn.qkv          |              1771776 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.attn.q_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.attn.k_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.attn.attn_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.attn.norm         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.attn.proj         |               590592 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.attn.proj_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.ls1               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.drop_path1        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.norm2             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.mlp               |              4722432 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.mlp.fc1           |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.mlp.act           |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.mlp.drop1         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.mlp.norm          |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.mlp.fc2           |              2360064 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.mlp.drop2         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.ls2               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.8.drop_path2        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9                   |              7087872 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.norm1             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.attn              |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.attn.qkv          |              1771776 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.attn.q_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.attn.k_norm       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.attn.attn_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.attn.norm         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.attn.proj         |               590592 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.attn.proj_drop    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.ls1               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.drop_path1        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.norm2             |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.mlp               |              4722432 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.mlp.fc1           |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.mlp.act           |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.mlp.drop1         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.mlp.norm          |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.mlp.fc2           |              2360064 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.mlp.drop2         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.ls2               |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.9.drop_path2        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10                  |              7087872 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.norm1            |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.attn             |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.attn.qkv         |              1771776 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.attn.q_norm      |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.attn.k_norm      |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.attn.attn_drop   |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.attn.norm        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.attn.proj        |               590592 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.attn.proj_drop   |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.ls1              |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.drop_path1       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.norm2            |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.mlp              |              4722432 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.mlp.fc1          |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.mlp.act          |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.mlp.drop1        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.mlp.norm         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.mlp.fc2          |              2360064 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.mlp.drop2        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.ls2              |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.10.drop_path2       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11                  |              7087872 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.norm1            |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.attn             |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.attn.qkv         |              1771776 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.attn.q_norm      |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.attn.k_norm      |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.attn.attn_drop   |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.attn.norm        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.attn.proj        |               590592 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.attn.proj_drop   |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.ls1              |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.drop_path1       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.norm2            |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.mlp              |              4722432 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.mlp.fc1          |              2362368 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.mlp.act          |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.mlp.drop1        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.mlp.norm         |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.mlp.fc2          |              2360064 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.mlp.drop2        |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.ls2              |                    0 |                        0 |                        0 |       0 |
-| model.backbone.blocks.11.drop_path2       |                    0 |                        0 |                        0 |       0 |
-| model.backbone.norm                       |                 1536 |                        0 |                        0 |       0 |
-| model.backbone.fc_norm                    |                    0 |                        0 |                        0 |       0 |
-| model.backbone.head_drop                  |                    0 |                        0 |                        0 |       0 |
-| model.backbone.head                       |                    0 |                        0 |                        0 |       0 |
-| model.projector                           |              6697984 |                        0 |                        0 |    8194 |
-| model.projector.0                         |               393728 |                        0 |                        0 |       0 |
-| model.projector.1                         |              6304256 |                        0 |                        0 |    8194 |
-| model.projector.1.0                       |              1050624 |                        0 |                        0 |       0 |
-| model.projector.1.1                       |                 4096 |                        0 |                        0 |    4097 |
-| model.projector.1.2                       |                    0 |                        0 |                        0 |       0 |
-| model.projector.1.3                       |                    0 |                        0 |                        0 |       0 |
-| model.projector.1.4                       |              4196352 |                        0 |                        0 |       0 |
-| model.projector.1.5                       |                 4096 |                        0 |                        0 |    4097 |
-| model.projector.1.6                       |                    0 |                        0 |                        0 |       0 |
-| model.projector.1.7                       |                    0 |                        0 |                        0 |       0 |
-| model.projector.1.8                       |              1049088 |                        0 |                        0 |       0 |
-| model.projector.1.9                       |                    0 |                        0 |                        0 |       0 |
-| model.sigreg                              |                    0 |                        0 |                        0 |      52 |
-| model.sigreg.ep                           |                    0 |                        0 |                        0 |      51 |
-+-------------------------------------------+----------------------+--------------------------+--------------------------+---------+
-12:50:51 | OK    | env_info.py | ✓ System: Linux 6.8.0-110-generic (x86_64)
-12:50:51 | INFO  | utils.py    | ── SLURM ─────────────────────────────────────────
-12:50:51 | INFO  | env_info.py |   Hostname: 38d56912728f
-12:50:51 | INFO  | trainer_inf~|   Job ID: N/A
-12:50:51 | INFO  | trainer_inf~|   Task ID: N/A
-12:50:51 | INFO  | trainer_inf~|   Job Name: N/A
-12:50:51 | INFO  | trainer_inf~|   Nodes: N/A
-12:50:51 | INFO  | trainer_inf~|   Tasks: N/A
-12:50:51 | INFO  | trainer_inf~|   CPUs per node: N/A
-12:50:51 | INFO  | trainer_inf~|   CPUs per task: N/A
-12:50:51 | INFO  | trainer_inf~|   Memory per node: N/A
-12:50:51 | INFO  | trainer_inf~|   Memory per CPU: N/A
-12:50:51 | INFO  | trainer_inf~|   Time limit: N/A
-12:50:51 | INFO  | trainer_inf~|   Partition: N/A
-12:50:51 | INFO  | trainer_inf~|   Node List: N/A
-12:50:51 | INFO  | trainer_inf~|   Submit Directory: N/A
-12:50:51 | INFO  | utils.py    |   storing module in callbacks_modules
-12:50:51 | INFO  | utils.py    |   setting up metrics
-LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-12:50:51 | INFO  | utils.py    | ── Optimizers ────────────────────────────────────
-12:50:51 | INFO  | module.py   |   Configuring single optimizer.
-Loading `train_dataloader` to estimate number of stepping batches.
-12:50:51 | WARN  | module.py   | could not set pl_trainer to train dataset
-/workspace/jepa/lib/python3.11/site-packages/lightning/pytorch/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
-12:50:52 | INFO  | lr_schedule~| 	User provided a dict
-12:50:52 | INFO  | module.py   |   Configured AdamW optimizer with LinearWarmupCosineAnnealing scheduler.
-12:50:52 | INFO  | utils.py    |   using explicitly provided optimizer
-12:50:52 | INFO  | utils.py    |   no scheduler given, using default ConstantLR
-/workspace/jepa/lib/python3.11/site-packages/lightning/pytorch/utilities/model_summary/model_summary.py:242: Precision bf16-mixed is not supported by the model summary.  Estimated model size in MB will not be accurate. Using 32 bits instead.
-┏━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
-┃   ┃ Name              ┃ Type       ┃ Params ┃ Mode  ┃ FLOPs ┃
-┡━━━╇━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
-│ 0 │ callbacks_modules │ ModuleDict │  769 K │ train │     0 │
-│ 1 │ callbacks_metrics │ ModuleDict │      0 │ train │     0 │
-│ 2 │ model             │ LeJEPA     │ 92.5 M │ train │     0 │
-└───┴───────────────────┴────────────┴────────┴───────┴───────┘
-Trainable params: 93.3 M                                                        
-Non-trainable params: 0                                                         
-Total params: 93.3 M                                                            
-Total estimated model params size (MB): 373                                     
-Modules in train mode: 303                                                      
-Modules in eval mode: 0                                                         
-Total FLOPs: 0                                                                  
-12:50:52 | WARN  | hf_models.py| ! No Hugging Face (PreTrainedModel) submodules found in LightningModule.
-12:50:52 | INFO  | utils.py    | ── Optimizers ────────────────────────────────────
-12:50:52 | INFO  | module.py   |   self.optimizers() gave us 2 optimizers
-12:50:52 | WARN  | module.py   | ! No clip val found for optimizer default_0
-12:50:52 | WARN  | module.py   | ! Will use the Trainer's value of None
-12:50:52 | WARN  | module.py   | ! No clip algorithm found for optimizer default_0
-12:50:52 | WARN  | module.py   | ! Will use the Trainer's value of None
-12:50:52 | OK    | module.py   | ✓ Optimizer check complete:
-+------------+------------+----------------+-----------+-----------+
-| Opt. Index | Opt. name  |      opt       | clip val. | clip alg. |
-+------------+------------+----------------+-----------+-----------+
-|     0      | default_0  | LightningAdamW |    None   |    None   |
-|     1      | inet_probe | LightningAdamW |    None   |    norm   |
-+------------+------------+----------------+-----------+-----------+
-12:50:55 | INFO  | utils.py    | ── LogUnusedParametersOnce ───────────────────────
-12:50:55 | INFO  | unused_para~|   registered hooks on 164 leaf parameters
-12:50:55 | OK    | env_info.py | ✓ Packages: 123 packages collected in 3.77s
-12:50:55 | OK    | env_info.py | ✓ NVIDIA Driver: 580.126.20
-12:50:56 | OK    | env_info.py | ✓ Git: ml @ 88f3064e
-12:50:56 | INFO  | env_info.py |   Remote: https://@github.com/NLPQuy/lejepa-MLProject.git
-12:50:56 | WARN  | env_info.py | ! Working directory has uncommitted changes
-12:50:56 | OK    | env_info.py | ✓ Environment: 4 relevant variables captured
-12:50:56 | INFO  | env_info.py |   Serializing environment data...
-12:50:56 | INFO  | env_info.py |   File exists, using version 11: environment_v11.json
-12:50:56 | INFO  | env_info.py |   File exists, using version 11: requirements_frozen_v11.txt
-12:50:56 | INFO  | env_info.py |   Save directory: /workspace/lejepa-MLProject/logs
-12:50:56 | INFO  | env_info.py |   Writing environment to temp file...
-12:50:56 | INFO  | env_info.py |   Moving to: environment_v11.json
-12:50:56 | OK    | env_info.py | ✓ Environment file saved (7.6 KB)
-12:50:56 | OK    | env_info.py | ✓ Requirements file saved (2.6 KB)
-/workspace/jepa/lib/python3.11/site-packages/lightning/pytorch/utilities/data.py:79: Trying to infer the `batch_size` from an ambiguous collection. The batch size we found is 64. To avoid any miscalculations, use `self.log(..., batch_size=batch_size)`.
-12:50:58 | OK    | unused_para~| ✓ all tracked parameters received gradients on the first backward pass
-12:50:58 | INFO  | unused_para~|   hooks removed, callback disabled
-/workspace/lejepa-MLProject/stable-pretraining/stable_pretraining/callbacks/queue.py:180: UserWarning: log('queue/embedding_fill_pct') called outside a training/validation step — metric buffered for next step
-  _spt_log(
-[Epoch 0/1] step 50/23862 (2.7 it/s)
-[Epoch 0/1] step 100/23862 (3.0 it/s)
-[Epoch 0/1] step 150/23862 (3.1 it/s)
-[Epoch 0/1] step 200/23862 (3.2 it/s)
-[Epoch 0/1] step 250/23862 (3.2 it/s)
-[Epoch 0/1] step 300/23862 (3.2 it/s)
-[Epoch 0/1] step 350/23862 (3.3 it/s)
-[Epoch 0/1] step 400/23862 (3.3 it/s)
-[Epoch 0/1] step 450/23862 (3.3 it/s)
-[Epoch 0/1] step 500/23862 (3.3 it/s)
-[Epoch 0/1] step 550/23862 (3.3 it/s)
-[Epoch 0/1] step 600/23862 (3.3 it/s)
-[Epoch 0/1] step 650/23862 (3.3 it/s)
-[Epoch 0/1] step 700/23862 (3.3 it/s)
-[Epoch 0/1] step 750/23862 (3.3 it/s)
-[Epoch 0/1] step 800/23862 (3.3 it/s)
-[Epoch 0/1] step 850/23862 (3.3 it/s)
-[Epoch 0/1] step 900/23862 (3.3 it/s)
-[Epoch 0/1] step 950/23862 (3.3 it/s)
-[Epoch 0/1] step 1000/23862 (3.3 it/s)
-[Epoch 0/1] step 1050/23862 (3.4 it/s)
-[Epoch 0/1] step 1100/23862 (3.4 it/s)
-[Epoch 0/1] step 1150/23862 (3.4 it/s)
-[Epoch 0/1] step 1200/23862 (3.4 it/s)
-[Epoch 0/1] step 1250/23862 (3.4 it/s)
-[Epoch 0/1] step 1300/23862 (3.4 it/s)
-[Epoch 0/1] step 1350/23862 (3.4 it/s)
-[Epoch 0/1] step 1400/23862 (3.4 it/s)
-[Epoch 0/1] step 1450/23862 (3.4 it/s)
-[Epoch 0/1] step 1500/23862 (3.4 it/s)
-[Epoch 0/1] step 1550/23862 (3.4 it/s)
-[Epoch 0/1] step 1600/23862 (3.4 it/s)
-[Epoch 0/1] step 1650/23862 (3.4 it/s)
-[Epoch 0/1] step 1700/23862 (3.4 it/s)
-[Epoch 0/1] step 1750/23862 (3.4 it/s)
-[Epoch 0/1] step 1800/23862 (3.4 it/s)
-[Epoch 0/1] step 1850/23862 (3.4 it/s)
-[Epoch 0/1] step 1900/23862 (3.4 it/s)
-[Epoch 0/1] step 1950/23862 (3.4 it/s)
-[Epoch 0/1] step 2000/23862 (3.4 it/s)
-[Epoch 0/1] step 2050/23862 (3.4 it/s)
-[Epoch 0/1] step 2100/23862 (3.4 it/s)
-[Epoch 0/1] step 2150/23862 (3.4 it/s)
-[Epoch 0/1] step 2200/23862 (3.4 it/s)
-[Epoch 0/1] step 2250/23862 (3.4 it/s)
-[Epoch 0/1] step 2300/23862 (3.4 it/s)
-[Epoch 0/1] step 2350/23862 (3.4 it/s)
-[Epoch 0/1] step 2400/23862 (3.4 it/s)
-[Epoch 0/1] step 2450/23862 (3.4 it/s)
-[Epoch 0/1] step 2500/23862 (3.4 it/s)
-[Epoch 0/1] step 2550/23862 (3.4 it/s)
-[Epoch 0/1] step 2600/23862 (3.4 it/s)
-[Epoch 0/1] step 2650/23862 (3.4 it/s)
-[Epoch 0/1] step 2700/23862 (3.4 it/s)
-[Epoch 0/1] step 2750/23862 (3.4 it/s)
-[Epoch 0/1] step 2800/23862 (3.4 it/s)
-[Epoch 0/1] step 2850/23862 (3.4 it/s)
-[Epoch 0/1] step 2900/23862 (3.4 it/s)
-[Epoch 0/1] step 2950/23862 (3.4 it/s)
-[Epoch 0/1] step 3000/23862 (3.4 it/s)
-[Epoch 0/1] step 3050/23862 (3.4 it/s)
-[Epoch 0/1] step 3100/23862 (3.4 it/s)
-[Epoch 0/1] step 3150/23862 (3.4 it/s)
-[Epoch 0/1] step 3200/23862 (3.4 it/s)
-[Epoch 0/1] step 3250/23862 (3.4 it/s)
-[Epoch 0/1] step 3300/23862 (3.4 it/s)
-[Epoch 0/1] step 3350/23862 (3.4 it/s)
-[Epoch 0/1] step 3400/23862 (3.4 it/s)
-[Epoch 0/1] step 3450/23862 (3.4 it/s)
-[Epoch 0/1] step 3500/23862 (3.4 it/s)
-[Epoch 0/1] step 3550/23862 (3.4 it/s)
-[Epoch 0/1] step 3600/23862 (3.4 it/s)
-[Epoch 0/1] step 3650/23862 (3.4 it/s)
-[Epoch 0/1] step 3700/23862 (3.4 it/s)
-[Epoch 0/1] step 3750/23862 (3.4 it/s)
-[Epoch 0/1] step 3800/23862 (3.4 it/s)
-[Epoch 0/1] step 3850/23862 (3.4 it/s)
-[Epoch 0/1] step 3900/23862 (3.4 it/s)
-[Epoch 0/1] step 3950/23862 (3.4 it/s)
-[Epoch 0/1] step 4000/23862 (3.4 it/s)
-[Epoch 0/1] step 4050/23862 (3.4 it/s)
-[Epoch 0/1] step 4100/23862 (3.4 it/s)
-[Epoch 0/1] step 4150/23862 (3.4 it/s)
-[Epoch 0/1] step 4200/23862 (3.4 it/s)
-[Epoch 0/1] step 4250/23862 (3.4 it/s)
-[Epoch 0/1] step 4300/23862 (3.4 it/s)
-[Epoch 0/1] step 4350/23862 (3.4 it/s)
-[Epoch 0/1] step 4400/23862 (3.4 it/s)
-[Epoch 0/1] step 4450/23862 (3.4 it/s)
-[Epoch 0/1] step 4500/23862 (3.4 it/s)
-[Epoch 0/1] step 4550/23862 (3.4 it/s)
-[Epoch 0/1] step 4600/23862 (3.4 it/s)
-[Epoch 0/1] step 4650/23862 (3.4 it/s)
-[Epoch 0/1] step 4700/23862 (3.4 it/s)
-[Epoch 0/1] step 4750/23862 (3.4 it/s)
-[Epoch 0/1] step 4800/23862 (3.4 it/s)
-[Epoch 0/1] step 4850/23862 (3.4 it/s)
-[Epoch 0/1] step 4900/23862 (3.4 it/s)
-[Epoch 0/1] step 4950/23862 (3.4 it/s)
-[Epoch 0/1] step 5000/23862 (3.4 it/s)
-[Epoch 0/1] step 5050/23862 (3.4 it/s)
-[Epoch 0/1] step 5100/23862 (3.4 it/s)
-[Epoch 0/1] step 5150/23862 (3.4 it/s)
-[Epoch 0/1] step 5200/23862 (3.4 it/s)
-[Epoch 0/1] step 5250/23862 (3.4 it/s)
-[Epoch 0/1] step 5300/23862 (3.4 it/s)
-[Epoch 0/1] step 5350/23862 (3.4 it/s)
-[Epoch 0/1] step 5400/23862 (3.4 it/s)
-[Epoch 0/1] step 5450/23862 (3.4 it/s)
-[Epoch 0/1] step 5500/23862 (3.4 it/s)
-[Epoch 0/1] step 5550/23862 (3.4 it/s)
-[Epoch 0/1] step 5600/23862 (3.4 it/s)
-[Epoch 0/1] step 5650/23862 (3.4 it/s)
-[Epoch 0/1] step 5700/23862 (3.4 it/s)
-[Epoch 0/1] step 5750/23862 (3.4 it/s)
-[Epoch 0/1] step 5800/23862 (3.4 it/s)
-[Epoch 0/1] step 5850/23862 (3.4 it/s)
-[Epoch 0/1] step 5900/23862 (3.4 it/s)
-[Epoch 0/1] step 5950/23862 (3.4 it/s)
-[Epoch 0/1] step 6000/23862 (3.4 it/s)
-[Epoch 0/1] step 6050/23862 (3.4 it/s)
-[Epoch 0/1] step 6100/23862 (3.4 it/s)
-[Epoch 0/1] step 6150/23862 (3.4 it/s)
-[Epoch 0/1] step 6200/23862 (3.4 it/s)
-[Epoch 0/1] step 6250/23862 (3.4 it/s)
-[Epoch 0/1] step 6300/23862 (3.4 it/s)
-[Epoch 0/1] step 6350/23862 (3.4 it/s)
-[Epoch 0/1] step 6400/23862 (3.4 it/s)
-[Epoch 0/1] step 6450/23862 (3.4 it/s)
-[Epoch 0/1] step 6500/23862 (3.4 it/s)
-[Epoch 0/1] step 6550/23862 (3.4 it/s)
-[Epoch 0/1] step 6600/23862 (3.4 it/s)
-[Epoch 0/1] step 6650/23862 (3.4 it/s)
-[Epoch 0/1] step 6700/23862 (3.4 it/s)
-[Epoch 0/1] step 6750/23862 (3.4 it/s)
-[Epoch 0/1] step 6800/23862 (3.4 it/s)
-[Epoch 0/1] step 6850/23862 (3.4 it/s)
-[Epoch 0/1] step 6900/23862 (3.4 it/s)
-[Epoch 0/1] step 6950/23862 (3.4 it/s)
-[Epoch 0/1] step 7000/23862 (3.4 it/s)
-[Epoch 0/1] step 7050/23862 (3.4 it/s)
-[Epoch 0/1] step 7100/23862 (3.4 it/s)
-[Epoch 0/1] step 7150/23862 (3.4 it/s)
-[Epoch 0/1] step 7200/23862 (3.4 it/s)
-[Epoch 0/1] step 7250/23862 (3.4 it/s)
-[Epoch 0/1] step 7300/23862 (3.4 it/s)
-[Epoch 0/1] step 7350/23862 (3.4 it/s)
-[Epoch 0/1] step 7400/23862 (3.4 it/s)
-[Epoch 0/1] step 7450/23862 (3.4 it/s)
-[Epoch 0/1] step 7500/23862 (3.4 it/s)
-[Epoch 0/1] step 7550/23862 (3.4 it/s)
-[Epoch 0/1] step 7600/23862 (3.4 it/s)
-[Epoch 0/1] step 7650/23862 (3.4 it/s)
-[Epoch 0/1] step 7700/23862 (3.4 it/s)
-[Epoch 0/1] step 7750/23862 (3.4 it/s)
-[Epoch 0/1] step 7800/23862 (3.4 it/s)
-[Epoch 0/1] step 7850/23862 (3.4 it/s)
-[Epoch 0/1] step 7900/23862 (3.4 it/s)
-[Epoch 0/1] step 7950/23862 (3.4 it/s)
-[Epoch 0/1] step 8000/23862 (3.4 it/s)
-[Epoch 0/1] step 8050/23862 (3.4 it/s)
-[Epoch 0/1] step 8100/23862 (3.4 it/s)
-[Epoch 0/1] step 8150/23862 (3.4 it/s)
-[Epoch 0/1] step 8200/23862 (3.4 it/s)
-[Epoch 0/1] step 8250/23862 (3.4 it/s)
-[Epoch 0/1] step 8300/23862 (3.4 it/s)
-[Epoch 0/1] step 8350/23862 (3.4 it/s)
-[Epoch 0/1] step 8400/23862 (3.4 it/s)
-[Epoch 0/1] step 8450/23862 (3.4 it/s)
-[Epoch 0/1] step 8500/23862 (3.4 it/s)
-[Epoch 0/1] step 8550/23862 (3.4 it/s)
-[Epoch 0/1] step 8600/23862 (3.4 it/s)
-[Epoch 0/1] step 8650/23862 (3.4 it/s)
-[Epoch 0/1] step 8700/23862 (3.4 it/s)
-[Epoch 0/1] step 8750/23862 (3.4 it/s)
-[Epoch 0/1] step 8800/23862 (3.4 it/s)
-[Epoch 0/1] step 8850/23862 (3.4 it/s)
-[Epoch 0/1] step 8900/23862 (3.4 it/s)
-[Epoch 0/1] step 8950/23862 (3.4 it/s)
-[Epoch 0/1] step 9000/23862 (3.4 it/s)
-[Epoch 0/1] step 9050/23862 (3.4 it/s)
-[Epoch 0/1] step 9100/23862 (3.4 it/s)
-[Epoch 0/1] step 9150/23862 (3.4 it/s)
-[Epoch 0/1] step 9200/23862 (3.4 it/s)
-[Epoch 0/1] step 9250/23862 (3.4 it/s)
-[Epoch 0/1] step 9300/23862 (3.4 it/s)
-[Epoch 0/1] step 9350/23862 (3.4 it/s)
-[Epoch 0/1] step 9400/23862 (3.4 it/s)
-[Epoch 0/1] step 9450/23862 (3.4 it/s)
-[Epoch 0/1] step 9500/23862 (3.4 it/s)
-[Epoch 0/1] step 9550/23862 (3.4 it/s)
-[Epoch 0/1] step 9600/23862 (3.4 it/s)
-[Epoch 0/1] step 9650/23862 (3.4 it/s)
-[Epoch 0/1] step 9700/23862 (3.4 it/s)
-[Epoch 0/1] step 9750/23862 (3.4 it/s)
-[Epoch 0/1] step 9800/23862 (3.4 it/s)
-[Epoch 0/1] step 9850/23862 (3.4 it/s)
-[Epoch 0/1] step 9900/23862 (3.4 it/s)
-[Epoch 0/1] step 9950/23862 (3.4 it/s)
-[Epoch 0/1] step 10000/23862 (3.4 it/s)
-[Epoch 0/1] step 10050/23862 (3.4 it/s)
-[Epoch 0/1] step 10100/23862 (3.4 it/s)
-[Epoch 0/1] step 10150/23862 (3.4 it/s)
-[Epoch 0/1] step 10200/23862 (3.4 it/s)
-[Epoch 0/1] step 10250/23862 (3.4 it/s)
-[Epoch 0/1] step 10300/23862 (3.4 it/s)
-[Epoch 0/1] step 10350/23862 (3.4 it/s)
-[Epoch 0/1] step 10400/23862 (3.4 it/s)
-[Epoch 0/1] step 10450/23862 (3.4 it/s)
-[Epoch 0/1] step 10500/23862 (3.4 it/s)
-[Epoch 0/1] step 10550/23862 (3.4 it/s)
-[Epoch 0/1] step 10600/23862 (3.4 it/s)
-[Epoch 0/1] step 10650/23862 (3.4 it/s)
-[Epoch 0/1] step 10700/23862 (3.4 it/s)
-[Epoch 0/1] step 10750/23862 (3.4 it/s)
-[Epoch 0/1] step 10800/23862 (3.4 it/s)
-[Epoch 0/1] step 10850/23862 (3.4 it/s)
-[Epoch 0/1] step 10900/23862 (3.4 it/s)
-[Epoch 0/1] step 10950/23862 (3.4 it/s)
-[Epoch 0/1] step 11000/23862 (3.4 it/s)
-[Epoch 0/1] step 11050/23862 (3.4 it/s)
-[Epoch 0/1] step 11100/23862 (3.4 it/s)
-[Epoch 0/1] step 11150/23862 (3.4 it/s)
-[Epoch 0/1] step 11200/23862 (3.4 it/s)
-[Epoch 0/1] step 11250/23862 (3.4 it/s)
-[Epoch 0/1] step 11300/23862 (3.4 it/s)
-[Epoch 0/1] step 11350/23862 (3.4 it/s)
-[Epoch 0/1] step 11400/23862 (3.4 it/s)
-[Epoch 0/1] step 11450/23862 (3.4 it/s)
-[Epoch 0/1] step 11500/23862 (3.4 it/s)
-[Epoch 0/1] step 11550/23862 (3.4 it/s)
-[Epoch 0/1] step 11600/23862 (3.4 it/s)
-[Epoch 0/1] step 11650/23862 (3.4 it/s)
-[Epoch 0/1] step 11700/23862 (3.4 it/s)
-[Epoch 0/1] step 11750/23862 (3.4 it/s)
-[Epoch 0/1] step 11800/23862 (3.4 it/s)
-[Epoch 0/1] step 11850/23862 (3.4 it/s)
-[Epoch 0/1] step 11900/23862 (3.4 it/s)
-[Epoch 0/1] step 11950/23862 (3.4 it/s)
-[Epoch 0/1] step 12000/23862 (3.4 it/s)
-[Epoch 0/1] step 12050/23862 (3.4 it/s)
-[Epoch 0/1] step 12100/23862 (3.3 it/s)
-[Epoch 0/1] step 12150/23862 (3.3 it/s)
-[Epoch 0/1] step 12200/23862 (3.3 it/s)
-[Epoch 0/1] step 12250/23862 (3.3 it/s)
-[Epoch 0/1] step 12300/23862 (3.3 it/s)
-[Epoch 0/1] step 12350/23862 (3.3 it/s)
-[Epoch 0/1] step 12400/23862 (3.3 it/s)
-[Epoch 0/1] step 12450/23862 (3.3 it/s)
-[Epoch 0/1] step 12500/23862 (3.3 it/s)
-[Epoch 0/1] step 12550/23862 (3.3 it/s)
-[Epoch 0/1] step 12600/23862 (3.3 it/s)
-[Epoch 0/1] step 12650/23862 (3.3 it/s)
-[Epoch 0/1] step 12700/23862 (3.3 it/s)
-[Epoch 0/1] step 12750/23862 (3.3 it/s)
-[Epoch 0/1] step 12800/23862 (3.3 it/s)
-[Epoch 0/1] step 12850/23862 (3.3 it/s)
-[Epoch 0/1] step 12900/23862 (3.3 it/s)
-[Epoch 0/1] step 12950/23862 (3.3 it/s)
-[Epoch 0/1] step 13000/23862 (3.3 it/s)
-[Epoch 0/1] step 13050/23862 (3.3 it/s)
-[Epoch 0/1] step 13100/23862 (3.3 it/s)
-[Epoch 0/1] step 13150/23862 (3.3 it/s)
-[Epoch 0/1] step 13200/23862 (3.3 it/s)
-[Epoch 0/1] step 13250/23862 (3.3 it/s)
-[Epoch 0/1] step 13300/23862 (3.3 it/s)
-[Epoch 0/1] step 13350/23862 (3.3 it/s)
-[Epoch 0/1] step 13400/23862 (3.3 it/s)
-[Epoch 0/1] step 13450/23862 (3.3 it/s)
-[Epoch 0/1] step 13500/23862 (3.3 it/s)
-[Epoch 0/1] step 13550/23862 (3.3 it/s)
-[Epoch 0/1] step 13600/23862 (3.3 it/s)
-[Epoch 0/1] step 13650/23862 (3.3 it/s)
-[Epoch 0/1] step 13700/23862 (3.3 it/s)
-[Epoch 0/1] step 13750/23862 (3.3 it/s)
-[Epoch 0/1] step 13800/23862 (3.3 it/s)
-[Epoch 0/1] step 13850/23862 (3.3 it/s)
-[Epoch 0/1] step 13900/23862 (3.3 it/s)
-[Epoch 0/1] step 13950/23862 (3.3 it/s)
-[Epoch 0/1] step 14000/23862 (3.3 it/s)
-[Epoch 0/1] step 14050/23862 (3.3 it/s)
-[Epoch 0/1] step 14100/23862 (3.3 it/s)
-[Epoch 0/1] step 14150/23862 (3.3 it/s)
-[Epoch 0/1] step 14200/23862 (3.3 it/s)
-[Epoch 0/1] step 14250/23862 (3.3 it/s)
-[Epoch 0/1] step 14300/23862 (3.3 it/s)
-[Epoch 0/1] step 14350/23862 (3.3 it/s)
-[Epoch 0/1] step 14400/23862 (3.3 it/s)
-[Epoch 0/1] step 14450/23862 (3.3 it/s)
-[Epoch 0/1] step 14500/23862 (3.3 it/s)
-[Epoch 0/1] step 14550/23862 (3.3 it/s)
-[Epoch 0/1] step 14600/23862 (3.3 it/s)
-[Epoch 0/1] step 14650/23862 (3.3 it/s)
-[Epoch 0/1] step 14700/23862 (3.3 it/s)
-[Epoch 0/1] step 14750/23862 (3.3 it/s)
-[Epoch 0/1] step 14800/23862 (3.3 it/s)
-[Epoch 0/1] step 14850/23862 (3.3 it/s)
-[Epoch 0/1] step 14900/23862 (3.3 it/s)
-[Epoch 0/1] step 14950/23862 (3.3 it/s)
-[Epoch 0/1] step 15000/23862 (3.3 it/s)
-[Epoch 0/1] step 15050/23862 (3.3 it/s)
-[Epoch 0/1] step 15100/23862 (3.3 it/s)
-[Epoch 0/1] step 15150/23862 (3.3 it/s)
-[Epoch 0/1] step 15200/23862 (3.3 it/s)
-[Epoch 0/1] step 15250/23862 (3.3 it/s)
-[Epoch 0/1] step 15300/23862 (3.3 it/s)
-[Epoch 0/1] step 15350/23862 (3.3 it/s)
-[Epoch 0/1] step 15400/23862 (3.3 it/s)
-[Epoch 0/1] step 15450/23862 (3.3 it/s)
-[Epoch 0/1] step 15500/23862 (3.3 it/s)
-[Epoch 0/1] step 15550/23862 (3.3 it/s)
-[Epoch 0/1] step 15600/23862 (3.3 it/s)
-[Epoch 0/1] step 15650/23862 (3.3 it/s)
-[Epoch 0/1] step 15700/23862 (3.3 it/s)
-[Epoch 0/1] step 15750/23862 (3.3 it/s)
-[Epoch 0/1] step 15800/23862 (3.3 it/s)
-[Epoch 0/1] step 15850/23862 (3.3 it/s)
-[Epoch 0/1] step 15900/23862 (3.3 it/s)
-[Epoch 0/1] step 15950/23862 (3.3 it/s)
-[Epoch 0/1] step 16000/23862 (3.3 it/s)
-[Epoch 0/1] step 16050/23862 (3.3 it/s)
-[Epoch 0/1] step 16100/23862 (3.3 it/s)
-[Epoch 0/1] step 16150/23862 (3.3 it/s)
-[Epoch 0/1] step 16200/23862 (3.3 it/s)
-[Epoch 0/1] step 16250/23862 (3.3 it/s)
-[Epoch 0/1] step 16300/23862 (3.3 it/s)
-[Epoch 0/1] step 16350/23862 (3.3 it/s)
-[Epoch 0/1] step 16400/23862 (3.3 it/s)
-[Epoch 0/1] step 16450/23862 (3.3 it/s)
-[Epoch 0/1] step 16500/23862 (3.3 it/s)
-[Epoch 0/1] step 16550/23862 (3.3 it/s)
-[Epoch 0/1] step 16600/23862 (3.3 it/s)
-[Epoch 0/1] step 16650/23862 (3.3 it/s)
-[Epoch 0/1] step 16700/23862 (3.3 it/s)
-[Epoch 0/1] step 16750/23862 (3.3 it/s)
-[Epoch 0/1] step 16800/23862 (3.3 it/s)
-[Epoch 0/1] step 16850/23862 (3.3 it/s)
-[Epoch 0/1] step 16900/23862 (3.3 it/s)
-[Epoch 0/1] step 16950/23862 (3.3 it/s)
-[Epoch 0/1] step 17000/23862 (3.3 it/s)
-[Epoch 0/1] step 17050/23862 (3.3 it/s)
-[Epoch 0/1] step 17100/23862 (3.3 it/s)
-[Epoch 0/1] step 17150/23862 (3.3 it/s)
-[Epoch 0/1] step 17200/23862 (3.3 it/s)
-[Epoch 0/1] step 17250/23862 (3.3 it/s)
-[Epoch 0/1] step 17300/23862 (3.3 it/s)
-[Epoch 0/1] step 17350/23862 (3.3 it/s)
-[Epoch 0/1] step 17400/23862 (3.3 it/s)
-[Epoch 0/1] step 17450/23862 (3.3 it/s)
-[Epoch 0/1] step 17500/23862 (3.3 it/s)
-[Epoch 0/1] step 17550/23862 (3.3 it/s)
-[Epoch 0/1] step 17600/23862 (3.3 it/s)
-[Epoch 0/1] step 17650/23862 (3.3 it/s)
-[Epoch 0/1] step 17700/23862 (3.3 it/s)
-[Epoch 0/1] step 17750/23862 (3.3 it/s)
-[Epoch 0/1] step 17800/23862 (3.3 it/s)
-[Epoch 0/1] step 17850/23862 (3.3 it/s)
-[Epoch 0/1] step 17900/23862 (3.3 it/s)
-[Epoch 0/1] step 17950/23862 (3.3 it/s)
-[Epoch 0/1] step 18000/23862 (3.3 it/s)
-[Epoch 0/1] step 18050/23862 (3.3 it/s)
-[Epoch 0/1] step 18100/23862 (3.3 it/s)
-[Epoch 0/1] step 18150/23862 (3.3 it/s)
-[Epoch 0/1] step 18200/23862 (3.3 it/s)
-[Epoch 0/1] step 18250/23862 (3.3 it/s)
-[Epoch 0/1] step 18300/23862 (3.3 it/s)
-[Epoch 0/1] step 18350/23862 (3.3 it/s)
-[Epoch 0/1] step 18400/23862 (3.3 it/s)
-[Epoch 0/1] step 18450/23862 (3.3 it/s)
-[Epoch 0/1] step 18500/23862 (3.3 it/s)
-[Epoch 0/1] step 18550/23862 (3.3 it/s)
-[Epoch 0/1] step 18600/23862 (3.3 it/s)
-[Epoch 0/1] step 18650/23862 (3.3 it/s)
-[Epoch 0/1] step 18700/23862 (3.3 it/s)
-[Epoch 0/1] step 18750/23862 (3.3 it/s)
-[Epoch 0/1] step 18800/23862 (3.3 it/s)
-[Epoch 0/1] step 18850/23862 (3.3 it/s)
-[Epoch 0/1] step 18900/23862 (3.3 it/s)
-[Epoch 0/1] step 18950/23862 (3.3 it/s)
-[Epoch 0/1] step 19000/23862 (3.3 it/s)
-[Epoch 0/1] step 19050/23862 (3.3 it/s)
-[Epoch 0/1] step 19100/23862 (3.3 it/s)
-[Epoch 0/1] step 19150/23862 (3.3 it/s)
-[Epoch 0/1] step 19200/23862 (3.3 it/s)
-[Epoch 0/1] step 19250/23862 (3.3 it/s)
-[Epoch 0/1] step 19300/23862 (3.3 it/s)
-[Epoch 0/1] step 19350/23862 (3.3 it/s)
-[Epoch 0/1] step 19400/23862 (3.3 it/s)
-[Epoch 0/1] step 19450/23862 (3.3 it/s)
-[Epoch 0/1] step 19500/23862 (3.3 it/s)
-[Epoch 0/1] step 19550/23862 (3.3 it/s)
-[Epoch 0/1] step 19600/23862 (3.3 it/s)
-[Epoch 0/1] step 19650/23862 (3.3 it/s)
-[Epoch 0/1] step 19700/23862 (3.3 it/s)
-[Epoch 0/1] step 19750/23862 (3.3 it/s)
-[Epoch 0/1] step 19800/23862 (3.3 it/s)
-[Epoch 0/1] step 19850/23862 (3.3 it/s)
-[Epoch 0/1] step 19900/23862 (3.3 it/s)
-[Epoch 0/1] step 19950/23862 (3.3 it/s)
-[Epoch 0/1] step 20000/23862 (3.3 it/s)
-[Epoch 0/1] step 20050/23862 (3.3 it/s)
-[Epoch 0/1] step 20100/23862 (3.3 it/s)
-[Epoch 0/1] step 20150/23862 (3.3 it/s)
-[Epoch 0/1] step 20200/23862 (3.3 it/s)
-[Epoch 0/1] step 20250/23862 (3.3 it/s)
-[Epoch 0/1] step 20300/23862 (3.3 it/s)
-[Epoch 0/1] step 20350/23862 (3.3 it/s)
-[Epoch 0/1] step 20400/23862 (3.3 it/s)
-[Epoch 0/1] step 20450/23862 (3.3 it/s)
-[Epoch 0/1] step 20500/23862 (3.3 it/s)
-[Epoch 0/1] step 20550/23862 (3.3 it/s)
-[Epoch 0/1] step 20600/23862 (3.3 it/s)
-[Epoch 0/1] step 20650/23862 (3.3 it/s)
-[Epoch 0/1] step 20700/23862 (3.3 it/s)
-[Epoch 0/1] step 20750/23862 (3.3 it/s)
-[Epoch 0/1] step 20800/23862 (3.3 it/s)
-[Epoch 0/1] step 20850/23862 (3.3 it/s)
-[Epoch 0/1] step 20900/23862 (3.3 it/s)
-[Epoch 0/1] step 20950/23862 (3.3 it/s)
-[Epoch 0/1] step 21000/23862 (3.3 it/s)
-[Epoch 0/1] step 21050/23862 (3.3 it/s)
-[Epoch 0/1] step 21100/23862 (3.3 it/s)
-[Epoch 0/1] step 21150/23862 (3.3 it/s)
-[Epoch 0/1] step 21200/23862 (3.3 it/s)
-[Epoch 0/1] step 21250/23862 (3.3 it/s)
-[Epoch 0/1] step 21300/23862 (3.3 it/s)
-[Epoch 0/1] step 21350/23862 (3.3 it/s)
-[Epoch 0/1] step 21400/23862 (3.3 it/s)
-[Epoch 0/1] step 21450/23862 (3.3 it/s)
-[Epoch 0/1] step 21500/23862 (3.3 it/s)
-[Epoch 0/1] step 21550/23862 (3.3 it/s)
-[Epoch 0/1] step 21600/23862 (3.3 it/s)
-[Epoch 0/1] step 21650/23862 (3.3 it/s)
-[Epoch 0/1] step 21700/23862 (3.3 it/s)
-[Epoch 0/1] step 21750/23862 (3.3 it/s)
-[Epoch 0/1] step 21800/23862 (3.3 it/s)
-[Epoch 0/1] step 21850/23862 (3.3 it/s)
-[Epoch 0/1] step 21900/23862 (3.3 it/s)
-[Epoch 0/1] step 21950/23862 (3.3 it/s)
-[Epoch 0/1] step 22000/23862 (3.2 it/s)
-[Epoch 0/1] step 22050/23862 (3.2 it/s)
-[Epoch 0/1] step 22100/23862 (3.2 it/s)
-[Epoch 0/1] step 22150/23862 (3.2 it/s)
-[Epoch 0/1] step 22200/23862 (3.2 it/s)
-[Epoch 0/1] step 22250/23862 (3.2 it/s)
-[Epoch 0/1] step 22300/23862 (3.2 it/s)
-[Epoch 0/1] step 22350/23862 (3.2 it/s)
-[Epoch 0/1] step 22400/23862 (3.2 it/s)
-[Epoch 0/1] step 22450/23862 (3.2 it/s)
-[Epoch 0/1] step 22500/23862 (3.2 it/s)
-[Epoch 0/1] step 22550/23862 (3.2 it/s)
-[Epoch 0/1] step 22600/23862 (3.2 it/s)
-[Epoch 0/1] step 22650/23862 (3.2 it/s)
-[Epoch 0/1] step 22700/23862 (3.2 it/s)
-[Epoch 0/1] step 22750/23862 (3.2 it/s)
-[Epoch 0/1] step 22800/23862 (3.2 it/s)
-[Epoch 0/1] step 22850/23862 (3.2 it/s)
-[Epoch 0/1] step 22900/23862 (3.2 it/s)
-[Epoch 0/1] step 22950/23862 (3.2 it/s)
-[Epoch 0/1] step 23000/23862 (3.2 it/s)
-[Epoch 0/1] step 23050/23862 (3.2 it/s)
-[Epoch 0/1] step 23100/23862 (3.2 it/s)
-[Epoch 0/1] step 23150/23862 (3.2 it/s)
-[Epoch 0/1] step 23200/23862 (3.2 it/s)
-[Epoch 0/1] step 23250/23862 (3.2 it/s)
-[Epoch 0/1] step 23300/23862 (3.2 it/s)
-[Epoch 0/1] step 23350/23862 (3.2 it/s)
-[Epoch 0/1] step 23400/23862 (3.2 it/s)
-[Epoch 0/1] step 23450/23862 (3.2 it/s)
-[Epoch 0/1] step 23500/23862 (3.2 it/s)
-[Epoch 0/1] step 23550/23862 (3.2 it/s)
-[Epoch 0/1] step 23600/23862 (3.2 it/s)
-[Epoch 0/1] step 23650/23862 (3.2 it/s)
-[Epoch 0/1] step 23700/23862 (3.2 it/s)
-[Epoch 0/1] step 23750/23862 (3.2 it/s)
-[Epoch 0/1] step 23800/23862 (3.2 it/s)
-[Epoch 0/1] step 23850/23862 (3.2 it/s)
-[Epoch 0/1] done in 7364.5s
-14:53:36 | INFO  | checkpoint_~|   Checking for non PyTorch modules to save
-14:53:36 | INFO  | checkpoint_~|   Checking for Wandb params to save
-14:53:36 | OK    | checkpoint_~| ✓ Wandb params save check complete
-14:53:41 | INFO  | checkpoint_~|   Checking for non PyTorch modules to save
-14:53:41 | INFO  | checkpoint_~|   Checking for Wandb params to save
-14:53:41 | OK    | checkpoint_~| ✓ Wandb params save check complete
-`Trainer.fit` stopped: `max_epochs=1` reached.
-Epoch 0/0  ━━━━━━━━━━━━━━━━━ 23862/23862 2:02:44 •        3.21it/s v_num: 12.000
-                                         0:00:00                                
-/workspace/jepa/lib/python3.11/site-packages/lightning/pytorch/trainer/call.py:228: 1 buffered metric(s) were dropped at teardown because no valid logging step occurred after they were buffered
-
-✓ Pretraining done. Best checkpoint: /workspace/checkpoints/lejepa-vitb-epepoch=000.ckpt
-
-============================================================
-Phase 2+3 — Embedding Extraction + Few-Shot Linear Probe
-============================================================
-14:53:48 | INFO  | utils.py    | ── Module ────────────────────────────────────────
-14:53:48 | WARN  | module.py   | ! No hyperparameters provided - hyperparameter logging is disabled.
-14:53:48 | INFO  | module.py   |   Setting custom forward method.
-14:53:48 | WARN  | module.py   | ! You didn't pass a forward method. This will fail unless you implemented your own Module class.
-14:53:48 | INFO  | module.py   |   No metrics configuration provided - automatic metric tracking is disabled.
-✓ Loaded LeJEPA (vit_base_patch16_224) from /workspace/checkpoints/lejepa-vitb-epepoch=000.ckpt
-
-============================================================
-  DTD  (tanganke/dtd)
-============================================================
-  ▶ Trích xuất TRAIN embeddings ...
-14:53:50 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
-14:53:50 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/dtd/resolve/main/README.md "HTTP/1.1 401 Unauthorized"
-  ❌ SKIP DTD: Dataset 'tanganke/dtd' doesn't exist on the Hub or cannot be accessed.
-
-============================================================
-  Aircraft  (HuggingFaceM4/FGVC-Aircraft)
-============================================================
-  ▶ Trích xuất TRAIN embeddings ...
-  0%|          | 0.00/2.75G [00:00<?, ?B/s]  0%|          | 131k/2.75G [00:00<43:41, 1.05MB/s]  0%|          | 1.05M/2.75G [00:00<09:49, 4.67MB/s]  0%|          | 5.60M/2.75G [00:00<02:11, 20.9MB/s]  1%|          | 13.8M/2.75G [00:00<01:03, 43.1MB/s]  1%|          | 21.0M/2.75G [00:00<00:51, 52.9MB/s]  1%|          | 27.4M/2.75G [00:00<00:48, 56.3MB/s]  1%|▏         | 34.8M/2.75G [00:00<00:43, 62.0MB/s]  2%|▏         | 42.2M/2.75G [00:00<00:41, 65.7MB/s]  2%|▏         | 49.2M/2.75G [00:00<00:40, 67.0MB/s]  2%|▏         | 57.0M/2.75G [00:01<00:40, 66.4MB/s]  2%|▏         | 64.2M/2.75G [00:01<00:39, 68.2MB/s]  3%|▎         | 71.7M/2.75G [00:01<00:38, 70.2MB/s]  3%|▎         | 79.1M/2.75G [00:01<00:37, 71.4MB/s]  3%|▎         | 86.5M/2.75G [00:01<00:37, 72.0MB/s]  3%|▎         | 94.2M/2.75G [00:01<00:36, 73.6MB/s]  4%|▎         | 103M/2.75G [00:01<00:34, 77.7MB/s]   4%|▍         | 111M/2.75G [00:01<00:33, 79.7MB/s]  4%|▍         | 120M/2.75G [00:01<00:32, 80.2MB/s]  5%|▍         | 128M/2.75G [00:01<00:32, 81.8MB/s]  5%|▍         | 137M/2.75G [00:02<00:31, 82.7MB/s]  5%|▌         | 145M/2.75G [00:02<00:31, 83.1MB/s]  6%|▌         | 153M/2.75G [00:02<00:33, 78.4MB/s]  6%|▌         | 162M/2.75G [00:02<00:32, 80.1MB/s]  6%|▌         | 170M/2.75G [00:02<00:31, 81.2MB/s]  6%|▋         | 178M/2.75G [00:02<00:31, 81.1MB/s]  7%|▋         | 187M/2.75G [00:02<00:31, 80.4MB/s]  7%|▋         | 195M/2.75G [00:02<00:32, 79.9MB/s]  7%|▋         | 203M/2.75G [00:02<00:31, 81.3MB/s]  8%|▊         | 211M/2.75G [00:03<00:33, 76.3MB/s]  8%|▊         | 219M/2.75G [00:03<00:32, 77.0MB/s]  8%|▊         | 227M/2.75G [00:03<00:32, 77.7MB/s]  9%|▊         | 235M/2.75G [00:03<00:33, 75.2MB/s]  9%|▉         | 243M/2.75G [00:03<00:32, 76.9MB/s]  9%|▉         | 251M/2.75G [00:03<00:33, 73.6MB/s]  9%|▉         | 259M/2.75G [00:03<00:32, 77.0MB/s] 10%|▉         | 268M/2.75G [00:03<00:31, 79.4MB/s] 10%|█         | 277M/2.75G [00:03<00:30, 81.5MB/s] 10%|█         | 285M/2.75G [00:03<00:29, 83.1MB/s] 11%|█         | 294M/2.75G [00:04<00:28, 85.0MB/s] 11%|█         | 303M/2.75G [00:04<00:30, 80.6MB/s] 11%|█▏        | 312M/2.75G [00:04<00:29, 81.9MB/s] 12%|█▏        | 321M/2.75G [00:04<00:28, 84.7MB/s] 12%|█▏        | 330M/2.75G [00:04<00:28, 86.2MB/s] 12%|█▏        | 339M/2.75G [00:04<00:28, 84.1MB/s] 13%|█▎        | 347M/2.75G [00:04<00:30, 79.3MB/s] 13%|█▎        | 355M/2.75G [00:04<00:30, 79.4MB/s] 13%|█▎        | 363M/2.75G [00:04<00:30, 79.4MB/s] 13%|█▎        | 371M/2.75G [00:05<00:30, 79.4MB/s] 14%|█▍        | 379M/2.75G [00:05<00:29, 79.3MB/s] 14%|█▍        | 387M/2.75G [00:05<00:29, 79.8MB/s] 14%|█▍        | 395M/2.75G [00:05<00:29, 80.2MB/s] 15%|█▍        | 403M/2.75G [00:05<00:31, 75.6MB/s] 15%|█▍        | 411M/2.75G [00:05<00:30, 76.8MB/s] 15%|█▌        | 420M/2.75G [00:05<00:29, 79.1MB/s] 16%|█▌        | 428M/2.75G [00:05<00:28, 81.0MB/s] 16%|█▌        | 437M/2.75G [00:05<00:27, 83.7MB/s] 16%|█▌        | 446M/2.75G [00:05<00:27, 84.8MB/s] 17%|█▋        | 455M/2.75G [00:06<00:28, 81.4MB/s] 17%|█▋        | 464M/2.75G [00:06<00:27, 83.5MB/s] 17%|█▋        | 472M/2.75G [00:06<00:27, 82.1MB/s] 17%|█▋        | 480M/2.75G [00:06<00:27, 82.1MB/s] 18%|█▊        | 489M/2.75G [00:06<00:27, 81.0MB/s] 18%|█▊        | 497M/2.75G [00:06<00:28, 79.8MB/s] 18%|█▊        | 505M/2.75G [00:06<00:28, 79.5MB/s] 19%|█▊        | 514M/2.75G [00:06<00:27, 80.9MB/s] 19%|█▉        | 522M/2.75G [00:06<00:27, 81.6MB/s] 19%|█▉        | 530M/2.75G [00:06<00:27, 81.3MB/s] 20%|█▉        | 538M/2.75G [00:07<00:28, 77.6MB/s] 20%|█▉        | 547M/2.75G [00:07<00:28, 78.5MB/s] 20%|██        | 555M/2.75G [00:07<00:27, 78.8MB/s] 20%|██        | 563M/2.75G [00:07<00:27, 79.4MB/s] 21%|██        | 571M/2.75G [00:07<00:27, 80.2MB/s] 21%|██        | 579M/2.75G [00:07<00:28, 75.5MB/s] 21%|██▏       | 587M/2.75G [00:07<00:30, 71.3MB/s] 22%|██▏       | 594M/2.75G [00:07<00:30, 71.4MB/s] 22%|██▏       | 601M/2.75G [00:07<00:31, 68.0MB/s] 22%|██▏       | 608M/2.75G [00:08<00:32, 66.1MB/s] 22%|██▏       | 615M/2.75G [00:08<00:31, 67.6MB/s] 23%|██▎       | 623M/2.75G [00:08<00:31, 68.6MB/s] 23%|██▎       | 630M/2.75G [00:08<00:31, 66.9MB/s] 23%|██▎       | 637M/2.75G [00:08<00:30, 68.6MB/s] 23%|██▎       | 644M/2.75G [00:08<00:31, 66.3MB/s] 24%|██▎       | 651M/2.75G [00:08<00:30, 68.9MB/s] 24%|██▍       | 658M/2.75G [00:08<00:31, 66.4MB/s] 24%|██▍       | 666M/2.75G [00:08<00:30, 69.2MB/s] 24%|██▍       | 673M/2.75G [00:09<00:31, 66.8MB/s] 25%|██▍       | 680M/2.75G [00:09<00:30, 67.0MB/s] 25%|██▍       | 687M/2.75G [00:09<00:30, 68.3MB/s] 25%|██▌       | 694M/2.75G [00:09<00:31, 66.3MB/s] 25%|██▌       | 701M/2.75G [00:09<00:29, 69.1MB/s] 26%|██▌       | 709M/2.75G [00:09<00:29, 68.8MB/s] 26%|██▌       | 716M/2.75G [00:09<00:30, 67.0MB/s] 26%|██▋       | 723M/2.75G [00:09<00:28, 70.4MB/s] 27%|██▋       | 730M/2.75G [00:09<00:30, 67.0MB/s] 27%|██▋       | 739M/2.75G [00:09<00:28, 70.8MB/s] 27%|██▋       | 746M/2.75G [00:10<00:29, 68.4MB/s] 27%|██▋       | 753M/2.75G [00:10<00:29, 68.6MB/s] 28%|██▊       | 760M/2.75G [00:10<00:28, 70.2MB/s] 28%|██▊       | 767M/2.75G [00:10<00:28, 70.8MB/s] 28%|██▊       | 774M/2.75G [00:10<00:29, 67.9MB/s] 28%|██▊       | 782M/2.75G [00:10<00:27, 70.4MB/s] 29%|██▊       | 789M/2.75G [00:10<00:27, 71.0MB/s] 29%|██▉       | 796M/2.75G [00:10<00:31, 62.4MB/s] 29%|██▉       | 803M/2.75G [00:10<00:33, 58.7MB/s] 29%|██▉       | 809M/2.75G [00:11<00:34, 55.8MB/s] 30%|██▉       | 815M/2.75G [00:11<00:33, 57.6MB/s] 30%|██▉       | 821M/2.75G [00:11<00:35, 54.8MB/s] 30%|███       | 827M/2.75G [00:11<00:36, 53.1MB/s] 30%|███       | 834M/2.75G [00:11<00:34, 56.0MB/s] 30%|███       | 839M/2.75G [00:11<00:35, 53.6MB/s] 31%|███       | 846M/2.75G [00:11<00:34, 56.1MB/s] 31%|███       | 851M/2.75G [00:11<00:35, 54.0MB/s] 31%|███       | 858M/2.75G [00:11<00:33, 56.4MB/s] 31%|███▏      | 863M/2.75G [00:12<00:34, 54.3MB/s] 32%|███▏      | 870M/2.75G [00:12<00:33, 56.8MB/s] 32%|███▏      | 875M/2.75G [00:12<00:34, 54.8MB/s] 32%|███▏      | 881M/2.75G [00:12<00:36, 50.7MB/s] 32%|███▏      | 887M/2.75G [00:12<00:36, 51.5MB/s] 32%|███▏      | 893M/2.75G [00:12<00:38, 48.0MB/s] 33%|███▎      | 898M/2.75G [00:12<00:39, 47.2MB/s] 33%|███▎      | 902M/2.75G [00:12<00:41, 44.3MB/s] 33%|███▎      | 907M/2.75G [00:13<00:42, 43.3MB/s] 33%|███▎      | 911M/2.75G [00:13<00:43, 42.8MB/s] 33%|███▎      | 916M/2.75G [00:13<00:43, 42.0MB/s] 33%|███▎      | 920M/2.75G [00:13<00:44, 41.7MB/s] 34%|███▎      | 924M/2.75G [00:13<00:44, 41.3MB/s] 34%|███▎      | 928M/2.75G [00:13<00:44, 41.1MB/s] 34%|███▍      | 933M/2.75G [00:13<00:43, 41.9MB/s] 34%|███▍      | 937M/2.75G [00:13<00:43, 41.6MB/s] 34%|███▍      | 942M/2.75G [00:13<00:42, 42.3MB/s] 34%|███▍      | 946M/2.75G [00:13<00:43, 42.0MB/s] 35%|███▍      | 952M/2.75G [00:14<00:41, 43.0MB/s] 35%|███▍      | 956M/2.75G [00:14<00:42, 42.6MB/s] 35%|███▍      | 961M/2.75G [00:14<00:41, 43.4MB/s] 35%|███▌      | 965M/2.75G [00:14<00:41, 43.1MB/s] 35%|███▌      | 970M/2.75G [00:14<00:41, 43.4MB/s] 35%|███▌      | 974M/2.75G [00:14<00:41, 43.1MB/s] 36%|███▌      | 980M/2.75G [00:14<00:40, 44.1MB/s] 36%|███▌      | 984M/2.75G [00:14<00:40, 43.7MB/s] 36%|███▌      | 989M/2.75G [00:14<00:39, 44.7MB/s] 36%|███▌      | 994M/2.75G [00:15<00:39, 44.3MB/s] 36%|███▋      | 999M/2.75G [00:15<00:39, 44.8MB/s] 36%|███▋      | 1.00G/2.75G [00:15<00:39, 44.4MB/s] 37%|███▋      | 1.01G/2.75G [00:15<00:38, 45.1MB/s] 37%|███▋      | 1.01G/2.75G [00:15<00:38, 44.7MB/s] 37%|███▋      | 1.02G/2.75G [00:15<00:38, 45.3MB/s] 37%|███▋      | 1.02G/2.75G [00:15<00:38, 44.9MB/s] 37%|███▋      | 1.03G/2.75G [00:15<00:37, 45.5MB/s] 37%|███▋      | 1.03G/2.75G [00:15<00:38, 45.1MB/s] 38%|███▊      | 1.04G/2.75G [00:16<00:37, 46.1MB/s] 38%|███▊      | 1.04G/2.75G [00:16<00:37, 45.6MB/s] 38%|███▊      | 1.05G/2.75G [00:16<00:36, 46.4MB/s] 38%|███▊      | 1.05G/2.75G [00:16<00:37, 45.9MB/s] 38%|███▊      | 1.06G/2.75G [00:16<00:36, 46.6MB/s] 39%|███▊      | 1.06G/2.75G [00:16<00:36, 46.1MB/s] 39%|███▉      | 1.07G/2.75G [00:16<00:36, 46.7MB/s] 39%|███▉      | 1.07G/2.75G [00:16<00:36, 46.3MB/s] 39%|███▉      | 1.08G/2.75G [00:16<00:35, 46.7MB/s] 39%|███▉      | 1.08G/2.75G [00:16<00:36, 46.2MB/s] 39%|███▉      | 1.09G/2.75G [00:17<00:35, 46.7MB/s] 40%|███▉      | 1.09G/2.75G [00:17<00:35, 46.3MB/s] 40%|███▉      | 1.10G/2.75G [00:17<00:35, 46.7MB/s] 40%|████      | 1.10G/2.75G [00:17<00:35, 46.2MB/s] 40%|████      | 1.11G/2.75G [00:17<00:35, 47.0MB/s] 40%|████      | 1.11G/2.75G [00:17<00:35, 46.5MB/s] 41%|████      | 1.12G/2.75G [00:17<00:34, 47.3MB/s] 41%|████      | 1.12G/2.75G [00:17<00:34, 46.9MB/s] 41%|████      | 1.13G/2.75G [00:17<00:34, 47.5MB/s] 41%|████      | 1.13G/2.75G [00:18<00:34, 47.0MB/s] 41%|████▏     | 1.14G/2.75G [00:18<00:33, 47.8MB/s] 42%|████▏     | 1.14G/2.75G [00:18<00:34, 47.2MB/s] 42%|████▏     | 1.15G/2.75G [00:18<00:33, 47.9MB/s] 42%|████▏     | 1.15G/2.75G [00:18<00:33, 47.4MB/s] 42%|████▏     | 1.16G/2.75G [00:18<00:33, 48.0MB/s] 42%|████▏     | 1.16G/2.75G [00:18<00:33, 47.5MB/s] 42%|████▏     | 1.17G/2.75G [00:18<00:33, 47.9MB/s] 43%|████▎     | 1.17G/2.75G [00:18<00:33, 47.4MB/s] 43%|████▎     | 1.18G/2.75G [00:19<00:32, 48.0MB/s] 43%|████▎     | 1.18G/2.75G [00:19<00:33, 47.6MB/s] 43%|████▎     | 1.19G/2.75G [00:19<00:32, 48.0MB/s] 43%|████▎     | 1.19G/2.75G [00:19<00:32, 47.6MB/s] 44%|████▎     | 1.20G/2.75G [00:19<00:32, 48.0MB/s] 44%|████▎     | 1.20G/2.75G [00:19<00:32, 47.5MB/s] 44%|████▍     | 1.21G/2.75G [00:19<00:32, 48.0MB/s] 44%|████▍     | 1.21G/2.75G [00:19<00:32, 47.5MB/s] 44%|████▍     | 1.22G/2.75G [00:19<00:31, 48.0MB/s] 44%|████▍     | 1.22G/2.75G [00:19<00:32, 47.5MB/s] 45%|████▍     | 1.23G/2.75G [00:20<00:31, 48.0MB/s] 45%|████▍     | 1.23G/2.75G [00:20<00:31, 47.6MB/s] 45%|████▌     | 1.24G/2.75G [00:20<00:31, 48.0MB/s] 45%|████▌     | 1.25G/2.75G [00:20<00:31, 47.7MB/s] 45%|████▌     | 1.25G/2.75G [00:20<00:31, 48.0MB/s] 46%|████▌     | 1.26G/2.75G [00:20<00:31, 47.6MB/s] 46%|████▌     | 1.26G/2.75G [00:20<00:31, 47.9MB/s] 46%|████▌     | 1.27G/2.75G [00:20<00:31, 47.6MB/s] 46%|████▌     | 1.27G/2.75G [00:20<00:30, 48.0MB/s] 46%|████▋     | 1.28G/2.75G [00:21<00:31, 47.6MB/s] 47%|████▋     | 1.28G/2.75G [00:21<00:30, 48.0MB/s] 47%|████▋     | 1.29G/2.75G [00:21<00:30, 47.7MB/s] 47%|████▋     | 1.29G/2.75G [00:21<00:30, 48.0MB/s] 47%|████▋     | 1.30G/2.75G [00:21<00:30, 47.6MB/s] 47%|████▋     | 1.30G/2.75G [00:21<00:32, 44.4MB/s] 47%|████▋     | 1.31G/2.75G [00:21<00:35, 41.2MB/s] 48%|████▊     | 1.31G/2.75G [00:21<00:36, 39.9MB/s] 48%|████▊     | 1.31G/2.75G [00:21<00:36, 39.4MB/s] 48%|████▊     | 1.32G/2.75G [00:22<00:38, 37.0MB/s] 48%|████▊     | 1.32G/2.75G [00:22<00:39, 35.8MB/s] 48%|████▊     | 1.33G/2.75G [00:22<00:37, 38.4MB/s] 48%|████▊     | 1.33G/2.75G [00:22<00:38, 36.7MB/s] 48%|████▊     | 1.33G/2.75G [00:22<00:38, 36.6MB/s] 49%|████▊     | 1.34G/2.75G [00:22<00:38, 36.6MB/s] 49%|████▉     | 1.34G/2.75G [00:22<00:38, 37.1MB/s] 49%|████▉     | 1.35G/2.75G [00:22<00:37, 37.1MB/s] 49%|████▉     | 1.35G/2.75G [00:22<00:37, 37.6MB/s] 49%|████▉     | 1.35G/2.75G [00:23<00:37, 37.7MB/s] 49%|████▉     | 1.36G/2.75G [00:23<00:36, 38.3MB/s] 49%|████▉     | 1.36G/2.75G [00:23<00:36, 38.2MB/s] 50%|████▉     | 1.37G/2.75G [00:23<00:35, 39.0MB/s] 50%|████▉     | 1.37G/2.75G [00:23<00:35, 39.0MB/s] 50%|████▉     | 1.38G/2.75G [00:23<00:34, 39.7MB/s] 50%|█████     | 1.38G/2.75G [00:23<00:34, 39.6MB/s] 50%|█████     | 1.38G/2.75G [00:23<00:34, 40.1MB/s] 50%|█████     | 1.39G/2.75G [00:23<00:34, 40.1MB/s] 51%|█████     | 1.39G/2.75G [00:24<00:33, 40.8MB/s] 51%|█████     | 1.40G/2.75G [00:24<00:33, 40.7MB/s] 51%|█████     | 1.40G/2.75G [00:24<00:32, 41.3MB/s] 51%|█████     | 1.41G/2.75G [00:24<00:32, 41.2MB/s] 51%|█████▏    | 1.41G/2.75G [00:24<00:32, 41.8MB/s] 51%|█████▏    | 1.42G/2.75G [00:24<00:32, 41.7MB/s] 52%|█████▏    | 1.42G/2.75G [00:24<00:31, 42.3MB/s] 52%|█████▏    | 1.42G/2.75G [00:24<00:31, 42.2MB/s] 52%|█████▏    | 1.43G/2.75G [00:24<00:30, 42.9MB/s] 52%|█████▏    | 1.43G/2.75G [00:24<00:30, 42.8MB/s] 52%|█████▏    | 1.44G/2.75G [00:25<00:30, 43.4MB/s] 52%|█████▏    | 1.44G/2.75G [00:25<00:30, 43.2MB/s] 53%|█████▎    | 1.45G/2.75G [00:25<00:30, 43.5MB/s] 53%|█████▎    | 1.45G/2.75G [00:25<00:30, 43.3MB/s] 53%|█████▎    | 1.46G/2.75G [00:25<00:29, 44.0MB/s] 53%|█████▎    | 1.46G/2.75G [00:25<00:29, 43.8MB/s] 53%|█████▎    | 1.47G/2.75G [00:25<00:28, 44.5MB/s] 53%|█████▎    | 1.47G/2.75G [00:25<00:28, 44.3MB/s] 54%|█████▎    | 1.48G/2.75G [00:25<00:28, 44.7MB/s] 54%|█████▍    | 1.48G/2.75G [00:26<00:28, 44.6MB/s] 54%|█████▍    | 1.49G/2.75G [00:26<00:28, 44.8MB/s] 54%|█████▍    | 1.49G/2.75G [00:26<00:28, 44.7MB/s] 54%|█████▍    | 1.50G/2.75G [00:26<00:27, 45.0MB/s] 55%|█████▍    | 1.50G/2.75G [00:26<00:27, 44.9MB/s] 55%|█████▍    | 1.51G/2.75G [00:26<00:28, 44.2MB/s] 55%|█████▍    | 1.51G/2.75G [00:26<00:27, 44.9MB/s] 55%|█████▌    | 1.52G/2.75G [00:26<00:25, 47.9MB/s] 55%|█████▌    | 1.52G/2.75G [00:26<00:26, 45.8MB/s] 55%|█████▌    | 1.53G/2.75G [00:27<00:26, 46.1MB/s] 56%|█████▌    | 1.53G/2.75G [00:27<00:26, 46.1MB/s] 56%|█████▌    | 1.54G/2.75G [00:27<00:26, 45.1MB/s] 56%|█████▌    | 1.54G/2.75G [00:27<00:24, 48.7MB/s] 56%|█████▌    | 1.55G/2.75G [00:27<00:26, 46.0MB/s] 56%|█████▋    | 1.55G/2.75G [00:27<00:25, 46.6MB/s] 57%|█████▋    | 1.56G/2.75G [00:27<00:25, 46.4MB/s] 57%|█████▋    | 1.56G/2.75G [00:27<00:25, 46.5MB/s] 57%|█████▋    | 1.57G/2.75G [00:27<00:25, 46.1MB/s] 57%|█████▋    | 1.57G/2.75G [00:28<00:25, 46.7MB/s] 57%|█████▋    | 1.58G/2.75G [00:28<00:25, 46.4MB/s] 58%|█████▊    | 1.58G/2.75G [00:28<00:24, 47.0MB/s] 58%|█████▊    | 1.59G/2.75G [00:28<00:24, 46.8MB/s] 58%|█████▊    | 1.59G/2.75G [00:28<00:24, 47.2MB/s] 58%|█████▊    | 1.60G/2.75G [00:28<00:24, 46.7MB/s] 58%|█████▊    | 1.60G/2.75G [00:28<00:24, 47.5MB/s] 58%|█████▊    | 1.61G/2.75G [00:28<00:24, 47.1MB/s] 59%|█████▊    | 1.61G/2.75G [00:28<00:23, 47.8MB/s] 59%|█████▉    | 1.62G/2.75G [00:29<00:24, 47.3MB/s] 59%|█████▉    | 1.62G/2.75G [00:29<00:23, 48.0MB/s] 59%|█████▉    | 1.63G/2.75G [00:29<00:23, 47.3MB/s] 59%|█████▉    | 1.63G/2.75G [00:29<00:23, 48.1MB/s] 60%|█████▉    | 1.64G/2.75G [00:29<00:23, 47.5MB/s] 60%|█████▉    | 1.64G/2.75G [00:29<00:23, 48.2MB/s] 60%|█████▉    | 1.65G/2.75G [00:29<00:23, 47.6MB/s] 60%|██████    | 1.66G/2.75G [00:29<00:22, 48.0MB/s] 60%|██████    | 1.66G/2.75G [00:29<00:23, 47.5MB/s] 60%|██████    | 1.67G/2.75G [00:29<00:22, 48.1MB/s] 61%|██████    | 1.67G/2.75G [00:30<00:22, 47.7MB/s] 61%|██████    | 1.68G/2.75G [00:30<00:22, 48.0MB/s] 61%|██████    | 1.68G/2.75G [00:30<00:22, 47.6MB/s] 61%|██████    | 1.69G/2.75G [00:30<00:22, 48.1MB/s] 61%|██████▏   | 1.69G/2.75G [00:30<00:22, 47.7MB/s] 62%|██████▏   | 1.70G/2.75G [00:30<00:22, 48.0MB/s] 62%|██████▏   | 1.70G/2.75G [00:30<00:22, 47.7MB/s] 62%|██████▏   | 1.71G/2.75G [00:30<00:21, 48.0MB/s] 62%|██████▏   | 1.71G/2.75G [00:30<00:21, 47.7MB/s] 62%|██████▏   | 1.72G/2.75G [00:31<00:21, 47.9MB/s] 63%|██████▎   | 1.72G/2.75G [00:31<00:21, 47.7MB/s] 63%|██████▎   | 1.73G/2.75G [00:31<00:21, 47.8MB/s] 63%|██████▎   | 1.73G/2.75G [00:31<00:21, 47.8MB/s] 63%|██████▎   | 1.74G/2.75G [00:31<00:21, 47.7MB/s] 63%|██████▎   | 1.74G/2.75G [00:31<00:21, 47.7MB/s] 63%|██████▎   | 1.75G/2.75G [00:31<00:21, 47.9MB/s] 64%|██████▎   | 1.75G/2.75G [00:31<00:20, 47.9MB/s] 64%|██████▍   | 1.76G/2.75G [00:31<00:20, 47.8MB/s] 64%|██████▍   | 1.76G/2.75G [00:32<00:20, 48.3MB/s] 64%|██████▍   | 1.77G/2.75G [00:32<00:20, 47.7MB/s] 64%|██████▍   | 1.77G/2.75G [00:32<00:20, 47.8MB/s] 65%|██████▍   | 1.78G/2.75G [00:32<00:20, 47.6MB/s] 65%|██████▍   | 1.78G/2.75G [00:32<00:20, 48.4MB/s] 65%|██████▍   | 1.79G/2.75G [00:32<00:20, 47.4MB/s] 65%|██████▌   | 1.79G/2.75G [00:32<00:19, 48.5MB/s] 65%|██████▌   | 1.80G/2.75G [00:32<00:20, 47.5MB/s] 66%|██████▌   | 1.80G/2.75G [00:32<00:19, 48.5MB/s] 66%|██████▌   | 1.81G/2.75G [00:32<00:19, 47.3MB/s] 66%|██████▌   | 1.81G/2.75G [00:33<00:19, 48.3MB/s] 66%|██████▌   | 1.82G/2.75G [00:33<00:19, 47.3MB/s] 66%|██████▌   | 1.82G/2.75G [00:33<00:19, 48.1MB/s] 66%|██████▋   | 1.83G/2.75G [00:33<00:19, 47.4MB/s] 67%|██████▋   | 1.83G/2.75G [00:33<00:18, 48.5MB/s] 67%|██████▋   | 1.84G/2.75G [00:33<00:19, 47.4MB/s] 67%|██████▋   | 1.84G/2.75G [00:33<00:18, 49.2MB/s] 67%|██████▋   | 1.85G/2.75G [00:33<00:19, 46.6MB/s] 67%|██████▋   | 1.86G/2.75G [00:33<00:17, 50.1MB/s] 68%|██████▊   | 1.86G/2.75G [00:34<00:18, 47.7MB/s] 68%|██████▊   | 1.87G/2.75G [00:34<00:18, 47.1MB/s] 68%|██████▊   | 1.87G/2.75G [00:34<00:18, 48.6MB/s] 68%|██████▊   | 1.88G/2.75G [00:34<00:18, 46.7MB/s] 68%|██████▊   | 1.88G/2.75G [00:34<00:17, 50.0MB/s] 69%|██████▊   | 1.89G/2.75G [00:34<00:18, 47.5MB/s] 69%|██████▊   | 1.89G/2.75G [00:34<00:18, 47.2MB/s] 69%|██████▉   | 1.90G/2.75G [00:34<00:17, 49.9MB/s] 69%|██████▉   | 1.90G/2.75G [00:34<00:17, 47.4MB/s] 69%|██████▉   | 1.91G/2.75G [00:35<00:17, 47.2MB/s] 70%|██████▉   | 1.92G/2.75G [00:35<00:16, 50.0MB/s] 70%|██████▉   | 1.92G/2.75G [00:35<00:17, 47.8MB/s] 70%|██████▉   | 1.93G/2.75G [00:35<00:17, 47.4MB/s] 70%|███████   | 1.93G/2.75G [00:35<00:16, 50.4MB/s] 70%|███████   | 1.94G/2.75G [00:35<00:17, 48.0MB/s] 71%|███████   | 1.94G/2.75G [00:35<00:17, 47.4MB/s] 71%|███████   | 1.95G/2.75G [00:35<00:16, 49.8MB/s] 71%|███████   | 1.95G/2.75G [00:35<00:16, 47.8MB/s] 71%|███████   | 1.96G/2.75G [00:36<00:15, 50.8MB/s] 71%|███████▏  | 1.96G/2.75G [00:36<00:16, 48.3MB/s] 72%|███████▏  | 1.97G/2.75G [00:36<00:16, 47.7MB/s] 72%|███████▏  | 1.98G/2.75G [00:36<00:15, 50.6MB/s] 72%|███████▏  | 1.98G/2.75G [00:36<00:15, 48.3MB/s] 72%|███████▏  | 1.99G/2.75G [00:36<00:15, 48.0MB/s] 72%|███████▏  | 1.99G/2.75G [00:36<00:14, 51.4MB/s] 73%|███████▎  | 2.00G/2.75G [00:36<00:15, 48.9MB/s] 73%|███████▎  | 2.00G/2.75G [00:37<00:15, 48.2MB/s] 73%|███████▎  | 2.01G/2.75G [00:37<00:14, 51.7MB/s] 73%|███████▎  | 2.02G/2.75G [00:37<00:15, 49.1MB/s] 73%|███████▎  | 2.02G/2.75G [00:37<00:15, 48.4MB/s] 74%|███████▎  | 2.03G/2.75G [00:37<00:14, 51.6MB/s] 74%|███████▍  | 2.03G/2.75G [00:37<00:14, 49.0MB/s] 74%|███████▍  | 2.04G/2.75G [00:37<00:14, 48.9MB/s] 74%|███████▍  | 2.05G/2.75G [00:37<00:13, 52.7MB/s] 74%|███████▍  | 2.05G/2.75G [00:37<00:14, 50.2MB/s] 75%|███████▍  | 2.06G/2.75G [00:38<00:14, 49.2MB/s] 75%|███████▍  | 2.06G/2.75G [00:38<00:13, 53.0MB/s] 75%|███████▌  | 2.07G/2.75G [00:38<00:13, 50.1MB/s] 75%|███████▌  | 2.07G/2.75G [00:38<00:13, 49.6MB/s] 76%|███████▌  | 2.08G/2.75G [00:38<00:13, 51.2MB/s] 76%|███████▌  | 2.08G/2.75G [00:38<00:13, 50.3MB/s] 76%|███████▌  | 2.09G/2.75G [00:38<00:12, 52.1MB/s] 76%|███████▌  | 2.10G/2.75G [00:38<00:13, 50.5MB/s] 76%|███████▋  | 2.10G/2.75G [00:38<00:12, 51.2MB/s] 77%|███████▋  | 2.11G/2.75G [00:39<00:11, 54.7MB/s] 77%|███████▋  | 2.11G/2.75G [00:39<00:12, 51.8MB/s] 77%|███████▋  | 2.12G/2.75G [00:39<00:12, 51.0MB/s] 77%|███████▋  | 2.13G/2.75G [00:39<00:12, 51.7MB/s] 78%|███████▊  | 2.13G/2.75G [00:39<00:11, 55.8MB/s] 78%|███████▊  | 2.14G/2.75G [00:39<00:11, 52.9MB/s] 78%|███████▊  | 2.15G/2.75G [00:39<00:11, 52.1MB/s] 78%|███████▊  | 2.15G/2.75G [00:39<00:10, 55.8MB/s] 78%|███████▊  | 2.16G/2.75G [00:40<00:11, 53.3MB/s] 79%|███████▊  | 2.17G/2.75G [00:40<00:10, 55.9MB/s] 79%|███████▉  | 2.17G/2.75G [00:40<00:12, 48.4MB/s] 79%|███████▉  | 2.18G/2.75G [00:40<00:10, 52.9MB/s] 79%|███████▉  | 2.18G/2.75G [00:40<00:12, 46.2MB/s] 79%|███████▉  | 2.19G/2.75G [00:40<00:12, 44.3MB/s] 80%|███████▉  | 2.19G/2.75G [00:40<00:12, 44.3MB/s] 80%|███████▉  | 2.20G/2.75G [00:40<00:13, 42.0MB/s] 80%|███████▉  | 2.20G/2.75G [00:40<00:13, 42.2MB/s] 80%|████████  | 2.21G/2.75G [00:41<00:13, 42.1MB/s] 80%|████████  | 2.21G/2.75G [00:41<00:12, 42.8MB/s] 80%|████████  | 2.22G/2.75G [00:41<00:12, 41.9MB/s] 81%|████████  | 2.22G/2.75G [00:41<00:12, 42.6MB/s] 81%|████████  | 2.22G/2.75G [00:41<00:12, 41.9MB/s] 81%|████████  | 2.23G/2.75G [00:41<00:11, 43.9MB/s] 81%|████████  | 2.23G/2.75G [00:41<00:12, 42.6MB/s] 81%|████████▏ | 2.24G/2.75G [00:41<00:11, 44.3MB/s] 81%|████████▏ | 2.24G/2.75G [00:41<00:11, 43.4MB/s] 82%|████████▏ | 2.25G/2.75G [00:42<00:11, 45.6MB/s] 82%|████████▏ | 2.25G/2.75G [00:42<00:11, 43.5MB/s] 82%|████████▏ | 2.26G/2.75G [00:42<00:11, 44.3MB/s] 82%|████████▏ | 2.26G/2.75G [00:42<00:10, 45.8MB/s] 82%|████████▏ | 2.27G/2.75G [00:42<00:10, 46.2MB/s] 83%|████████▎ | 2.27G/2.75G [00:42<00:10, 45.5MB/s] 83%|████████▎ | 2.28G/2.75G [00:42<00:10, 45.9MB/s] 83%|████████▎ | 2.28G/2.75G [00:42<00:10, 46.9MB/s] 83%|████████▎ | 2.29G/2.75G [00:42<00:09, 47.9MB/s] 83%|████████▎ | 2.29G/2.75G [00:43<00:09, 47.0MB/s] 83%|████████▎ | 2.30G/2.75G [00:43<00:09, 48.1MB/s] 84%|████████▎ | 2.30G/2.75G [00:43<00:09, 47.3MB/s] 84%|████████▍ | 2.31G/2.75G [00:43<00:08, 49.5MB/s] 84%|████████▍ | 2.31G/2.75G [00:43<00:09, 47.6MB/s] 84%|████████▍ | 2.32G/2.75G [00:43<00:08, 49.1MB/s] 84%|████████▍ | 2.32G/2.75G [00:43<00:08, 48.2MB/s] 85%|████████▍ | 2.33G/2.75G [00:43<00:08, 49.5MB/s] 85%|████████▍ | 2.34G/2.75G [00:43<00:08, 48.0MB/s] 85%|████████▌ | 2.34G/2.75G [00:43<00:08, 50.3MB/s] 85%|████████▌ | 2.35G/2.75G [00:44<00:08, 48.8MB/s] 85%|████████▌ | 2.35G/2.75G [00:44<00:07, 51.0MB/s] 86%|████████▌ | 2.36G/2.75G [00:44<00:07, 49.6MB/s] 86%|████████▌ | 2.36G/2.75G [00:44<00:07, 51.3MB/s] 86%|████████▌ | 2.37G/2.75G [00:44<00:07, 49.8MB/s] 86%|████████▌ | 2.37G/2.75G [00:44<00:07, 51.4MB/s] 86%|████████▋ | 2.38G/2.75G [00:44<00:07, 49.9MB/s] 87%|████████▋ | 2.38G/2.75G [00:44<00:07, 52.0MB/s] 87%|████████▋ | 2.39G/2.75G [00:44<00:07, 50.5MB/s] 87%|████████▋ | 2.40G/2.75G [00:45<00:06, 52.8MB/s] 87%|████████▋ | 2.40G/2.75G [00:45<00:06, 51.0MB/s] 87%|████████▋ | 2.41G/2.75G [00:45<00:06, 53.1MB/s] 88%|████████▊ | 2.41G/2.75G [00:45<00:06, 51.3MB/s] 88%|████████▊ | 2.42G/2.75G [00:45<00:06, 53.3MB/s] 88%|████████▊ | 2.42G/2.75G [00:45<00:06, 51.5MB/s] 88%|████████▊ | 2.43G/2.75G [00:45<00:06, 52.9MB/s] 88%|████████▊ | 2.43G/2.75G [00:45<00:06, 51.3MB/s] 89%|████████▊ | 2.44G/2.75G [00:45<00:06, 51.9MB/s] 89%|████████▉ | 2.45G/2.75G [00:46<00:05, 52.8MB/s] 89%|████████▉ | 2.45G/2.75G [00:46<00:05, 52.9MB/s] 89%|████████▉ | 2.46G/2.75G [00:46<00:05, 54.7MB/s] 89%|████████▉ | 2.46G/2.75G [00:46<00:05, 53.0MB/s] 90%|████████▉ | 2.47G/2.75G [00:46<00:05, 53.9MB/s] 90%|████████▉ | 2.47G/2.75G [00:46<00:05, 53.0MB/s] 90%|█████████ | 2.48G/2.75G [00:46<00:05, 53.4MB/s] 90%|█████████ | 2.48G/2.75G [00:46<00:04, 54.5MB/s] 90%|█████████ | 2.49G/2.75G [00:46<00:04, 53.1MB/s] 91%|█████████ | 2.50G/2.75G [00:46<00:04, 55.1MB/s] 91%|█████████ | 2.50G/2.75G [00:47<00:04, 53.0MB/s] 91%|█████████ | 2.51G/2.75G [00:47<00:04, 54.9MB/s] 91%|█████████▏| 2.51G/2.75G [00:47<00:04, 53.0MB/s] 92%|█████████▏| 2.52G/2.75G [00:47<00:04, 54.9MB/s] 92%|█████████▏| 2.52G/2.75G [00:47<00:04, 52.9MB/s] 92%|█████████▏| 2.53G/2.75G [00:47<00:04, 53.8MB/s] 92%|█████████▏| 2.54G/2.75G [00:47<00:04, 53.0MB/s] 92%|█████████▏| 2.54G/2.75G [00:47<00:03, 53.5MB/s] 93%|█████████▎| 2.55G/2.75G [00:47<00:03, 54.6MB/s] 93%|█████████▎| 2.55G/2.75G [00:47<00:03, 54.2MB/s] 93%|█████████▎| 2.56G/2.75G [00:48<00:03, 53.7MB/s] 93%|█████████▎| 2.56G/2.75G [00:48<00:03, 54.5MB/s] 93%|█████████▎| 2.57G/2.75G [00:48<00:03, 54.9MB/s] 94%|█████████▎| 2.58G/2.75G [00:48<00:03, 54.3MB/s] 94%|█████████▎| 2.58G/2.75G [00:48<00:03, 54.4MB/s] 94%|█████████▍| 2.59G/2.75G [00:48<00:03, 54.3MB/s] 94%|█████████▍| 2.59G/2.75G [00:48<00:02, 55.2MB/s] 94%|█████████▍| 2.60G/2.75G [00:48<00:02, 55.5MB/s] 95%|█████████▍| 2.60G/2.75G [00:48<00:02, 53.4MB/s] 95%|█████████▍| 2.61G/2.75G [00:49<00:02, 55.6MB/s] 95%|█████████▍| 2.61G/2.75G [00:49<00:02, 53.6MB/s] 95%|█████████▌| 2.62G/2.75G [00:49<00:02, 55.6MB/s] 95%|█████████▌| 2.63G/2.75G [00:49<00:02, 54.4MB/s] 96%|█████████▌| 2.63G/2.75G [00:49<00:02, 55.6MB/s] 96%|█████████▌| 2.64G/2.75G [00:49<00:02, 55.9MB/s] 96%|█████████▌| 2.64G/2.75G [00:49<00:02, 54.7MB/s] 96%|█████████▌| 2.65G/2.75G [00:49<00:01, 56.0MB/s] 96%|█████████▋| 2.66G/2.75G [00:49<00:01, 54.0MB/s] 97%|█████████▋| 2.66G/2.75G [00:49<00:01, 56.3MB/s] 97%|█████████▋| 2.67G/2.75G [00:50<00:01, 53.6MB/s] 97%|█████████▋| 2.67G/2.75G [00:50<00:01, 55.8MB/s] 97%|█████████▋| 2.68G/2.75G [00:50<00:01, 54.2MB/s] 98%|█████████▊| 2.69G/2.75G [00:50<00:01, 55.8MB/s] 98%|█████████▊| 2.69G/2.75G [00:50<00:01, 54.2MB/s] 98%|█████████▊| 2.70G/2.75G [00:50<00:01, 56.0MB/s] 98%|█████████▊| 2.70G/2.75G [00:50<00:00, 54.4MB/s] 98%|█████████▊| 2.71G/2.75G [00:50<00:00, 56.0MB/s] 99%|█████████▊| 2.71G/2.75G [00:50<00:00, 54.4MB/s] 99%|█████████▉| 2.72G/2.75G [00:51<00:00, 56.1MB/s] 99%|█████████▉| 2.73G/2.75G [00:51<00:00, 54.4MB/s] 99%|█████████▉| 2.73G/2.75G [00:51<00:00, 56.1MB/s] 99%|█████████▉| 2.74G/2.75G [00:51<00:00, 54.4MB/s]100%|█████████▉| 2.74G/2.75G [00:51<00:00, 55.6MB/s]100%|█████████▉| 2.75G/2.75G [00:51<00:00, 55.0MB/s]100%|██████████| 2.75G/2.75G [00:51<00:00, 53.3MB/s]
-    → torch.Size([6667, 768])
-  ▶ Trích xuất TEST embeddings ...
-    → torch.Size([3333, 768])
-  shots=  1  → 3.62%  (seeds=[0, 1, 2])
-  shots= 10  → 8.11%  (seeds=[0, 1, 2])
-  shots=all  → 16.05%
-
-============================================================
-  Cars  (tanganke/stanford_cars)
-============================================================
-  ▶ Trích xuất TRAIN embeddings ...
-15:01:56 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
-15:01:56 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/tanganke/stanford_cars/resolve/main/README.md "HTTP/1.1 401 Unauthorized"
-  ❌ SKIP Cars: Dataset 'tanganke/stanford_cars' doesn't exist on the Hub or cannot be accessed.
-
-============================================================
-  CIFAR-10  (cifar10)
-============================================================
-  ▶ Trích xuất TRAIN embeddings ...
-  0%|          | 0.00/170M [00:00<?, ?B/s]  0%|          | 32.8k/170M [00:00<20:58, 135kB/s]  0%|          | 98.3k/170M [00:00<09:26, 301kB/s]  0%|          | 229k/170M [00:00<04:52, 582kB/s]   0%|          | 360k/170M [00:00<03:47, 748kB/s]  0%|          | 754k/170M [00:00<01:49, 1.55MB/s]  1%|          | 1.47M/170M [00:00<00:57, 2.94MB/s]  2%|▏         | 2.98M/170M [00:00<00:28, 5.84MB/s]  3%|▎         | 5.96M/170M [00:01<00:14, 11.5MB/s]  6%|▌         | 9.50M/170M [00:01<00:09, 16.3MB/s]  7%|▋         | 12.7M/170M [00:01<00:08, 18.9MB/s]  9%|▉         | 16.0M/170M [00:01<00:07, 20.9MB/s] 11%|█         | 19.2M/170M [00:01<00:06, 22.1MB/s] 13%|█▎        | 22.4M/170M [00:01<00:06, 23.0MB/s] 15%|█▌        | 25.6M/170M [00:01<00:06, 23.7MB/s] 17%|█▋        | 28.7M/170M [00:02<00:05, 23.8MB/s] 19%|█▊        | 31.8M/170M [00:02<00:05, 24.0MB/s] 21%|██        | 35.0M/170M [00:02<00:05, 24.3MB/s] 22%|██▏       | 38.1M/170M [00:02<00:05, 24.4MB/s] 24%|██▍       | 41.4M/170M [00:02<00:05, 24.6MB/s] 26%|██▌       | 44.5M/170M [00:02<00:05, 24.6MB/s] 28%|██▊       | 47.7M/170M [00:02<00:04, 24.7MB/s] 30%|██▉       | 50.9M/170M [00:02<00:04, 24.8MB/s] 32%|███▏      | 54.1M/170M [00:03<00:04, 24.9MB/s] 34%|███▎      | 57.3M/170M [00:03<00:04, 24.8MB/s] 35%|███▌      | 60.4M/170M [00:03<00:04, 24.7MB/s] 37%|███▋      | 63.5M/170M [00:03<00:04, 24.6MB/s] 39%|███▉      | 66.7M/170M [00:03<00:04, 24.7MB/s] 41%|████      | 69.9M/170M [00:03<00:04, 24.7MB/s] 43%|████▎     | 73.0M/170M [00:03<00:03, 24.7MB/s] 45%|████▍     | 76.1M/170M [00:03<00:03, 24.5MB/s] 47%|████▋     | 79.3M/170M [00:04<00:03, 24.6MB/s] 48%|████▊     | 82.5M/170M [00:04<00:03, 24.7MB/s] 50%|█████     | 85.7M/170M [00:04<00:03, 24.7MB/s] 52%|█████▏    | 88.9M/170M [00:04<00:03, 24.8MB/s] 54%|█████▍    | 92.1M/170M [00:04<00:03, 24.9MB/s] 56%|█████▌    | 95.2M/170M [00:04<00:03, 24.7MB/s] 58%|█████▊    | 98.3M/170M [00:04<00:02, 24.6MB/s] 59%|█████▉    | 101M/170M [00:04<00:02, 24.5MB/s]  61%|██████▏   | 104M/170M [00:05<00:02, 24.4MB/s] 63%|██████▎   | 108M/170M [00:05<00:02, 24.3MB/s] 65%|██████▍   | 111M/170M [00:05<00:02, 24.2MB/s] 67%|██████▋   | 114M/170M [00:05<00:02, 24.6MB/s] 69%|██████▊   | 117M/170M [00:05<00:02, 24.4MB/s] 70%|███████   | 120M/170M [00:05<00:02, 24.2MB/s] 72%|███████▏  | 123M/170M [00:05<00:01, 24.2MB/s] 74%|███████▍  | 126M/170M [00:05<00:01, 24.4MB/s] 76%|███████▌  | 129M/170M [00:06<00:01, 24.4MB/s] 78%|███████▊  | 133M/170M [00:06<00:01, 24.4MB/s] 80%|███████▉  | 136M/170M [00:06<00:01, 24.5MB/s] 81%|████████▏ | 139M/170M [00:06<00:01, 24.4MB/s] 83%|████████▎ | 142M/170M [00:06<00:01, 24.3MB/s] 85%|████████▌ | 145M/170M [00:06<00:01, 24.5MB/s] 87%|████████▋ | 148M/170M [00:06<00:00, 24.6MB/s] 89%|████████▉ | 152M/170M [00:07<00:00, 24.7MB/s] 91%|█████████ | 155M/170M [00:07<00:00, 24.7MB/s] 93%|█████████▎| 158M/170M [00:07<00:00, 24.7MB/s] 94%|█████████▍| 161M/170M [00:07<00:00, 24.7MB/s] 96%|█████████▋| 164M/170M [00:07<00:00, 24.8MB/s] 98%|█████████▊| 167M/170M [00:07<00:00, 24.8MB/s]100%|██████████| 170M/170M [00:07<00:00, 22.2MB/s]
-/workspace/jepa/lib/python3.11/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
-  entry = pickle.load(f, encoding="latin1")
-    → torch.Size([50000, 768])
-  ▶ Trích xuất TEST embeddings ...
-    → torch.Size([10000, 768])
-  shots=  1  → 23.04%  (seeds=[0, 1, 2])
-  shots= 10  → 40.48%  (seeds=[0, 1, 2])
-  shots=all  → 71.76%
-
-============================================================
-  CIFAR-100  (cifar100)
-============================================================
-  ▶ Trích xuất TRAIN embeddings ...
-  0%|          | 0.00/169M [00:00<?, ?B/s]  0%|          | 32.8k/169M [00:00<21:41, 130kB/s]  0%|          | 98.3k/169M [00:00<09:42, 290kB/s]  0%|          | 229k/169M [00:00<04:59, 564kB/s]   0%|          | 426k/169M [00:00<03:06, 905kB/s]  1%|          | 885k/169M [00:00<01:33, 1.79MB/s]  1%|          | 1.77M/169M [00:00<00:48, 3.44MB/s]  2%|▏         | 3.57M/169M [00:01<00:24, 6.79MB/s]  4%|▎         | 6.32M/169M [00:01<00:14, 11.3MB/s]  6%|▌         | 9.40M/169M [00:01<00:10, 15.1MB/s]  7%|▋         | 12.6M/169M [00:01<00:08, 17.9MB/s]  9%|▉         | 15.7M/169M [00:01<00:07, 19.6MB/s] 11%|█         | 18.8M/169M [00:01<00:07, 20.8MB/s] 13%|█▎        | 21.9M/169M [00:01<00:06, 21.7MB/s] 15%|█▍        | 25.1M/169M [00:01<00:06, 22.2MB/s] 17%|█▋        | 28.2M/169M [00:02<00:06, 22.7MB/s] 18%|█▊        | 31.2M/169M [00:02<00:06, 22.8MB/s] 20%|██        | 34.4M/169M [00:02<00:05, 23.0MB/s] 22%|██▏       | 37.5M/169M [00:02<00:05, 23.1MB/s] 24%|██▍       | 40.6M/169M [00:02<00:05, 23.2MB/s] 26%|██▌       | 43.6M/169M [00:02<00:05, 23.3MB/s] 28%|██▊       | 46.7M/169M [00:02<00:05, 23.2MB/s] 29%|██▉       | 49.7M/169M [00:02<00:05, 23.1MB/s] 31%|███       | 52.8M/169M [00:03<00:04, 23.3MB/s] 33%|███▎      | 55.9M/169M [00:03<00:04, 23.4MB/s] 35%|███▍      | 59.1M/169M [00:03<00:04, 23.5MB/s] 37%|███▋      | 62.3M/169M [00:03<00:04, 23.5MB/s] 39%|███▊      | 65.4M/169M [00:03<00:04, 23.6MB/s] 41%|████      | 68.5M/169M [00:03<00:04, 23.5MB/s] 42%|████▏     | 71.4M/169M [00:03<00:04, 23.2MB/s] 44%|████▍     | 74.6M/169M [00:04<00:04, 23.5MB/s] 46%|████▌     | 77.7M/169M [00:04<00:03, 23.4MB/s] 48%|████▊     | 80.6M/169M [00:04<00:03, 23.2MB/s] 50%|████▉     | 83.8M/169M [00:04<00:03, 23.3MB/s] 51%|█████▏    | 86.9M/169M [00:04<00:03, 23.3MB/s] 53%|█████▎    | 89.9M/169M [00:04<00:03, 23.3MB/s] 55%|█████▌    | 93.1M/169M [00:04<00:03, 23.4MB/s] 57%|█████▋    | 96.2M/169M [00:04<00:03, 23.3MB/s] 59%|█████▊    | 99.3M/169M [00:05<00:03, 23.1MB/s] 60%|██████    | 102M/169M [00:05<00:02, 22.8MB/s]  62%|██████▏   | 105M/169M [00:05<00:02, 22.7MB/s] 64%|██████▍   | 108M/169M [00:05<00:02, 22.5MB/s] 66%|██████▌   | 111M/169M [00:05<00:02, 22.3MB/s] 67%|██████▋   | 114M/169M [00:05<00:02, 22.3MB/s] 69%|██████▉   | 117M/169M [00:05<00:02, 22.2MB/s] 71%|███████   | 120M/169M [00:06<00:02, 22.2MB/s] 73%|███████▎  | 123M/169M [00:06<00:02, 22.2MB/s] 74%|███████▍  | 126M/169M [00:06<00:01, 22.2MB/s] 76%|███████▌  | 129M/169M [00:06<00:01, 22.2MB/s] 78%|███████▊  | 131M/169M [00:06<00:01, 22.2MB/s] 80%|███████▉  | 134M/169M [00:06<00:01, 22.2MB/s] 81%|████████▏ | 137M/169M [00:06<00:01, 22.2MB/s] 83%|████████▎ | 140M/169M [00:06<00:01, 22.2MB/s] 85%|████████▍ | 143M/169M [00:07<00:01, 22.2MB/s] 87%|████████▋ | 146M/169M [00:07<00:01, 22.2MB/s] 88%|████████▊ | 149M/169M [00:07<00:00, 22.4MB/s] 90%|█████████ | 152M/169M [00:07<00:00, 22.3MB/s] 92%|█████████▏| 155M/169M [00:07<00:00, 22.4MB/s] 94%|█████████▎| 158M/169M [00:07<00:00, 22.4MB/s] 95%|█████████▌| 161M/169M [00:07<00:00, 22.5MB/s] 97%|█████████▋| 164M/169M [00:08<00:00, 22.8MB/s] 99%|█████████▉| 167M/169M [00:08<00:00, 23.1MB/s]100%|██████████| 169M/169M [00:08<00:00, 20.6MB/s]
-    → torch.Size([50000, 768])
-  ▶ Trích xuất TEST embeddings ...
-    → torch.Size([10000, 768])
-  shots=  1  → 7.47%  (seeds=[0, 1, 2])
-  shots= 10  → 22.30%  (seeds=[0, 1, 2])
-  shots=all  → 49.90%
-
-============================================================
-  Flowers102  (nelorth/oxford-flowers)
-============================================================
-  ▶ Trích xuất TRAIN embeddings ...
-15:09:00 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
-15:09:00 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/nelorth/oxford-flowers/resolve/main/README.md "HTTP/1.1 401 Unauthorized"
-  ❌ SKIP Flowers102: Dataset 'nelorth/oxford-flowers' doesn't exist on the Hub or cannot be accessed.
-
-============================================================
-  Food-101  (ethz/food101)
-============================================================
-  ▶ Trích xuất TRAIN embeddings ...
-15:09:00 | WARN  | datasets.py | No storage_options provided — adding a default timeout to avoid hanging
-15:09:00 | INFO  | __init__.py | HTTP Request: HEAD https://huggingface.co/datasets/ethz/food101/resolve/main/README.md "HTTP/1.1 401 Unauthorized"
-  ❌ SKIP Food-101: Dataset 'ethz/food101' doesn't exist on the Hub or cannot be accessed.
-
-============================================================
-  Oxford Pets  (pcuenq/oxford-pets)
-============================================================
-  ▶ Trích xuất TRAIN embeddings ...
-  0%|          | 0.00/792M [00:00<?, ?B/s]  0%|          | 98.3k/792M [00:00<15:05, 874kB/s]  0%|          | 524k/792M [00:00<05:12, 2.53MB/s]  0%|          | 2.85M/792M [00:00<01:14, 10.6MB/s]  2%|▏         | 13.3M/792M [00:00<00:17, 44.3MB/s]  3%|▎         | 21.9M/792M [00:00<00:13, 57.0MB/s]  4%|▍         | 32.2M/792M [00:00<00:10, 71.9MB/s]  5%|▌         | 42.1M/792M [00:00<00:09, 76.5MB/s]  7%|▋         | 52.0M/792M [00:00<00:08, 83.0MB/s]  8%|▊         | 62.2M/792M [00:00<00:08, 88.8MB/s]  9%|▉         | 71.2M/792M [00:01<00:08, 86.7MB/s] 10%|█         | 81.8M/792M [00:01<00:07, 92.1MB/s] 11%|█▏        | 91.1M/792M [00:01<00:07, 88.9MB/s] 13%|█▎        | 102M/792M [00:01<00:07, 93.6MB/s]  14%|█▍        | 111M/792M [00:01<00:07, 90.0MB/s] 15%|█▌        | 121M/792M [00:01<00:07, 93.2MB/s] 17%|█▋        | 131M/792M [00:01<00:07, 90.8MB/s] 18%|█▊        | 142M/792M [00:01<00:06, 94.6MB/s] 19%|█▉        | 152M/792M [00:01<00:07, 91.0MB/s] 20%|██        | 162M/792M [00:02<00:06, 94.5MB/s] 22%|██▏       | 172M/792M [00:02<00:06, 91.4MB/s] 23%|██▎       | 182M/792M [00:02<00:06, 93.9MB/s] 24%|██▍       | 192M/792M [00:02<00:06, 91.1MB/s] 26%|██▌       | 203M/792M [00:02<00:06, 96.7MB/s] 27%|██▋       | 213M/792M [00:02<00:06, 91.3MB/s] 28%|██▊       | 223M/792M [00:02<00:05, 95.1MB/s] 29%|██▉       | 233M/792M [00:02<00:06, 91.0MB/s] 31%|███       | 243M/792M [00:02<00:05, 93.9MB/s] 32%|███▏      | 253M/792M [00:03<00:05, 90.6MB/s] 33%|███▎      | 263M/792M [00:03<00:05, 93.8MB/s] 34%|███▍      | 273M/792M [00:03<00:05, 91.1MB/s] 36%|███▌      | 283M/792M [00:03<00:05, 94.0MB/s] 37%|███▋      | 293M/792M [00:03<00:05, 91.1MB/s] 38%|███▊      | 303M/792M [00:03<00:05, 94.0MB/s] 40%|███▉      | 313M/792M [00:03<00:05, 90.9MB/s] 41%|████      | 323M/792M [00:03<00:05, 93.4MB/s] 42%|████▏     | 334M/792M [00:03<00:05, 91.0MB/s] 43%|████▎     | 344M/792M [00:04<00:04, 93.6MB/s] 45%|████▍     | 354M/792M [00:04<00:04, 91.5MB/s] 46%|████▌     | 364M/792M [00:04<00:04, 94.5MB/s] 47%|████▋     | 374M/792M [00:04<00:04, 91.6MB/s] 49%|████▊     | 384M/792M [00:04<00:04, 94.5MB/s] 50%|████▉     | 394M/792M [00:04<00:04, 91.6MB/s] 51%|█████     | 405M/792M [00:04<00:03, 97.1MB/s] 52%|█████▏    | 415M/792M [00:04<00:04, 91.9MB/s] 54%|█████▍    | 427M/792M [00:04<00:04, 91.2MB/s] 55%|█████▌    | 438M/792M [00:05<00:03, 96.0MB/s] 56%|█████▋    | 447M/792M [00:05<00:03, 91.2MB/s] 58%|█████▊    | 459M/792M [00:05<00:03, 91.2MB/s] 59%|█████▉    | 470M/792M [00:05<00:03, 96.9MB/s] 61%|██████    | 480M/792M [00:05<00:03, 91.4MB/s] 62%|██████▏   | 491M/792M [00:05<00:03, 95.6MB/s] 63%|██████▎   | 500M/792M [00:05<00:03, 91.5MB/s] 64%|██████▍   | 510M/792M [00:05<00:03, 87.9MB/s] 66%|██████▌   | 522M/792M [00:05<00:02, 95.9MB/s] 67%|██████▋   | 532M/792M [00:06<00:02, 90.4MB/s] 69%|██████▊   | 543M/792M [00:06<00:02, 89.5MB/s] 70%|██████▉   | 554M/792M [00:06<00:02, 95.5MB/s] 71%|███████   | 564M/792M [00:06<00:02, 90.8MB/s] 73%|███████▎  | 575M/792M [00:06<00:02, 96.9MB/s] 74%|███████▍  | 585M/792M [00:06<00:02, 90.6MB/s] 75%|███████▌  | 595M/792M [00:06<00:02, 88.8MB/s] 77%|███████▋  | 607M/792M [00:06<00:01, 95.9MB/s] 78%|███████▊  | 616M/792M [00:06<00:01, 90.6MB/s] 79%|███████▉  | 627M/792M [00:07<00:01, 89.7MB/s] 81%|████████  | 640M/792M [00:07<00:01, 91.0MB/s] 82%|████████▏ | 650M/792M [00:07<00:01, 94.8MB/s] 83%|████████▎ | 660M/792M [00:07<00:01, 89.4MB/s] 85%|████████▍ | 670M/792M [00:07<00:01, 94.1MB/s] 86%|████████▌ | 680M/792M [00:07<00:01, 88.9MB/s] 87%|████████▋ | 692M/792M [00:07<00:01, 96.9MB/s] 89%|████████▊ | 702M/792M [00:07<00:00, 90.9MB/s] 90%|████████▉ | 712M/792M [00:08<00:00, 88.9MB/s] 91%|█████████ | 722M/792M [00:08<00:00, 92.5MB/s] 92%|█████████▏| 732M/792M [00:08<00:00, 89.2MB/s] 94%|█████████▎| 742M/792M [00:08<00:00, 91.0MB/s] 95%|█████████▍| 752M/792M [00:08<00:00, 88.2MB/s] 96%|█████████▋| 764M/792M [00:08<00:00, 96.2MB/s] 98%|█████████▊| 773M/792M [00:08<00:00, 90.7MB/s] 99%|█████████▉| 784M/792M [00:08<00:00, 94.5MB/s]100%|██████████| 792M/792M [00:08<00:00, 89.3MB/s]
-  0%|          | 0.00/19.2M [00:00<?, ?B/s]  1%|          | 98.3k/19.2M [00:00<00:22, 832kB/s]  4%|▎         | 688k/19.2M [00:00<00:05, 3.14MB/s] 25%|██▌       | 4.88M/19.2M [00:00<00:00, 17.1MB/s] 75%|███████▍  | 14.4M/19.2M [00:00<00:00, 43.7MB/s]100%|██████████| 19.2M/19.2M [00:00<00:00, 36.6MB/s]
-    → torch.Size([3680, 768])
-  ▶ Trích xuất TEST embeddings ...
-    → torch.Size([3669, 768])
-  shots=  1  → 7.74%  (seeds=[0, 1, 2])
-  shots= 10  → 17.96%  (seeds=[0, 1, 2])
-  shots=all  → 30.17%
-
-=== LeJEPA ViT-B (1ep IN-1K) — Few-Shot Linear Probe ===
-
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- shots │         DTD │    Aircraft │        Cars │    CIFAR-10 │   CIFAR-100 │  Flowers102 │    Food-101 │ Oxford Pets │    avg.
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-     1 │         nan │        3.62 │         nan │       23.04 │        7.47 │         nan │         nan │        7.74 │   10.47
-    10 │         nan │        8.11 │         nan │       40.48 │       22.30 │         nan │         nan │       17.96 │   22.21
-   all │         nan │       16.05 │         nan │       71.76 │       49.90 │         nan │         nan │       30.17 │   41.97
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-

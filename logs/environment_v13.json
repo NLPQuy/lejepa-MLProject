@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-11T22:35:54.578359",
+  "timestamp": "2026-05-11T22:15:23.063893",
   "python": {
     "version": "3.11.10 (main, Sep  7 2024, 18:35:41) [GCC 11.4.0]",
     "version_info": {
@@ -167,13 +167,13 @@
     "commit_hash": "44ce443bb0c80ec8dab446b3d9628455868e3884",
     "branch": "ml",
     "has_uncommitted_changes": true,
-    "uncommitted_changes": "M .gitignore\n D logs/environment_v1.json\n D logs/environment_v10.json\n D logs/environment_v11.json\n D logs/environment_v2.json\n D logs/environment_v3.json\n D logs/environment_v4.json\n D logs/environment_v5.json\n D logs/environment_v6.json\n D logs/environment_v7.json\n D logs/environment_v8.json\n D logs/environment_v9.json\n D logs/lightning_logs/version_0/hparams.yaml\n D logs/lightning_logs/version_1/hparams.yaml\n D logs/lightning_logs/version_10/hparams.yaml\n D logs/lightning_logs/version_10/metrics.csv\n D logs/lightning_logs/version_11/hparams.yaml\n D logs/lightning_logs/version_11/metrics.csv\n D logs/lightning_logs/version_12/hparams.yaml\n D logs/lightning_logs/version_12/metrics.csv\n D logs/lightning_logs/version_2/hparams.yaml\n D logs/lightning_logs/version_3/hparams.yaml\n D logs/lightning_logs/version_3/metrics.csv\n D logs/lightning_logs/version_4/hparams.yaml\n D logs/lightning_logs/version_5/hparams.yaml\n D logs/lightning_logs/version_6/hparams.yaml\n D logs/lightning_logs/version_6/metrics.csv\n D logs/lightning_logs/version_7/hparams.yaml\n D logs/lightning_logs/version_7/metrics.csv\n D logs/lightning_logs/version_8/hparams.yaml\n D logs/lightning_logs/version_8/metrics.csv\n D logs/lightning_logs/version_9/hparams.yaml\n D logs/lightning_logs/version_9/metrics.csv\n D scripts/prepare_imagenet.py\n D scripts/requirements_extract.txt\n M stable-pretraining/stable_pretraining/__init__.py\n D train.log\n D train.pid\n M train_eval_vit_b.py\n?? __pycache__/\n?? logs/environment_v12.json\n?? logs/environment_v13.json\n?? logs/environment_v14.json\n?? logs/environment_v15.json\n?? logs/eval_old_ckpt.log\n?? logs/eval_old_ckpt_main.log\n?? logs/eval_old_ckpt_runpy.log\n?? logs/lightning_logs/version_13/\n?? logs/lightning_logs/version_14/\n?? logs/lightning_logs/version_15/\n?? logs/lightning_logs/version_16/\n?? logs/lightning_logs/version_17/\n?? logs/requirements_frozen_v12.txt\n?? logs/requirements_frozen_v13.txt\n?? logs/requirements_frozen_v14.txt\n?? logs/requirements_frozen_v15.txt\n?? logs/spt_import_ok.txt\n?? logs/spt_importtime.txt\n?? logs/train_vit_b.log\n?? requirements.txt\n?? test_imports.py",
+    "uncommitted_changes": "M .gitignore\n D scripts/prepare_imagenet.py\n D scripts/requirements_extract.txt\n M stable-pretraining/stable_pretraining/__init__.py\n D train.log\n M train.pid\n M train_eval_vit_b.py\n?? __pycache__/\n?? logs/environment_v12.json\n?? logs/eval_old_ckpt.log\n?? logs/eval_old_ckpt_main.log\n?? logs/eval_old_ckpt_runpy.log\n?? logs/lightning_logs/version_13/\n?? logs/lightning_logs/version_14/\n?? logs/requirements_frozen_v12.txt\n?? logs/spt_import_ok.txt\n?? logs/spt_importtime.txt\n?? logs/train_vit_b.log\n?? requirements.txt\n?? test_imports.py",
     "remote_url": "https://github.com/NLPQuy/lejepa-MLProject.git"
   },
   "slurm": null,
   "environment_variables": {
     "PATH": "/workspace/lejepa-MLProject/venv/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-    "MASTER_PORT": "38565",
+    "MASTER_PORT": "38129",
     "MASTER_ADDR": "127.0.0.1",
     "CUDA_MODULE_LOADING": "LAZY",
     "CUDA_DEVICE_ORDER": "PCI_BUS_ID"

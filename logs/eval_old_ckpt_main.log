@@ -1,0 +1,6 @@
+[env] Loaded /workspace/.env
+[shm] /dev/shm free: 23.7 GB  →  cache dir: /dev/shm/hf_cache
+[hf] Logged in to HuggingFace.
+[install] pip install -e /workspace/lejepa-MLProject/stable-pretraining
+  $ /workspace/lejepa-MLProject/venv/bin/python -m pip install -q -e '/workspace/lejepa-MLProject/stable-pretraining'
+WARNING: typer 0.25.1 does not provide the extra 'all'

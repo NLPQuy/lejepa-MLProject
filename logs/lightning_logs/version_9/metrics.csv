@@ -1,4 +1,0 @@
-epoch,fit/inv_epoch,fit/inv_step,fit/loss_epoch,fit/loss_step,fit/sigreg_epoch,fit/sigreg_step,hparams/lr_default_0,hparams/lr_inet_probe,lr-AdamW,lr-AdamW-1,queue/embedding_fill_pct,step,train/inet_probe_loss_epoch,train/inet_probe_loss_step
-,,,,,,,,,1.688e-05,0.001,,49,,
-0,,0.19033488631248474,,4.377834796905518,,83.5,1.6879999748198316e-05,0.0010000000474974513,,,1.0,49,,7.3134765625
-0,0.14833427965641022,,5.237708568572998,,101.79000091552734,,,,,,,49,7.751101016998291,
