@@ -39,11 +39,15 @@ if os.path.isfile(_env_file):
                 os.environ.setdefault(_k.strip(), _v.strip().strip('"').strip("'"))
     print(f"[env] Loaded {_env_file}")
 
-
-_SHM_CACHE = "/workspace/hf_cache"
+_KAGGLE_RUN = os.path.isdir("/kaggle/input") or bool(os.environ.get("KAGGLE_KERNEL_RUN_TYPE"))
+_KAGGLE_TEMP = os.environ.get("LEJEPA_KAGGLE_TEMP", "/kaggle/temp/lejepa")
+_SHM_CACHE = os.path.join(_KAGGLE_TEMP, "hf_cache") if _KAGGLE_RUN else "/workspace/hf_cache"
+_DATA_ROOT = os.path.join(_KAGGLE_TEMP, "torchvision_data") if _KAGGLE_RUN else "./data"
 os.makedirs(_SHM_CACHE, exist_ok=True)
+os.makedirs(_DATA_ROOT, exist_ok=True)
 os.environ["HF_DATASETS_CACHE"] = _SHM_CACHE
 os.environ["HF_HOME"]           = _SHM_CACHE
+os.environ["HF_HUB_CACHE"]      = os.path.join(_SHM_CACHE, "hub")
 os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 if "--skip-pretrain" in sys.argv:
     os.environ["SPT_LIGHT_IMPORT"] = "1"
@@ -53,11 +57,16 @@ else:
 _shm_stat = os.statvfs("/dev/shm")
 _shm_free_gb = _shm_stat.f_bfree * _shm_stat.f_frsize / 1e9
 print(f"[shm] /dev/shm free: {_shm_free_gb:.1f} GB  →  cache dir: {_SHM_CACHE}")
+print(f"[data-cache] torchvision root: {_DATA_ROOT}")
 
 # ── Cấu hình repo ─────────────────────────────────────────────────────────────
 GITHUB_TOKEN  = os.environ.get("GITHUB_TOKEN", "") 
 GITHUB_REPO   = "https://github.com/NLPQuy/lejepa-MLProject.git"
-CLONE_DIR     = "/workspace/lejepa-MLProject"  # RunPod write dir
+CLONE_DIR     = (
+    os.path.dirname(os.path.abspath(__file__))
+    if _KAGGLE_RUN and "__file__" in dir()
+    else "/workspace/lejepa-MLProject"
+)  # RunPod write dir; Kaggle uses the uploaded script directory.
 
 if os.environ.get("LEJEPA_SKIP_HF_LOGIN", "1") == "1":
     print("[hf] Skip HuggingFace login (LEJEPA_SKIP_HF_LOGIN=1).")
@@ -179,14 +188,14 @@ if SPT_PATH not in sys.path:
 
 import math
 import random
+import gc
+import shutil
 import socket
 from pathlib import Path
 
-import lightning.pytorch as pl
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torchmetrics
 import torchvision
 import timm
 from torchvision.transforms import v2 as tv2
@@ -194,6 +203,145 @@ from torchvision.transforms.functional import InterpolationMode
 from torch.utils.data import DataLoader, Subset, TensorDataset
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+try:
+    import lightning.pytorch as pl
+except ModuleNotFoundError:
+    pl = None
+
+try:
+    import torchmetrics
+except ModuleNotFoundError:
+    torchmetrics = None
+
+PORTABLE_CUDA = os.environ.get(
+    "LEJEPA_PORTABLE_CUDA",
+    "1" if _KAGGLE_RUN else "0",
+).lower() not in {"0", "false", "no"}
+FORCE_CPU = os.environ.get("LEJEPA_FORCE_CPU", "0").lower() in {"1", "true", "yes"}
+ALLOW_CPU_FALLBACK = os.environ.get("LEJEPA_ALLOW_CPU_FALLBACK", "0").lower() in {"1", "true", "yes"}
+
+
+def configure_portable_cuda() -> None:
+    """Prefer compatibility over fused CUDA kernels on mixed GPU fleets.
+
+    This targets GPUs such as P100 (sm60), T4 (sm75), RTX A4500 (sm86),
+    and newer cards without relying on flash/memory-efficient attention
+    kernels that may be missing from the active PyTorch/CUDA wheel.
+    """
+    if not torch.cuda.is_available():
+        print("[cuda] CUDA unavailable; using CPU.")
+        return
+
+    name = torch.cuda.get_device_name(0)
+    capability = torch.cuda.get_device_capability(0)
+    print(
+        f"[cuda] device={name} capability=sm{capability[0]}{capability[1]} "
+        f"torch={torch.__version__} cuda={torch.version.cuda}"
+    )
+
+    if not PORTABLE_CUDA:
+        print("[cuda] Portable CUDA guard disabled (LEJEPA_PORTABLE_CUDA=0).")
+        return
+
+    try:
+        torch.backends.cuda.enable_flash_sdp(False)
+        torch.backends.cuda.enable_mem_efficient_sdp(False)
+        torch.backends.cuda.enable_math_sdp(True)
+        print("[cuda] SDP kernels: flash=off mem_efficient=off math=on")
+    except Exception as e:
+        print(f"[cuda] WARNING: could not configure SDP kernels: {e}")
+
+    try:
+        from timm.layers import set_fused_attn
+
+        set_fused_attn(False)
+        print("[cuda] timm fused attention disabled.")
+    except Exception as e:
+        print(f"[cuda] WARNING: could not disable timm fused attention: {e}")
+
+    if capability[0] < 7:
+        print("[cuda] Legacy GPU detected; avoiding bf16/flash-style kernels.")
+
+
+def get_eval_device() -> torch.device:
+    if FORCE_CPU:
+        print("[eval] LEJEPA_FORCE_CPU=1; using CPU.")
+        return torch.device("cpu")
+    return torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+def choose_trainer_precision() -> str:
+    explicit = os.environ.get("LEJEPA_TRAIN_PRECISION", "")
+    if explicit:
+        return explicit
+    if FORCE_CPU or not torch.cuda.is_available():
+        return "32-true"
+    if torch.cuda.is_bf16_supported():
+        return "bf16-mixed"
+    return "16-mixed"
+
+
+def _disk_free_gb(path: str) -> float:
+    probe = path
+    while not os.path.exists(probe):
+        parent = os.path.dirname(probe)
+        if parent == probe:
+            probe = "/"
+            break
+        probe = parent
+    stat = os.statvfs(probe)
+    return stat.f_bavail * stat.f_frsize / 1e9
+
+
+def cleanup_eval_storage(reason: str = "") -> None:
+    """Keep Kaggle's small writable disk from filling up between datasets."""
+    if not _KAGGLE_RUN or os.environ.get("LEJEPA_KEEP_EVAL_CACHE", "0") == "1":
+        return
+
+    for path in (_DATA_ROOT, _SHM_CACHE):
+        shutil.rmtree(path, ignore_errors=True)
+        os.makedirs(path, exist_ok=True)
+
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
+    suffix = f" after {reason}" if reason else ""
+    print(
+        f"[cleanup] freed eval cache{suffix}; "
+        f"/kaggle/working free={_disk_free_gb('/kaggle/working'):.2f} GB, "
+        f"/kaggle/temp free={_disk_free_gb('/kaggle/temp'):.2f} GB"
+    )
+
+
+def verify_backbone_device(backbone: nn.Module, device: torch.device) -> nn.Module:
+    """Run a tiny forward pass to catch unsupported CUDA kernels early."""
+    backbone = backbone.to(device).eval()
+    if device.type != "cuda":
+        return backbone
+
+    try:
+        with torch.inference_mode():
+            probe = torch.zeros(1, 3, 224, 224, device=device)
+            _ = backbone(probe)
+        torch.cuda.synchronize()
+        print("[cuda] Backbone smoke test passed.")
+        return backbone
+    except RuntimeError as e:
+        message = str(e)
+        if ALLOW_CPU_FALLBACK:
+            print(f"[cuda] WARNING: GPU smoke test failed; falling back to CPU: {message}")
+            torch.cuda.empty_cache()
+            return backbone.cpu().eval()
+        raise RuntimeError(
+            "GPU smoke test failed before evaluation. This usually means the "
+            "active PyTorch/CUDA wheel or fused kernels are not compatible with "
+            f"the assigned GPU. Original error: {message}"
+        ) from e
+
+
+configure_portable_cuda()
 
 # ── Tensor Core precision (recommended for H100 / A100) 
 torch.set_float32_matmul_precision("high")
@@ -252,12 +400,13 @@ IMAGENET_ROOT = "/workspace/imagenet"
 
 # ── Misc
 NUM_WORKERS  = 16   # local SSD → có thể tăng workers
-PRECISION    = "bf16-mixed"
+PRECISION    = choose_trainer_precision()
 ACCELERATOR  = "gpu"
 DEVICES      = "auto"
-CKPT_DIR     = Path("/workspace/checkpoints")
-LOG_DIR      = Path(REPO_ROOT) / "logs"
+CKPT_DIR     = Path("/kaggle/working/checkpoints") if _KAGGLE_RUN else Path("/workspace/checkpoints")
+LOG_DIR      = Path("/kaggle/working/logs") if _KAGGLE_RUN else Path(REPO_ROOT) / "logs"
 CKPT_DIR.mkdir(parents=True, exist_ok=True)
+LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 IMG_MEAN = (0.485, 0.456, 0.406)
 IMG_STD  = (0.229, 0.224, 0.225)
@@ -480,6 +629,9 @@ def build_pretrain_datamodule() -> "DataModule":
 
 def build_pretrain_module() -> tuple["SPTModule", list]:
     """Tạo spt.Module bọc LeJEPA (ViT-B) + các callbacks."""
+    if torchmetrics is None:
+        raise ModuleNotFoundError("torchmetrics is required for pretraining.")
+
     from stable_pretraining.module import Module as SPTModule
     from stable_pretraining.callbacks.probe import OnlineProbe
     from stable_pretraining.callbacks.rankme import RankMe
@@ -573,6 +725,9 @@ def run_pretraining(resume_ckpt: str = None) -> str:
     Returns:
         Path đến best checkpoint.
     """
+    if pl is None:
+        raise ModuleNotFoundError("lightning is required for pretraining.")
+
     _ensure_stable_pretraining()
 
     # Pick a free port for DDP rendezvous to avoid EADDRINUSE
@@ -660,15 +815,15 @@ def extract_embeddings(
         is_train = split in ["train", "trainval"]
 
         if hf_dataset_name == "cifar10":
-            tv_ds = torchvision.datasets.CIFAR10(root="./data", train=is_train, download=True)
+            tv_ds = torchvision.datasets.CIFAR10(root=_DATA_ROOT, train=is_train, download=True)
         elif hf_dataset_name == "cifar100":
-            tv_ds = torchvision.datasets.CIFAR100(root="./data", train=is_train, download=True)
+            tv_ds = torchvision.datasets.CIFAR100(root=_DATA_ROOT, train=is_train, download=True)
         elif hf_dataset_name == "HuggingFaceM4/FGVC-Aircraft":
             tv_split = "trainval" if is_train else "test"
-            tv_ds = torchvision.datasets.FGVCAircraft(root="./data", split=tv_split, download=True)
+            tv_ds = torchvision.datasets.FGVCAircraft(root=_DATA_ROOT, split=tv_split, download=True)
         else:  # pcuenq/oxford-pets
             tv_split = "trainval" if is_train else "test"
-            tv_ds = torchvision.datasets.OxfordIIITPet(root="./data", split=tv_split, download=True)
+            tv_ds = torchvision.datasets.OxfordIIITPet(root=_DATA_ROOT, split=tv_split, download=True)
 
         ds = DictWrapDataset(tv_ds, transform=make_val_transform_eval())
     else:
@@ -828,7 +983,7 @@ def run_evaluation(checkpoint_path: str) -> dict:
     Returns:
         { dataset_label: { "1": acc, "10": acc, "all": acc } }
     """
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = get_eval_device()
     print(f"[eval] device = {device}")
 
     # ── Tái tạo backbone và load weights ─────────────────────────────────────
@@ -857,6 +1012,9 @@ def run_evaluation(checkpoint_path: str) -> dict:
     if unexpected:
         print(f"[eval] ⚠ Unexpected keys (ignored): {unexpected[:5]}")
     print(f"✓ Loaded backbone ({BACKBONE_NAME}) from {checkpoint_path}")
+    backbone = verify_backbone_device(backbone, device)
+    device = next(backbone.parameters()).device
+    cleanup_eval_storage("startup")
 
     results = {}
 
@@ -904,6 +1062,8 @@ def run_evaluation(checkpoint_path: str) -> dict:
         except Exception as _eval_e:
             print(f"  ❌ SKIP {ds_label}: {_eval_e}")
             results[ds_label] = {}   # giữ partial results, không crash toàn bộ
+        finally:
+            cleanup_eval_storage(ds_label)
 
     return results
 
@@ -968,6 +1128,32 @@ def _is_notebook() -> bool:
     return any(s in sys.argv[0] for s in ("ipykernel", "colab_kernel", "pydev"))
 
 
+def _find_kaggle_checkpoint() -> str:
+    """Find the attached Kaggle checkpoint dataset file."""
+    explicit = os.environ.get("LEJEPA_CHECKPOINT", "")
+    if explicit:
+        return explicit
+
+    candidates = sorted(Path("/kaggle/input/lejepa-checkpoints").rglob("*.ckpt"))
+    if not candidates:
+        candidates = sorted(Path("/kaggle/input").rglob("*.ckpt"))
+    if not candidates:
+        raise FileNotFoundError(
+            "Không tìm thấy checkpoint .ckpt trong /kaggle/input. "
+            "Hãy attach dataset mlbang/lejepa-checkpoints hoặc set LEJEPA_CHECKPOINT."
+        )
+
+    preferred = [
+        p for p in candidates
+        if "epoch=004" in p.name or "epoch004" in p.name or "ep004" in p.name
+    ]
+    if not preferred:
+        preferred = [p for p in candidates if p.name == "last.ckpt"]
+    ckpt = preferred[0] if preferred else candidates[0]
+    print(f"[kaggle] Auto checkpoint: {ckpt}")
+    return str(ckpt)
+
+
 if os.environ.get("LEJEPA_DEBUG_MAIN") == "1":
     print(f"[debug] __name__={__name__} _is_notebook={_is_notebook()}")
 
@@ -983,6 +1169,9 @@ if __name__ == "__main__" and not _is_notebook():
     p.add_argument("--resume",        type=str, default=None,
                    help="Resume pretraining từ checkpoint này.")
     args = p.parse_args()
+    if _KAGGLE_RUN and not args.skip_pretrain and not args.checkpoint and not args.resume:
+        args.skip_pretrain = True
+        args.checkpoint = _find_kaggle_checkpoint()
 
     main(
         skip_pretrain   = args.skip_pretrain,

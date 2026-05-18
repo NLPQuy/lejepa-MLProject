@@ -1,0 +1,15 @@
+[{"stream_name":"stdout","time":0.829133584,"data":"[shm] /dev/shm free: 14.5 GB  →  cache dir: /kaggle/working/hf_cache\n"}
+,{"stream_name":"stdout","time":0.829205667,"data":"[hf] Skip HuggingFace login (LEJEPA_SKIP_HF_LOGIN=1).\n"}
+,{"stream_name":"stderr","time":28.140003366,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":28.140065409,"data":"  File \"/kaggle/src/script.py\", line 274, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":28.140260973,"data":"    LOG_DIR.mkdir(parents=True, exist_ok=True)\n"}
+,{"stream_name":"stderr","time":28.140377613,"data":"  File \"/usr/lib/python3.12/pathlib.py\", line 1311, in mkdir\n"}
+,{"stream_name":"stderr","time":28.142306772,"data":"    os.mkdir(self, mode)\n"}
+,{"stream_name":"stderr","time":28.142416198,"data":"OSError: [Errno 30] Read-only file system: '/kaggle/src/logs'\n"}
+,{"stream_name":"stderr","time":32.707897761,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":32.707955961,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":32.916849032,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":32.916878481,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":33.683888498,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":34.967736628,"data":"[NbConvertApp] Writing 439174 bytes to __results__.html\n"}
+]
