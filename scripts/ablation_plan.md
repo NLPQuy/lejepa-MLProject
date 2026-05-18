@@ -18,14 +18,36 @@
 
 ---
 
-## Existing Ablations (keep, adjust dataset/epochs)
+## Executable Ablation Pipeline
+
+The current runnable ablation path is the lightweight renderer plus local
+training entrypoint:
+
+```bash
+python scripts/ablations.py list
+python scripts/ablations.py render epps
+python scripts/ablations.py write-scripts --ready-only
+python scripts/train_lejepa_ablation.py dataset_name=synthetic max_steps=3 batch_size=4 num_workers=0 backbone=vit_tiny_patch16_224 bstat_num_slices=16 accelerator=cpu devices=1 precision=32
+```
+
+Use `scripts/ablations.py` as the source of executable sweep commands.  Do not
+use `scripts/je.py`: that file is referenced by older notes but does not exist
+in this checkout.
+
+The old `scripts/launch_*_ablation.md` files are legacy/manual launch notes.
+Keep them as historical ablation sketches, but prefer rendering fresh commands
+with `scripts/ablations.py`.
+
+---
+
+## Existing Ablations (legacy/manual notes; keep, adjust dataset/epochs)
 
 | # | File | What varies | Recommended epochs |
 |---|------|-------------|-------------------|
-| 1 | `launch_epps_ablation.md` | `t_max` × `n_points` × `num_slices` | 50 |
-| 2 | `launch_proj_ablation.md` | `embedding_dim` × `projector_dim` | 50 |
-| 3 | `launch_rtokens_ablation.md` | `reg_tokens` | 50 |
-| 4 | `launch_views_ablation.md` | `n_views` × `n_global_views` | 50 |
+| 1 | `launch_epps_ablation.md` (legacy/manual) | `t_max` × `n_points` × `num_slices` | 50 |
+| 2 | `launch_proj_ablation.md` (legacy/manual) | `embedding_dim` × `projector_dim` | 50 |
+| 3 | `launch_rtokens_ablation.md` (legacy/manual) | `reg_tokens` | 50 |
+| 4 | `launch_views_ablation.md` (legacy/manual) | `n_views` × `n_global_views` | 50 |
 
 ---
 

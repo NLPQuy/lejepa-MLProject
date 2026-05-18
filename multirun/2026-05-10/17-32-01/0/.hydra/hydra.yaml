@@ -1,0 +1,180 @@
+hydra:
+  run:
+    dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.num}
+  launcher:
+    _target_: hydra._internal.core_plugins.basic_launcher.BasicLauncher
+  sweeper:
+    _target_: hydra._internal.core_plugins.basic_sweeper.BasicSweeper
+    max_batch_size: null
+    params: null
+  help:
+    app_name: ${hydra.job.name}
+    header: '${hydra.help.app_name} is powered by Hydra.
+
+      '
+    footer: 'Powered by Hydra (https://hydra.cc)
+
+      Use --hydra-help to view Hydra specific help
+
+      '
+    template: '${hydra.help.header}
+
+      == Configuration groups ==
+
+      Compose your configuration from those groups (group=option)
+
+
+      $APP_CONFIG_GROUPS
+
+
+      == Config ==
+
+      Override anything in the config (foo.bar=value)
+
+
+      $CONFIG
+
+
+      ${hydra.help.footer}
+
+      '
+  hydra_help:
+    template: 'Hydra (${hydra.runtime.version})
+
+      See https://hydra.cc for more info.
+
+
+      == Flags ==
+
+      $FLAGS_HELP
+
+
+      == Configuration groups ==
+
+      Compose your configuration from those groups (For example, append hydra/job_logging=disabled
+      to command line)
+
+
+      $HYDRA_CONFIG_GROUPS
+
+
+      Use ''--cfg hydra'' to Show the Hydra config.
+
+      '
+    hydra_help: ???
+  hydra_logging:
+    version: 1
+    formatters:
+      simple:
+        format: '[%(asctime)s][HYDRA] %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: simple
+        stream: ext://sys.stdout
+    root:
+      level: INFO
+      handlers:
+      - console
+    loggers:
+      logging_example:
+        level: DEBUG
+    disable_existing_loggers: false
+  job_logging:
+    version: 1
+    formatters:
+      simple:
+        format: '[%(asctime)s][%(name)s][%(levelname)s] - %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: simple
+        stream: ext://sys.stdout
+      file:
+        class: logging.FileHandler
+        formatter: simple
+        filename: ${hydra.runtime.output_dir}/${hydra.job.name}.log
+    root:
+      level: INFO
+      handlers:
+      - console
+      - file
+    disable_existing_loggers: false
+  env: {}
+  mode: MULTIRUN
+  searchpath: []
+  callbacks: {}
+  output_subdir: .hydra
+  overrides:
+    hydra:
+    - hydra.mode=MULTIRUN
+    task:
+    - dataset_name=synthetic
+    - max_epochs=50
+    - backbone=vit_tiny_patch16_224
+    - bstat_name=epps_pulley
+    - bstat_t_max=3
+    - bstat_n_points=17
+    - bstat_lambda=0.05
+    - embedding_dim=512
+    - projector_dim=512
+    - projector_arch=MLP
+    - lr=0.0005
+    - weight_decay=0.05
+    - teacher_student=False
+    - drop_path_rate=0.1
+    - multi_crop=True
+    - resolution=224
+    - local_resolution=96
+    - patch_size=16
+    - patch_mask_ratio=0.3
+    - max_steps=3
+    - num_workers=0
+    - accelerator=cpu
+    - devices=1
+    - precision=32
+    - n_views=4
+    - n_global_views=2
+    - batch_size=4
+    - bstat_num_slices=16
+    - autostop=True
+  job:
+    name: train_lejepa_ablation
+    chdir: null
+    override_dirname: accelerator=cpu,autostop=True,backbone=vit_tiny_patch16_224,batch_size=4,bstat_lambda=0.05,bstat_n_points=17,bstat_name=epps_pulley,bstat_num_slices=16,bstat_t_max=3,dataset_name=synthetic,devices=1,drop_path_rate=0.1,embedding_dim=512,local_resolution=96,lr=0.0005,max_epochs=50,max_steps=3,multi_crop=True,n_global_views=2,n_views=4,num_workers=0,patch_mask_ratio=0.3,patch_size=16,precision=32,projector_arch=MLP,projector_dim=512,resolution=224,teacher_student=False,weight_decay=0.05
+    id: '0'
+    num: 0
+    config_name: train_config
+    env_set: {}
+    env_copy: []
+    config:
+      override_dirname:
+        kv_sep: '='
+        item_sep: ','
+        exclude_keys: []
+  runtime:
+    version: 1.3.2
+    version_base: '1.3'
+    cwd: /Users/phu-quynguyen-lam/o D/lejepa
+    config_sources:
+    - path: hydra.conf
+      schema: pkg
+      provider: hydra
+    - path: ''
+      schema: structured
+      provider: schema
+    output_dir: /Users/phu-quynguyen-lam/o D/lejepa/multirun/2026-05-10/17-32-01/0
+    choices:
+      hydra/env: default
+      hydra/callbacks: null
+      hydra/job_logging: default
+      hydra/hydra_logging: default
+      hydra/hydra_help: default
+      hydra/help: default
+      hydra/sweeper: basic
+      hydra/launcher: basic
+      hydra/output: default
+  verbose: false

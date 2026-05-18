@@ -1,0 +1,10 @@
+- dataset_name=synthetic
+- max_steps=3
+- batch_size=4
+- num_workers=0
+- backbone=vit_tiny_patch16_224
+- bstat_num_slices=16
+- aggregator=mean
+- accelerator=cpu
+- devices=1
+- precision=32

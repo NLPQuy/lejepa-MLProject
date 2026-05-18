@@ -19,7 +19,7 @@ pip install lejepa
 # Or from source
 pip install -e .
 
-# Training harness (needed for scripts/je.py and train_eval_vit_l.py)
+# Training harness (needed for scripts/train_lejepa_ablation.py and train_eval_vit_l.py)
 cd stable-pretraining && pip install -e .
 
 # Minimal example dependencies
@@ -100,8 +100,23 @@ Described in `MINIMAL.md` — a ~130-line script using `timm`, `datasets`, `wand
 python mnist.py +lamb=0.02 +V=4 +proj_dim=16 +lr=2e-3 +bs=256 +epochs=800
 ```
 
-**Full (stable-pretraining + Hydra sweeps)**  
-`scripts/launch_inet10.py` generates the shell command for a multi-backbone sweep on ImageNet-10:
+**Ablation runner (current executable path)**  
+`scripts/ablations.py` renders sweep commands and `scripts/train_lejepa_ablation.py` runs local LeJEPA ablation smoke/training jobs:
+
+```bash
+python scripts/ablations.py list
+python scripts/ablations.py render epps
+python scripts/ablations.py write-scripts --ready-only
+python scripts/train_lejepa_ablation.py dataset_name=synthetic max_steps=3 batch_size=4 num_workers=0 backbone=vit_tiny_patch16_224 bstat_num_slices=16 accelerator=cpu devices=1 precision=32
+```
+
+The old markdown launch files under `scripts/launch_*_ablation.md` are
+legacy/manual notes. Do not use `scripts/je.py`; older docs reference it, but
+that file does not exist in this checkout.
+
+**Legacy Hydra sweep note**  
+`scripts/launch_inet10.py` generates a shell command for a multi-backbone sweep
+on ImageNet-10, but the generated target references missing `scripts/je.py`:
 
 ```bash
 HYDRA_FULL_ERROR=1 python scripts/je.py \
