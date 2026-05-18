@@ -3,3 +3,5 @@ checkpoints/
 *.bak
 data/
 venv/
+__pycache__/
+*.pyc
