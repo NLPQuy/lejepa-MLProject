@@ -64,6 +64,17 @@ class Transform(v2.Transform):
     def name(self):
         return self.__class__.__name__
 
+    def make_params(self, flat_inputs):
+        """Compatibility shim: torchvision v2 renamed make_params → _get_params."""
+        if hasattr(super(), "_get_params"):
+            return super()._get_params(flat_inputs)
+        if hasattr(super(), "make_params"):
+            return super().make_params(flat_inputs)
+        raise AttributeError(
+            f"{self.__class__.__name__} has neither make_params nor _get_params. "
+            "Update stable-pretraining to support this torchvision version."
+        )
+
 
 @torch.jit.unused
 def to_image(

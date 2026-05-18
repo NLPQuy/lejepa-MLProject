@@ -1,0 +1,5 @@
+checkpoints/
+.hf_cache/
+*.bak
+data/
+venv/

@@ -7,26 +7,16 @@ os.environ["LOGURU_LEVEL"] = os.environ.get("LOGURU_LEVEL", "INFO")
 
 import logging
 import sys
+from importlib.util import find_spec
 
 from loguru import logger
 from omegaconf import OmegaConf
 
-# Handle optional dependencies early
-try:
-    import sklearn.base  # noqa: F401
+# Handle optional dependencies without importing heavy modules
+_enable_sklearn = os.environ.get("SPT_ENABLE_SKLEARN", "0") == "1"
+SKLEARN_AVAILABLE = _enable_sklearn and (find_spec("sklearn") is not None)
+WANDB_AVAILABLE = find_spec("wandb") is not None
 
-    SKLEARN_AVAILABLE = True
-except ImportError:
-    SKLEARN_AVAILABLE = False
-
-try:
-    import wandb  # noqa: F401
-
-    WANDB_AVAILABLE = True
-except ImportError:
-    WANDB_AVAILABLE = False
-
-from . import backbone, callbacks, data, losses, module, optim, static, utils
 from .__about__ import (
     __author__,
     __license__,
@@ -35,71 +25,87 @@ from .__about__ import (
     __url__,
     __version__,
 )
-from .backbone.utils import TeacherStudentWrapper
-from .callbacks import (
-    EarlyStopping,
-    ImageRetrieval,
-    LiDAR,
-    LoggingCallback,
-    ModuleSummary,
-    OnlineKNN,
-    OnlineProbe,
-    OnlineWriter,
-    RankMe,
-    TeacherStudentCallback,
-    TrainerInfo,
-)
-from .callbacks.registry import log, log_dict
-from .manager import Manager
-from .module import Module
 from .utils.lightning_patch import apply_manual_optimization_patch
 
-# Conditionally import callbacks that depend on optional packages
-if SKLEARN_AVAILABLE:
-    from .callbacks import SklearnCheckpoint
-else:
-    SklearnCheckpoint = None
+_LIGHT_IMPORT = os.environ.get("SPT_LIGHT_IMPORT", "1") == "1"
 
-__all__ = [
-    # Availability flags
-    "SKLEARN_AVAILABLE",
-    "WANDB_AVAILABLE",
-    # Callbacks
-    "OnlineProbe",
-    "SklearnCheckpoint",
-    "OnlineKNN",
-    "TrainerInfo",
-    "LoggingCallback",
-    "ModuleSummary",
-    "EarlyStopping",
-    "OnlineWriter",
-    "RankMe",
-    "LiDAR",
-    "ImageRetrieval",
-    "TeacherStudentCallback",
-    # Modules
-    "utils",
-    "data",
-    "module",
-    "static",
-    "optim",
-    "losses",
-    "callbacks",
-    "backbone",
-    # Classes
-    "Manager",
-    "Module",
-    "TeacherStudentWrapper",
-    "log",
-    "log_dict",
-    # Package info
-    "__author__",
-    "__license__",
-    "__summary__",
-    "__title__",
-    "__url__",
-    "__version__",
-]
+if not _LIGHT_IMPORT:
+    from . import backbone, callbacks, data, losses, module, optim, static, utils
+    from .backbone.utils import TeacherStudentWrapper
+    from .callbacks import (
+        EarlyStopping,
+        ImageRetrieval,
+        LiDAR,
+        LoggingCallback,
+        ModuleSummary,
+        OnlineKNN,
+        OnlineProbe,
+        OnlineWriter,
+        RankMe,
+        TeacherStudentCallback,
+        TrainerInfo,
+    )
+    from .callbacks.registry import log, log_dict
+    from .manager import Manager
+    from .module import Module
+
+    # Conditionally import callbacks that depend on optional packages
+    if SKLEARN_AVAILABLE:
+        from .callbacks import SklearnCheckpoint
+    else:
+        SklearnCheckpoint = None
+
+    __all__ = [
+        # Availability flags
+        "SKLEARN_AVAILABLE",
+        "WANDB_AVAILABLE",
+        # Callbacks
+        "OnlineProbe",
+        "SklearnCheckpoint",
+        "OnlineKNN",
+        "TrainerInfo",
+        "LoggingCallback",
+        "ModuleSummary",
+        "EarlyStopping",
+        "OnlineWriter",
+        "RankMe",
+        "LiDAR",
+        "ImageRetrieval",
+        "TeacherStudentCallback",
+        # Modules
+        "utils",
+        "data",
+        "module",
+        "static",
+        "optim",
+        "losses",
+        "callbacks",
+        "backbone",
+        # Classes
+        "Manager",
+        "Module",
+        "TeacherStudentWrapper",
+        "log",
+        "log_dict",
+        # Package info
+        "__author__",
+        "__license__",
+        "__summary__",
+        "__title__",
+        "__url__",
+        "__version__",
+    ]
+else:
+    __all__ = [
+        "SKLEARN_AVAILABLE",
+        "WANDB_AVAILABLE",
+        "__author__",
+        "__license__",
+        "__summary__",
+        "__title__",
+        "__url__",
+        "__version__",
+    ]
 
 # Register OmegaConf resolvers
 OmegaConf.register_new_resolver("eval", eval)
@@ -174,14 +180,15 @@ class InterceptHandler(logging.Handler):
 logging.root.handlers = []
 logging.basicConfig(handlers=[InterceptHandler()], level="INFO")
 
-# Try to set datasets logging verbosity if available
-try:
-    import datasets
+if not _LIGHT_IMPORT:
+    # Try to set datasets logging verbosity if available
+    try:
+        import datasets
 
-    datasets.logging.set_verbosity_info()
-except (ModuleNotFoundError, AttributeError):
-    # AttributeError can occur with pyarrow version incompatibilities
-    pass
+        datasets.logging.set_verbosity_info()
+    except (ModuleNotFoundError, AttributeError):
+        # AttributeError can occur with pyarrow version incompatibilities
+        pass
 
-# Apply Lightning patch for manual optimization parameter support
-apply_manual_optimization_patch()
+    # Apply Lightning patch for manual optimization parameter support
+    apply_manual_optimization_patch()
