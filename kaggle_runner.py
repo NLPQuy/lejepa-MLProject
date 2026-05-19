@@ -21,20 +21,28 @@
 # - `data/imagenet10/` from the source zip (already bundled), OR
 #   a separate Kaggle dataset input → adjust `DATA` below
 
-# %% [1] Install dependencies (run once)
-import subprocess, os
+# %% [1] Install dependencies (run once, NO internet needed)
+import subprocess, os, glob
 
-SOURCE = "/kaggle/input/lejepa-mlproject"       # ← name of your uploaded dataset
-DATA   = f"{SOURCE}/data/imagenet10"            # bundled dataset inside source zip
-CKPT   = "/kaggle/working/checkpoints"          # writable output dir
+SOURCE = "/kaggle/input/lejepa-mlproject"       # ← adjust to your uploaded dataset name
+DATA   = f"{SOURCE}/data/imagenet10"            # imagenette bundled in source zip
+CKPT   = "/kaggle/working/checkpoints"          # writable Kaggle output dir
 BENCH  = f"{SOURCE}/stable-pretraining/benchmarks/imagenet10"
+WHEELS = f"{SOURCE}/wheels"                     # pre-downloaded wheels (no internet)
 
+os.makedirs(CKPT, exist_ok=True)
+
+# Step 1: install bundled wheels (loguru, omegaconf, hydra, submitit, etc.)
+wheel_files = " ".join(glob.glob(f"{WHEELS}/*.whl"))
+if wheel_files:
+    subprocess.run(f"pip install {wheel_files} -q", shell=True, check=True)
+
+# Step 2: install stable_pretraining package itself (skip network deps)
 subprocess.run(
-    f"pip install -e {SOURCE}/stable-pretraining --no-build-isolation -q",
+    f"pip install -e {SOURCE}/stable-pretraining --no-deps -q",
     shell=True, check=True,
 )
-subprocess.run("pip install scipy -q", shell=True, check=True)
-os.makedirs(CKPT, exist_ok=True)
+
 print("Install OK")
 print(f"SOURCE : {SOURCE}")
 print(f"DATA   : {DATA}")
