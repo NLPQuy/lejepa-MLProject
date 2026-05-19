@@ -164,3 +164,79 @@ sort: cost-ascending under Active
 - **Idea 2 (register tokens)** — REFRAMED to "promote batch-1 Idea 3 TOY to Priority 1 + augment decision rule with artifact-tail mechanism-check". Do NOT queue as a new TOY; do NOT spend new compute. See batch-6/idea-2-vetting.md §Reframe direction.
 
 - **Idea 6 (PH H₀ regularizer)** — REFRAMED to "ARCHIVE direction; salvageable only with 32-d projection or PH₁ variant + 1-hr-CPU gradient-norm sanity at d=384". Do NOT queue as a TOY.
+
+<!-- Batch-7 additions, appended 2026-05-19, cost-ascending order -->
+
+### Batch 7 — Active TOYs
+
+- **Idea 2-A (batch 7)** (Hyvärinen Phase A — synthetic convex-decoy sanity)
+  - Cost: 0 GPU-h (CPU, ~1 hr)
+  - Decision rule: `‖s_θ + z‖_F` decreases AND `‖Cov(z) − I‖_F` does NOT decrease in isolation → Phase B fires; else KILL
+  - Dependency: none — run immediately
+  - Status: pending
+
+- **Idea 3-A (batch 7)** (Max-sliced Phase A — alternating-opt stability on rotated synthetic)
+  - Cost: 0 GPU-h (CPU + small-GPU, ~2 hr)
+  - Decision rule: `T(Z·g_φ)` monotonic increase AND converges (oscillation < 10 % over last 200 steps) → Phase B fires; else KILL adversary direction (keep 50/50-mix fallback)
+  - Dependency: none — run immediately
+  - Status: pending
+
+- **Idea 2-B (batch 7)** (Hyvärinen 5th arm of per-slice bake-off on ImageNet-10)
+  - Cost: 6 GPU-h
+  - Decision rule: Hyvärinen ≥ EP − 0.3 pp at matched WC × 1.10 → KEEP; ≥ winner + 0.4 pp non-overlap → FULL SEND new SIGReg default; loses by > 0.3 pp → KILL
+  - Dependency: Phase A pass + ASHA Step-0
+  - Status: blocked on Phase A
+
+- **Idea 1 (batch 7)** (Flow-matching invariance 3rd arm in alignment bake-off)
+  - Cost: 12 GPU-h (~5 GPU-h incremental over Sinkhorn b6 TOY)
+  - Decision rule: FM ≥ baseline-MSE + 0.4 pp AND within ±0.3 pp of Sinkhorn → FULL SEND as alignment 2nd-option; FM > MSE but < Sinkhorn − 0.3 pp → REFRAME; FM ≤ MSE → KILL; flow divergence > 0.5 on val → KILL
+  - Dependency: b6 Sinkhorn Phase B settled (sequencing); ASHA Step-0
+  - Status: pending — sequenced after b6 Sinkhorn
+
+- **Idea 3-B (batch 7)** (Max-sliced 4-arm on ImageNet-10)
+  - Cost: 15 GPU-h
+  - Decision rule: `1-adv > 1-random + 0.4 pp` AND `1-adv ≥ 1024-random − 0.3 pp` → FULL SEND (supersedes sampler family); `1-adv ≤ 1-random + 0.4 pp` → KILL; `50-50 mix > 1-adv + 0.3 pp` → REFRAME
+  - Dependency: Phase A pass + ASHA Step-0
+  - Status: blocked on Phase A
+
+### Batch 7 — Reframed (NOT new TOYs)
+
+- **Idea 4 (RL augmentation policy)** — REFRAMED. Original `random / saliency / RL-from-random` design measures the wrong control. Re-submit as **saliency-init RL vs saliency-frozen** in batch-8 (isolates online-adaptation delta). Do NOT spend new compute on the original design.
+
+- **Idea 5 (Neural-collapse ETF prototypes)** — REFRAMED. **0-cost prerequisite passes** mandatory: (a) literature search "Cramér–Wold neural collapse simplex ETF"; (b) empirical k-means cluster-mean pairwise-cosine check on saved LeJEPA checkpoint vs ETF target `−1/19`. If either pre-check shows redundancy → KILL definitively. If both pass → re-submit with SwAV-style baseline + K-sweep.
+
+### Batch 7 — Addendum TOY (quantum-themed Idea 6, added mid-session per user request)
+
+- **Idea 6 (batch 7 addendum)** (SU(d)-structured-orthogonal projector — quantum-circuit-inspired)
+  - Cost: 12 GPU-h (4 arms: baseline-MLP / MLP-strong-wd / structured-L=2d / structured-L=2d log d, × 3 seeds × 100 ep)
+  - Decision rule: best structured arm ≥ baseline + 0.4 pp AND > MLP-strong-wd by ≥ 0.3 pp → FULL SEND (new projector default); ≈ MLP-strong-wd → REFRAME (use weight decay, structure decorative); ≤ baseline − 0.3 pp → KILL; all within ±0.3 pp → re-run at 600 ep, else KILL.
+  - Falsification trigger: LeJEPA paper §5.2 reports projector contribution ~1 pp → signal may be in seed-variance noise (σ ~0.5 pp).
+  - Implementation requirement: vectorized butterfly pattern, NOT naive Python loop (per Stage 5 note).
+  - Dependency: ASHA Step-0; pairs naturally with Idea 3 (max-sliced) compose-mode bundle ("lean SIGReg + lean projector").
+  - Mutually exclusive with: b6 Idea 5 Poincaré (same projector axis — head-to-head only).
+  - Status: pending — slots into batch-7 TOY queue priority 5 (between Idea 1 alignment-bake-off and Idea 3-B max-sliced).
+
+### Batch 7 — Second Addendum TOY (FM-SIGReg Idea 7, added mid-session per user request)
+
+- **Idea 7-A (batch 7 addendum)** (FM-SIGReg Phase A — critic-step-ratio sanity on synthetic non-isotropic Z)
+  - Cost: 0 GPU-h (CPU, ~1 hr)
+  - Decision rule: `L_FM` monotonically decreases AND stabilizes within 500 steps at 1:1 critic-ratio with `v_ψ` LR = 5× encoder LR → Phase B fires at 1:1; if needs 2:1 → flag higher compute cost; if 5:1 fails → KILL (joint training infeasible)
+  - Dependency: none — run immediately
+  - Status: pending
+
+- **Idea 7-B (batch 7 addendum)** (FM-SIGReg 5-arm bake-off on ImageNet-10)
+  - Cost: 10 GPU-h (5 arms × 3 seeds × 100 ep × ~40 min/run at +25% step cost)
+  - Arms: A baseline-EP / B Hyvärinen-only / C FM-SIGReg OT-path (σ=0.01) / D FM-SIGReg diffusion-path (σ=0.1) / E 50/50 mix EP+FM
+  - Decision rule: best FM-arm ≥ Hyvärinen + 0.2 pp AND ≥ baseline + 0.3 pp non-overlap AND lower validation W_2 to N(0,I) → FULL SEND (new SIGReg-default); FM-OT (C) ties Hyvärinen + FM-diffusion (D) loses → REFRAME ("annealed Hyvärinen" hybrid); all FM ≤ Hyvärinen − 0.2 pp → KILL; validation W_2 not lower → KILL (mechanism didn't engage)
+  - Falsification trigger: score-FM near-equivalence in small-σ limit (Song-Ermon 2020) → arm D (σ=0.1) is the load-bearing test of mechanism-distinctness
+  - Implementation: paired sampling (`z_0 from encoder, z_1 from N(0,I) fresh`) + 4×d MLP velocity field + critic-ratio per Phase A result
+  - Dependency: Phase A pass + ASHA Step-0
+  - Status: blocked on Phase A
+  - Note: this idea closes the SIGReg-term axis after bake-off. Per-slice 4-deep (closed) + multivariate score 1-deep (Hyvärinen) + transport-based 1-deep (FM-SIGReg) + adversarial-on-top (max-sliced) = 6 mechanism families; no obvious un-covered slots remain.
+
+### Batch 7 — Idea 7 STATUS UPDATE (2026-05-19)
+- **Idea 7-A status**: unchanged — still pending Phase A sanity (free CPU, 1 hr)
+- **Idea 7-B status update**: TOY (v1) → FULL SEND (v2 after research-driven upgrades) — see idea-7-vetting-v2.md
+  - Cost updated: 10 GPU-h → 12 GPU-h (added anisotropic-target arm F)
+  - 6-arm bake-off replaces 5-arm: A baseline-EP / B Hyvärinen / C FM-v1 / D FM-v2-N(0,I) / E 50/50 mix / F FM-v2-anisotropic (Σ* = RankMe-0.6d setpoint, Hyvärinen N/A)
+  - The original 7-B TOY queue entry above stays for audit; this entry supersedes its status.

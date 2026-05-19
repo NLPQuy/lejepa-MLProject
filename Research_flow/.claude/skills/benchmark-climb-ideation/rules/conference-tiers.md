@@ -9,7 +9,7 @@ load-trigger: Step 2 (during search) and Step 4 (during Provenance check)
 Use this whitelist to **filter input** (does a paper come from a trusted venue?). Do NOT use venue prestige to rank ideas — see `./anti-bias.md` §Venue-blind ideation.
 
 ## ML general
-- **A***: NeurIPS, ICML, ICLR
+- **A***: NeurIPS, ICML, ICLR, Computer Vision conference can be considered. 
 - **A**: AAAI, IJCAI, AISTATS, UAI, COLT
 - **Journal A***: JMLR, MLJ, TPAMI
 

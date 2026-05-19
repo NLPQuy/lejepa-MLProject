@@ -97,3 +97,19 @@ type: append-only
 
 ## 2026-05-18 — Batch 6 — ImageNet-10
 *No FULL SEND verdicts this batch.* All 4 surviving ideas are TOY (Phase A free for 3 of them). Idea 4 (Sinkhorn) is the most-likely graduation candidate via its 15-GPU-h Phase A — re-vet on results.
+
+#### Idea 7 (batch 7 second addendum) — FM-SIGReg-v2 (Flow-Matching SIGReg with research-driven upgrades)
+- Verdict: FULL SEND (post-research v2 vetting; supersedes v1 TOY) — confidence 🟢
+- Composite: 2.0 (mid-range gain × high confidence in mechanism distinctness after upgrades)
+- Gain: +0.3 / +0.7 / +1.5 pp on Imagenette linear probe (mid-estimate; non-Gaussian-target arm is the upside driver)
+- Cost: ~12 GPU-h (6-arm bake-off including anisotropic-target arm)
+- Priority: 1 within batch-7 (first FULL SEND of batch-7)
+- Risk mitigation:
+  - ExFM closed-form regression target → 1:1 critic ratio (no GAN-style discipline)
+  - arXiv:2511.05480 KL bound C=1 for OT-displacement → loss interpretable as KL upper bound
+  - Multisample OT coupling → provably zero gradient variance at convergence
+  - Non-Gaussian target capability (anisotropic Σ* = RankMe-0.6d) → distinguishing axis Hyvärinen cannot match
+- Source: batch-7-idea7-addendum.md + idea-7-vetting-v2.md
+- Status: queued for Phase B 6-arm bake-off after ASHA Step-0 and FM-invariance b7-I1 results
+- Composition note: FM-SIGReg-v2 + b7-I1 FM-invariance = "all-flow LeJEPA" (pure CFM pipeline replacing both ECF test and MSE alignment); FM-SIGReg-v2 + b6 RankMe-controller naturally share the 0.6·d setpoint as their joint target.
+

@@ -78,3 +78,67 @@ type: append-only
   Cross-skill feedback to ideation: add duplicate-check-against-active-TOY pre-flight; require in-field-SSL search query when T3 ideas are drafted (not just cross-domain root).
 - Re-vet trigger: (a) Phase A results for Ideas 1 + 5 (free, this week); (b) Sinkhorn 3-arm result → re-vet for SIE-split + saliency-crops interactions; (c) iBOT-SIGReg vs MAE-aux head-to-head (consolidates batch-4 MAE-aux TOY).
 - Cross-skill signal: compose-mode recommendation now 4 batches in a row. Cumulative survivor stack 6–8 concrete components. Batch-7 should formally enumerate compositions; stop proposing new patterns.
+
+## 2026-05-19 — Batch 7 vetting
+- Benchmark: ImageNet-10 (Imagenette linear probe)
+- Source: ideation-output/ImageNet-10/batch-7.md
+- Ideas vetted: 5 (all Tier 3, user-directed 100 % T3 override)
+- Verdicts: 0 KILL / 2 REFRAME / 3 TOY / 0 FULL SEND
+- Time: ~22 min
+- Survival: 60 % (first time below 67 % since b2 — attributable to T3-heavy mix)
+- Top pick: Idea 3 Adversarial max-sliced SIGReg → FULL SEND on Phase A pass (free 2-hr sanity); potentially supersedes variance-reduction sampler family
+- Notable:
+  - Idea 4 REFRAMED for *original-design measures-wrong-control* (Stage 6 FAIL); reframe = saliency-init RL vs saliency-frozen — should ship in batch-8
+  - Idea 5 REFRAMED for *0-cost prerequisites deferred to vetting* (Cramér-Wold↔ETF redundancy check); run pre-checks before any compute
+  - Process gaps: (a) self-flagged EXTENDS-bordering-DUPLICATE ideas should auto-trigger in-batch reframe (Idea 4); (b) identified `0-cost` prerequisites should run at draft-time, not be deferred (Idea 5)
+- Re-vet trigger: Idea 2-A + Idea 3-A Phase A results (free, ~3 hr total wall-clock); Idea 1 after b6 Sinkhorn Phase B settles
+- Cross-skill: compose-mode recommendation now 5 batches in a row; user should formally choose between T3-novel-axis continuation vs compose-mode enumeration for batch-8
+
+## 2026-05-19 — Batch 7 ADDENDUM vetting (Idea 6 quantum-themed)
+- Benchmark: ImageNet-10 (Imagenette linear probe)
+- Source: ideation-output/ImageNet-10/batch-7-idea6-addendum.md (added mid-session per user request)
+- Idea vetted: 1 (Idea 6 — SU(d)-structured-orthogonal projector, quantum-circuit-inspired classical analog)
+- Verdict: 1 TOY (Rule #5: 0 FAIL + 4 WARN)
+- Time: ~8 min
+- Top pick (incremental): adds to batch-7 TOY queue at 12 GPU-h
+- Notable:
+  - Quantum framing is decorative (Stage 1 WEAKENED) — the empirical question (structured-orthogonal vs MLP projector with strong wd) is well-shaped regardless.
+  - VNE-as-SSL direction (arXiv:2304.01434) is direct prior art that closes the von-Neumann-entropy-regularizer angle — flagged for future ideation.
+  - Mutually exclusive with b6 Poincaré TOY (same projector axis).
+  - Compose-mode tie-in with Idea 3 (max-sliced): "lean SIGReg + lean projector" frees ~30% effective epochs at same budget.
+- Updated batch-7 survival: 4/6 = 67 % (back into b4/b5/b6 calibration band).
+
+## 2026-05-19 — Batch 7 SECOND ADDENDUM vetting (Idea 7 FM-SIGReg)
+- Benchmark: ImageNet-10 (Imagenette linear probe)
+- Source: ideation-output/ImageNet-10/batch-7-idea7-addendum.md (added mid-session per user request "improve SIGReg with flow matching")
+- Idea vetted: 1 (Idea 7 — FM-SIGReg: transport-based marginal-shape regularizer via CFM toward N(0,I))
+- Verdict: 1 TOY (Rule #5: 0 FAIL + 4 WARN)
+- Time: ~8 min
+- Top pick (incremental): adds to batch-7 TOY queue at 10 GPU-h (Phase B), 0 GPU-h Phase A
+- Notable:
+  - **Closes the SIGReg-term axis** when combined with b7-I2 Hyvärinen and the closed per-slice family. Recommendation to ideation: stop proposing new SIGReg-term mechanisms.
+  - **Mechanism-distinct from every existing SIGReg attack**: per-slice tests (test-based), Hyvärinen (score-based), max-sliced (worst-case test), FM-SIGReg (transport-based).
+  - **Strongest reframe target**: "annealed Hyvärinen" — DDPM-style noise schedule on b7-I2 score matching captures the smoothing benefit without FM machinery. Falls out naturally if FM-OT arm (C) ties Hyvärinen and FM-diffusion (D) loses.
+  - **Killer baseline** is b7-I2 Hyvärinen, not the EP baseline. Score-FM equivalence in small-σ regime (Song-Ermon 2020) means FM-OT may reduce to smoothed Hyvärinen; arm D (σ=0.1) is the load-bearing distinctness test.
+  - Closest prior art: arXiv:2512.23956 "Implicit geometric regularization in FM via Stein operators" (Dec 2025) — regularizes the flow itself, not an upstream encoder. Goal slot empty.
+- Updated batch-7 survival: 5/7 = 71 % (just inside upper edge of 30–70 % healthy band)
+- Re-vet trigger: Idea 7-A Phase A results (free, 1 hr CPU); then 7-B 10-GPU-h bake-off
+
+## 2026-05-19 — Batch 7 Idea 7 RE-VET (v2 after targeted research)
+- Source: idea-7-vetting-v2.md supersedes idea-7-vetting.md
+- Trigger: user request "research lại idea trên để vượt vetting"
+- Live searches performed (4 queries): closed-form FM velocity / FM KL Wasserstein bounds / FM gradient variance vs score / FM vs score multimodal
+- Critical finds:
+  - arXiv:2511.05480 (Nov 2025) — `KL(P_z || N(0,I)) ≤ C(d,T)·L_FM`; explicit constant C=T=1 for OT-displacement → fixes S4 monitoring WARN
+  - Explicit Flow Matching (ExFM) — closed-form denoised regression target → fixes S1 critic-ratio WARN
+  - Multisample FM (arXiv:2304.14772, ICML 2023) — Hungarian-matching coupling → zero gradient variance at convergence → reduces S6 score-FM-equivalence concern
+  - Non-Gaussian target capability (Albergo §3.3, arXiv:2303.08797) — Hyvärinen *cannot* use non-Gaussian targets (no closed-form score) → load-bearing differentiator → fully fixes S6
+- v2 verdict: 🚀 FULL SEND 🟢 (Rule #4: 0 FAIL + 0 WARN + S5 PASS)
+- v2 upgrades:
+  - Upgrade A — ExFM regression target (variance ↓)
+  - Upgrade B — certified KL upper bound from L_FM (interpretability ↑)
+  - Upgrade C — Multisample OT batch-level Hungarian coupling (gradient variance ↓)
+  - Upgrade D — non-Gaussian target Σ* inherits RankMe 0.6·d setpoint (no new HP)
+- 6-arm v2 falsification: baseline-EP / Hyvärinen / FM-v1 / FM-v2-N(0,I) / mix / FM-v2-anisotropic
+- Cost: ~12 GPU-h (1 extra arm vs v1)
+- Updated batch-7 stats: 0 KILL / 2 REFRAME / 4 TOY / 1 FULL SEND; survival 5/7 = 71 %
