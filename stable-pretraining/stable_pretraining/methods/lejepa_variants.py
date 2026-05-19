@@ -163,7 +163,13 @@ class HyvarienSIGReg(nn.Module):
 
     def forward(self, z: torch.Tensor) -> torch.Tensor:
         # z: [N, d] — must be in the encoder's computation graph (requires_grad=True)
-        s = self.score_net(z)  # [N, d]
+
+        # Residual score: s_θ(z) = head(z) − z  (spec §implementation step 1).
+        # This forces the convex-decoy fixed-point s_θ = −z to require head(z) = 0
+        # (zero-network), which is NOT immediately reachable from random init.
+        # With the absolute form head(z), the decoy requires head(z) = −z — a
+        # simple linear map, trivially reachable.
+        s = self.score_net(z) - z  # [N, d]
 
         # Hutchinson probe vector v ~ N(0, I)
         v = torch.randn_like(z)
@@ -174,6 +180,7 @@ class HyvarienSIGReg(nn.Module):
         jvp = torch.autograd.grad(sv_dot, z, create_graph=True)[0]  # [N, d]
 
         # Hyvärinen ISM loss (equation 4, Hyvärinen JMLR 2005)
+        # With residual s_θ: (s + z) = head(z), so main_term = 0.5 * ||head(z)||²
         main_term = 0.5 * (s + z).pow(2).sum(-1).mean()
         hutch_trace = (v * jvp).sum(-1).mean()
         return main_term + hutch_trace
@@ -198,39 +205,74 @@ class AdversarialSIGReg(nn.Module):
     are non-zero and correctly split: encoder descends, adversary ascends.
     The meaningful metric is the encoder's linear-probe accuracy, not this loss.
 
+    Anchor: EMA of past batch means (spec: "rolling mean over K steps") stabilises
+    the adversary input and breaks the trivial fixed-point where g_φ depends
+    on the same embeddings it is evaluating.
+
+    Regularisation: spectral norm on all layers + WGAN-GP gradient penalty
+    (spec requires BOTH; GP enforces ||∇_anchor g_φ||₂ ≤ 1 explicitly).
+
     Args:
         dim: Embedding dimension.
         t_max: EppsPulley integration upper bound.
         n_points: EppsPulley quadrature nodes.
         adv_scale: Weight of the adversary term (default 1.0).
+        lambda_gp: Gradient-penalty coefficient (default 10.0).
+        anchor_decay: EMA decay for rolling anchor (default 0.99).
     """
 
-    def __init__(self, dim: int, t_max: float = 3.0, n_points: int = 17, adv_scale: float = 1.0):
+    def __init__(
+        self,
+        dim: int,
+        t_max: float = 3.0,
+        n_points: int = 17,
+        adv_scale: float = 1.0,
+        lambda_gp: float = 10.0,
+        anchor_decay: float = 0.99,
+    ):
         super().__init__()
         self.adv_scale = adv_scale
+        self.lambda_gp = lambda_gp
+        self.anchor_decay = anchor_decay
         self.ep = EppsPulley(t_max=t_max, n_points=n_points)
         hidden = 4 * dim
-        # Spectral norm for Lipschitz constraint (prevents adversary divergence)
+        # Spectral norm: Lipschitz constraint on each layer
         self.slicing_head = nn.Sequential(
             nn.utils.spectral_norm(nn.Linear(dim, hidden)),
             nn.SiLU(),
             nn.utils.spectral_norm(nn.Linear(hidden, dim)),
         )
+        # Rolling EMA anchor — updated in forward, not a learnable parameter
+        self.register_buffer("anchor_ema", torch.zeros(1, dim))
+        self.register_buffer("anchor_initialized", torch.zeros((), dtype=torch.bool))
 
     def forward(self, z: torch.Tensor) -> torch.Tensor:
-        # Fixed anchor: mean embedding, detached (prevents trivial recursion)
-        anchor = z.detach().mean(0, keepdim=True)  # [1, d]
+        # Update rolling EMA anchor with current batch mean (no gradients)
+        batch_mean = z.detach().mean(0, keepdim=True)  # [1, d]
+        if not self.anchor_initialized.item():
+            self.anchor_ema.copy_(batch_mean)
+            self.anchor_initialized.fill_(True)
+        else:
+            self.anchor_ema.lerp_(batch_mean, 1.0 - self.anchor_decay)
+        anchor = self.anchor_ema.clone()  # [1, d], detached rolling mean
 
-        # Adversary output: worst-case unit direction
+        # Adversary output: worst-case unit direction from rolling anchor
         u = F.normalize(self.slicing_head(anchor), dim=-1)  # [1, d]
 
-        # Adversary path: grad flows to slicing_head, NOT to encoder (z.detach)
+        # Adversary path: grad flows to slicing_head, NOT to encoder
         adv_loss = -self.ep(z.detach() @ u.T).mean()
 
-        # Encoder path: grad flows to encoder, NOT to slicing_head (u.detach)
+        # Encoder path: grad flows to encoder, NOT to slicing_head
         enc_loss = self.ep(z @ u.detach().T).mean()
 
-        return enc_loss + self.adv_scale * adv_loss
+        # WGAN-GP gradient penalty: enforce ||∇_anchor g_φ(anchor)||₂ ≤ 1
+        # (spec: "both spectral norm AND gradient penalty required for stability")
+        anchor_gp = anchor.detach().requires_grad_(True)
+        u_gp = F.normalize(self.slicing_head(anchor_gp), dim=-1)
+        grad = torch.autograd.grad(u_gp.sum(), anchor_gp, create_graph=True)[0]
+        gp_loss = self.lambda_gp * (grad.norm(p=2, dim=-1) - 1.0).pow(2).mean()
+
+        return enc_loss + self.adv_scale * adv_loss + gp_loss
 
 
 # ---------------------------------------------------------------------------
@@ -266,7 +308,7 @@ class FMSIGReg(nn.Module):
     encoder is pushed toward N(0, I). z_t is detached to avoid double-counting.
 
     v2 upgrades applied:
-      (A) ExFM closed-form regression target = z_1 − z_0 (already standard CFM)
+      (A) ExFM denoised target: (z_t − z_0) / t  (lower variance than z_1 − z_0)
       (B) L_FM is a KL upper bound on KL(P_z || N(0,I)) (Lipman 2023 + arXiv:2511.05480)
       (C) Hungarian coupling: z_1 reordered to match z_0 batch-optimally
 
@@ -298,15 +340,19 @@ class FMSIGReg(nn.Module):
         # Upgrade C: Hungarian coupling — minimise W2 within batch
         z_1 = _hungarian_couple(z_0.detach(), z_1)
 
-        # OT-displacement interpolant
-        t = torch.rand(B, device=z.device, dtype=z.dtype)
+        # OT-displacement interpolant; t clamped away from 0 for numerical stability
+        t = torch.rand(B, device=z.device, dtype=z.dtype).clamp(min=0.05)
         eps = torch.randn_like(z_0)
         z_t = (1.0 - t[:, None]) * z_0.detach() + t[:, None] * z_1 + self.sigma * eps
 
-        # Closed-form OT-displacement target velocity (constant in t)
-        target_v = z_1 - z_0  # gradient flows through −z_0 → encoder
+        # Upgrade A — ExFM denoised regression target (lower variance than z_1 − z_0).
+        # For OT-displacement path z_t = (1-t)z_0 + t·z_1 + σε:
+        #   E[z_1|z_t, z_0] = (z_t − (1-t)·z_0) / t  ≈ z_1  when σ→0
+        #   target = E[z_1|z_t,z_0] − z_0 = (z_t − z_0) / t
+        # gradient flows through −z_0 → encoder (z_0 not detached here)
+        target_v = (z_t.detach() - z_0) / t[:, None]  # [B, d]
 
-        # Predicted velocity (detach z_t so encoder gradient comes only from target_v)
+        # Predicted velocity (detach z_t: encoder gradient comes only through target_v)
         t_emb = self.t_embed(t)  # [B, t_emb_dim]
         pred_v = self.net(torch.cat([z_t, t_emb], dim=-1))  # [B, d]
 
