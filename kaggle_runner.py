@@ -38,15 +38,13 @@ for whl in sorted(glob.glob(f"{WHEELS}/*.whl")):
     status = "OK" if r.returncode == 0 else "skip"
     print(f"  {status}  {whl.split('/')[-1]}")
 
-# Step 2: install stable_pretraining package itself (skip network deps)
-r = subprocess.run(
-    f"pip install -e {SOURCE}/stable-pretraining --no-deps -q",
-    shell=True, capture_output=True, text=True,
-)
-if r.returncode != 0:
-    print("stable_pretraining install FAILED:", r.stderr[-300:])
-else:
-    print("stable_pretraining OK")
+# Step 2: add stable_pretraining to PYTHONPATH (read-only dir → can't pip install -e)
+# subprocess.run inherits os.environ, so all benchmark scripts will see it too.
+import sys
+SPT_SRC = f"{SOURCE}/stable-pretraining"
+os.environ["PYTHONPATH"] = SPT_SRC + ":" + os.environ.get("PYTHONPATH", "")
+sys.path.insert(0, SPT_SRC)
+print(f"stable_pretraining  PYTHONPATH: {SPT_SRC}")
 
 print("Install OK")
 print(f"SOURCE : {SOURCE}")
