@@ -32,16 +32,21 @@ WHEELS = f"{SOURCE}/wheels"                     # pre-downloaded wheels (no inte
 
 os.makedirs(CKPT, exist_ok=True)
 
-# Step 1: install bundled wheels (loguru, omegaconf, hydra, submitit, etc.)
-wheel_files = " ".join(glob.glob(f"{WHEELS}/*.whl"))
-if wheel_files:
-    subprocess.run(f"pip install {wheel_files} -q", shell=True, check=True)
+# Step 1: install bundled wheels one by one (ignore already-installed conflicts)
+for whl in sorted(glob.glob(f"{WHEELS}/*.whl")):
+    r = subprocess.run(f"pip install '{whl}' -q --no-deps 2>&1", shell=True, capture_output=True, text=True)
+    status = "OK" if r.returncode == 0 else "skip"
+    print(f"  {status}  {whl.split('/')[-1]}")
 
 # Step 2: install stable_pretraining package itself (skip network deps)
-subprocess.run(
+r = subprocess.run(
     f"pip install -e {SOURCE}/stable-pretraining --no-deps -q",
-    shell=True, check=True,
+    shell=True, capture_output=True, text=True,
 )
+if r.returncode != 0:
+    print("stable_pretraining install FAILED:", r.stderr[-300:])
+else:
+    print("stable_pretraining OK")
 
 print("Install OK")
 print(f"SOURCE : {SOURCE}")
