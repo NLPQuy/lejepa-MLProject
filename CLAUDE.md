@@ -84,6 +84,8 @@ pytest tests/test_epps_pulley.py::TestEppsPulley::test_standard_normal_samples_l
 cd stable-pretraining && pytest
 ```
 
+The root `tests/` suite covers only the `lejepa/` package. The `stable-pretraining/` suite is independent with its own `pytest.ini`.
+
 ## Architecture
 
 ### Core idea
@@ -108,12 +110,21 @@ Two submodules, both exposing `torch.nn.Module`-compatible loss functions:
 - `EppsPulley` ← **primary test used by SIGReg** — computes the L² distance between the empirical characteristic function and the standard normal CF, integrated over `[0, t_max]` with precomputed trapezoid weights. Exploits symmetry of the CF to halve the integration domain.
 - Others (`AndersonDarling`, `CramerVonMises`, `ShapiroWilk`, `Watson`, `Moments`, `NLL`, `ExtendedJarqueBera`, `VCReg`) share the `UnivariateTest` base class.
 - All tests take input shape `(N, K)` and return shape `(K,)` — they test each of the K columns independently.
+- `DeprecatedEppsPulley` in `epps_pulley.py` is a dead class kept for reference; ignore it.
 
 **`lejepa.multivariate`** — extends univariate tests to high-dimensional embeddings:
 - `SlicingUnivariateTest` ← **primary wrapper** — projects embeddings onto `num_slices` random unit vectors and applies any `UnivariateTest` to each slice. Seed is synchronized across DDP ranks via `all_reduce` to guarantee identical projections everywhere.
 - `BHEP`, `BHEP_M`, `COMB`, `HZ`, `HV` — direct multivariate normality tests (alternatives to slicing).
 
 `UnivariateTest.base` handles distributed averaging via `torch.distributed.nn.all_reduce`.
+
+### Dual EppsPulley implementations
+
+There are **two separate, independent implementations** of the Epps-Pulley test:
+1. `lejepa.univariate.EppsPulley` — general-purpose, composable with `SlicingUnivariateTest`; lives in the `lejepa/` package
+2. `stable_pretraining.methods.lejepa.EppsPulley` + `SlicedEppsPulley` — self-contained copy baked into the `LeJEPA` model class; does not import from the `lejepa/` package
+
+The second implementation exists so `stable_pretraining.methods.lejepa` can be used without installing the `lejepa` package. Both are equivalent in math.
 
 ### `stable-pretraining/` package
 
@@ -130,8 +141,26 @@ A full PyTorch Lightning training framework used by the experiment scripts. Key 
 | `optim/` | Optimizer + scheduler builders |
 | `static.py` | `TIMM_PARAMETERS` dict mapping backbone names → parameter counts |
 | `cli.py` / `run.py` | Entry points for Hydra CLI |
+| `methods/lejepa.py` | **`LeJEPA` model class** — self-contained backbone + projector + loss |
 
 Data flows as **dicts** (`{"image": ..., "label": ...}`) through all components so any intermediate value is accessible in callbacks.
+
+### `LeJEPA` model API (train vs eval)
+
+`stable_pretraining.methods.lejepa.LeJEPA` has different forward signatures per mode:
+
+```python
+# Training: pass global and local view lists separately
+output = model(global_views=[img1, img2], local_views=[img3, img4, img5, img6])
+output.loss.backward()
+# output fields: loss, embedding, inv_loss, sigreg_loss
+
+# Eval: pass a single images tensor
+output = model(images=torch.randn(4, 3, 224, 224))
+features = output.embedding  # [N, D]
+```
+
+The center for the invariance loss is computed from **global views only** (`all_projected[:n_global].mean(0)`). Global views are 224×224; local views are 98×98. `sigreg_target` controls which tensor gets the SIGReg loss: `"proj"` (default), `"embed"`, or `"both"`.
 
 ### Training entry points
 
@@ -143,14 +172,20 @@ python mnist.py +lamb=0.02 +V=4 +proj_dim=16 +lr=2e-3 +bs=256 +epochs=800
 ```
 
 **Ablation runner (current executable path)**  
-`scripts/ablations.py` renders sweep commands and `scripts/train_lejepa_ablation.py` runs local LeJEPA ablation smoke/training jobs:
+`scripts/ablations.py` renders sweep commands and `scripts/train_lejepa_ablation.py` runs local LeJEPA ablation smoke/training jobs. Run both from the **project root**; `train_lejepa_ablation.py` self-patches `sys.path` to find `stable-pretraining/`.
 
 ```bash
 python scripts/ablations.py list
+python scripts/ablations.py show epps
 python scripts/ablations.py render epps
+python scripts/ablations.py render epps --smoke
 python scripts/ablations.py write-scripts --ready-only
+python scripts/ablations.py summarize logs/ --metric val/knn_top1
+
 python scripts/train_lejepa_ablation.py dataset_name=synthetic max_steps=3 batch_size=4 num_workers=0 backbone=vit_tiny_patch16_224 bstat_num_slices=16 accelerator=cpu devices=1 precision=32
 ```
+
+The canonical ablation baseline overrides live in `scripts/ablations/specs.py::BASE_OVERRIDES`. A spec's `status` field controls whether `write-scripts --ready-only` includes it.
 
 The old markdown launch files under `scripts/launch_*_ablation.md` are
 legacy/manual notes. Do not use `scripts/je.py`; older docs reference it, but
@@ -158,16 +193,7 @@ that file does not exist in this checkout.
 
 **Legacy Hydra sweep note**  
 `scripts/launch_inet10.py` generates a shell command for a multi-backbone sweep
-on ImageNet-10, but the generated target references missing `scripts/je.py`:
-
-```bash
-HYDRA_FULL_ERROR=1 python scripts/je.py \
-  --config-dir scripts/configs --config-name base \
-  +accelerator=single_gpu_sc \
-  ++bstat_name="epps_pulley" ++bstat_num_slices=1000 \
-  ++dataset_name="inet10" ++max_epochs=400 ++batch_size=512 \
-  ++bstat_lambda=0.02 ++lr=3e-3 ++weight_decay=3e-2
-```
+on ImageNet-10, but the generated target references missing `scripts/je.py`.
 
 **Kaggle / large-scale (train_eval_vit_l.py)**  
 Jupytext `.py` notebook targeting Kaggle with ImageNet-1K loaded as a local `ImageFolder`. Sets `HF_DATASETS_CACHE=/dev/shm` for RAM-based caching and uses `GITHUB_TOKEN` / `HF_TOKEN` secrets for repo + hub access.
@@ -183,5 +209,6 @@ Jupytext `.py` notebook targeting Kaggle with ImageNet-1K loaded as a local `Ima
 | `n_points` (EppsPulley) | `17` | Integration quadrature points (must be odd) |
 | `V` (num views) | `8` (2 global + 6 local) | Multi-crop DINO-style augmentation |
 | precision | `bfloat16` | Stable without gradient clipping |
+| `sigreg_target` | `"proj"` | Where to apply SIGReg: `"proj"`, `"embed"`, or `"both"` |
 
 Linear probe evaluation uses **concatenated CLS tokens from the last two layers** + `LayerNorm`, with AdamW at `lr=1e-3` and `weight_decay=1e-6`.
