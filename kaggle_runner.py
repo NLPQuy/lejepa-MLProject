@@ -46,9 +46,23 @@ os.environ["PYTHONPATH"] = SPT_SRC + ":" + os.environ.get("PYTHONPATH", "")
 sys.path.insert(0, SPT_SRC)
 print(f"stable_pretraining  PYTHONPATH: {SPT_SRC}")
 
-# IMPORTANT: use the notebook's Python (same env as this kernel, has lightning etc.)
-# NOT "python" which resolves to the system Python without packages
-PY = sys.executable
+# Find the Python that actually has lightning (conda Python, not system Python).
+# On Kaggle: kernel uses /opt/conda/bin/python3, sys.executable may return /usr/bin/python3.
+def _find_python():
+    candidates = [
+        "/opt/conda/bin/python3",
+        "/opt/conda/bin/python",
+        "/usr/local/bin/python3",
+        sys.executable,
+    ]
+    for py in candidates:
+        if os.path.exists(py):
+            r = subprocess.run([py, "-c", "import lightning"], capture_output=True)
+            if r.returncode == 0:
+                return py
+    return sys.executable
+
+PY = _find_python()
 print(f"Python  : {PY}")
 
 print("Install OK")
