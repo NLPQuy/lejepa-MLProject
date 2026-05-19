@@ -13,8 +13,11 @@ python lejepa-fm-sigreg.py --backbone vit_tiny_patch16_224 --max_epochs 100 \\
 """
 
 import argparse
+import os
 import sys
 from pathlib import Path
+
+os.environ.setdefault("SPT_LIGHT_IMPORT", "0")  # export Module, Manager, callbacks
 
 import lightning as pl
 import torch
@@ -120,6 +123,8 @@ def get_args():
     p.add_argument("--wandb_entity",     default="stable-ssl")
     p.add_argument("--wandb_project",    default="imagenet10-methods")
     p.add_argument("--checkpoint_dir",   default=None)
+    p.add_argument("--wandb_offline",    action="store_true", help="W&B offline mode (no internet needed)")
+    p.add_argument("--no_wandb",         action="store_true", help="Use CSV logger instead of W&B")
     return p.parse_args()
 
 
@@ -185,8 +190,13 @@ def main():
             ),
             pl.pytorch.callbacks.LearningRateMonitor(logging_interval="step"),
         ],
-        logger=pl.pytorch.loggers.WandbLogger(
-            entity=args.wandb_entity, project=args.wandb_project, name=run_name, log_model=False,
+        logger=(
+            pl.pytorch.loggers.CSVLogger(save_dir=ckpt_dir, name="csv_logs")
+            if args.no_wandb
+            else pl.pytorch.loggers.WandbLogger(
+                entity=args.wandb_entity, project=args.wandb_project,
+                name=run_name, log_model=False, offline=args.wandb_offline,
+            )
         ),
         precision=args.precision, devices=args.num_gpus, accelerator="gpu",
         strategy="ddp_find_unused_parameters_true" if args.num_gpus > 1 else "auto",
