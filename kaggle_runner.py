@@ -46,6 +46,11 @@ os.environ["PYTHONPATH"] = SPT_SRC + ":" + os.environ.get("PYTHONPATH", "")
 sys.path.insert(0, SPT_SRC)
 print(f"stable_pretraining  PYTHONPATH: {SPT_SRC}")
 
+# IMPORTANT: use the notebook's Python (same env as this kernel, has lightning etc.)
+# NOT "python" which resolves to the system Python without packages
+PY = sys.executable
+print(f"Python  : {PY}")
+
 print("Install OK")
 print(f"SOURCE : {SOURCE}")
 print(f"DATA   : {DATA}")
@@ -82,7 +87,7 @@ if torch.cuda.is_available():
 # %% [4] Quick smoke test (optional, ~30s)
 # import subprocess
 # subprocess.run([
-#     "python", f"{BENCH}/lejepa-vit-small.py",
+#     PY, f"{BENCH}/lejepa-vit-small.py",
 #     "--backbone",       "vit_tiny_patch16_224",
 #     "--max_epochs",     "1",
 #     "--batch_size",     "16",
@@ -99,7 +104,7 @@ if torch.cuda.is_available():
 
 # %% Baseline — ViT-S  100 ep
 # subprocess.run([
-#     "python", f"{BENCH}/lejepa-vit-small.py",
+#     PY, f"{BENCH}/lejepa-vit-small.py",
 #     "--backbone",        "vit_small_patch16_224",
 #     "--max_epochs",      "100",
 #     "--batch_size",      "128",
@@ -111,7 +116,7 @@ if torch.cuda.is_available():
 
 # %% Baseline — ViT-T  100 ep
 # subprocess.run([
-#     "python", f"{BENCH}/lejepa-vit-small.py",
+#     PY, f"{BENCH}/lejepa-vit-small.py",
 #     "--backbone",        "vit_tiny_patch16_224",
 #     "--max_epochs",      "100",
 #     "--batch_size",      "128",
@@ -128,7 +133,7 @@ if torch.cuda.is_available():
 
 # %% SRHT — ViT-S  100 ep
 # subprocess.run([
-#     "python", f"{BENCH}/lejepa-srht.py",
+#     PY, f"{BENCH}/lejepa-srht.py",
 #     "--backbone",        "vit_small_patch16_224",
 #     "--max_epochs",      "100",
 #     "--batch_size",      "128",
@@ -140,7 +145,7 @@ if torch.cuda.is_available():
 
 # %% SRHT — ViT-T  100 ep
 # subprocess.run([
-#     "python", f"{BENCH}/lejepa-srht.py",
+#     PY, f"{BENCH}/lejepa-srht.py",
 #     "--backbone",        "vit_tiny_patch16_224",
 #     "--max_epochs",      "100",
 #     "--batch_size",      "128",
@@ -157,7 +162,7 @@ if torch.cuda.is_available():
 
 # %% Hyvarinen — ViT-S  100 ep
 # subprocess.run([
-#     "python", f"{BENCH}/lejepa-hyvarinen.py",
+#     PY, f"{BENCH}/lejepa-hyvarinen.py",
 #     "--backbone",        "vit_small_patch16_224",
 #     "--max_epochs",      "100",
 #     "--batch_size",      "128",
@@ -169,7 +174,7 @@ if torch.cuda.is_available():
 
 # %% Hyvarinen — ViT-T  100 ep
 # subprocess.run([
-#     "python", f"{BENCH}/lejepa-hyvarinen.py",
+#     PY, f"{BENCH}/lejepa-hyvarinen.py",
 #     "--backbone",        "vit_tiny_patch16_224",
 #     "--max_epochs",      "100",
 #     "--batch_size",      "128",
@@ -186,7 +191,7 @@ if torch.cuda.is_available():
 
 # %% Adversarial — ViT-S  100 ep
 # subprocess.run([
-#     "python", f"{BENCH}/lejepa-adversarial.py",
+#     PY, f"{BENCH}/lejepa-adversarial.py",
 #     "--backbone",        "vit_small_patch16_224",
 #     "--max_epochs",      "100",
 #     "--batch_size",      "128",
@@ -198,7 +203,7 @@ if torch.cuda.is_available():
 
 # %% Adversarial — ViT-T  100 ep
 # subprocess.run([
-#     "python", f"{BENCH}/lejepa-adversarial.py",
+#     PY, f"{BENCH}/lejepa-adversarial.py",
 #     "--backbone",        "vit_tiny_patch16_224",
 #     "--max_epochs",      "100",
 #     "--batch_size",      "128",
@@ -215,7 +220,7 @@ if torch.cuda.is_available():
 
 # %% FM-SIGReg — ViT-S  100 ep
 # subprocess.run([
-#     "python", f"{BENCH}/lejepa-fm-sigreg.py",
+#     PY, f"{BENCH}/lejepa-fm-sigreg.py",
 #     "--backbone",        "vit_small_patch16_224",
 #     "--max_epochs",      "100",
 #     "--batch_size",      "128",
@@ -227,7 +232,7 @@ if torch.cuda.is_available():
 
 # %% FM-SIGReg — ViT-T  100 ep
 # subprocess.run([
-#     "python", f"{BENCH}/lejepa-fm-sigreg.py",
+#     PY, f"{BENCH}/lejepa-fm-sigreg.py",
 #     "--backbone",        "vit_tiny_patch16_224",
 #     "--max_epochs",      "100",
 #     "--batch_size",      "128",
@@ -244,7 +249,7 @@ if torch.cuda.is_available():
 
 # %% FM-Invariance — ViT-S  100 ep
 # subprocess.run([
-#     "python", f"{BENCH}/lejepa-fm-invariance.py",
+#     PY, f"{BENCH}/lejepa-fm-invariance.py",
 #     "--backbone",        "vit_small_patch16_224",
 #     "--max_epochs",      "100",
 #     "--batch_size",      "128",
@@ -256,7 +261,7 @@ if torch.cuda.is_available():
 
 # %% FM-Invariance — ViT-T  100 ep
 # subprocess.run([
-#     "python", f"{BENCH}/lejepa-fm-invariance.py",
+#     PY, f"{BENCH}/lejepa-fm-invariance.py",
 #     "--backbone",        "vit_tiny_patch16_224",
 #     "--max_epochs",      "100",
 #     "--batch_size",      "128",
