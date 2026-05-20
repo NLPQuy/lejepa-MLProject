@@ -10,6 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import os
 from pathlib import Path
+import re
 import sys
 import types
 from typing import Any
@@ -260,6 +261,15 @@ def _lejepa_forward(self, batch, stage):
 
 
 def _build_module(cfg: TrainConfig) -> LeJEPA:
+    match = re.search(r"_patch(\d+)_", cfg.backbone)
+    native_patch = int(match.group(1)) if match else None
+    patch_size = cfg.patch_size
+    patch_size_arg = (
+        patch_size
+        if patch_size and patch_size > 0 and patch_size != native_patch
+        else None
+    )
+
     module = LeJEPA(
         encoder_name=cfg.backbone,
         lamb=cfg.bstat_lambda,
@@ -281,7 +291,7 @@ def _build_module(cfg: TrainConfig) -> LeJEPA:
         patch_mask_ratio=cfg.patch_mask_ratio,
         patch_mask_block_size=cfg.patch_mask_block_size,
         patch_mask_crop_ratio=cfg.patch_mask_crop_ratio,
-        patch_size=cfg.patch_size,
+        patch_size=patch_size_arg,
     )
     module.forward = types.MethodType(_lejepa_forward, module)
     module.optim = {

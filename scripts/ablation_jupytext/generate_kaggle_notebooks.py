@@ -1,60 +1,32 @@
-"""Generate Kaggle jupytext notebooks from the ablation specs.
-
-Each generated notebook is self-contained: it owns a literal ``OVERRIDES``
-dict the user can edit per-spec, then calls ``render`` / ``render_chunk``
-from ``_common`` to produce the shell command via ``dataclasses.replace``
-(no monkeypatching of ``BASE_OVERRIDES``).
-"""
+"""Generate slim Kaggle jupytext notebooks, one per ablation spec."""
 
 from __future__ import annotations
 
-from pathlib import Path
 import sys
-import textwrap
-
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-OUT_SUBDIR = Path("scripts") / "ablation_jupytext"
-NOTEBOOK_DIR_REL = OUT_SUBDIR.as_posix()
 
 from scripts.ablations.common import AblationSpec, count_configs  # noqa: E402
 from scripts.ablations.specs import list_specs  # noqa: E402
 
-
-SKIP = {"projector_dims", "reg_tokens"}
-INCLUDE = {
-    "epps",
-    "drop_path",
-    "projector_depth",
-    "patch_masking",
-    "aggregation",
-    "sigreg_target",
-    "predictor",
-    "views",
-}
-CHUNK_CONFIG = {
-    "epps": {"chunk_size": 9, "num_chunks": 3},
-    "views": {"chunk_size": 6, "num_chunks": 2},
-}
-
-# Default OVERRIDES rendered into every notebook. Users edit the literal dict
-# inside the notebook itself; this constant is only the seed.
+OUT_DIR = ROOT / "scripts" / "ablation_jupytext"
+INCLUDE = {"epps", "drop_path", "projector_depth", "patch_masking", "aggregation", "sigreg_target", "predictor", "views"}
+CHUNKS = {"epps": (9, 3), "views": (6, 2)}
 DEFAULT_OVERRIDES = {
-    "dataset_name": "imagenette",
+    "dataset_name": "imagenet10",
     "backbone": "vit_small_patch16_224",
     "batch_size": 512,
-    "max_epochs": 50,
+    "max_epochs": 100,
     "resolution": 224,
     "local_resolution": 96,
-    "patch_size": 16,
+    "patch_size": 0,
     "num_workers": 4,
     "precision": "bf16-mixed",
     "accelerator": "gpu",
     "devices": 1,
 }
-
-
 HEADER = """# ---
 # jupyter:
 #   jupytext:
@@ -73,132 +45,88 @@ def _md(text: str) -> str:
     return "\n".join(f"# {line}" if line else "#" for line in text.splitlines())
 
 
-def _format_overrides_literal(overrides: dict) -> str:
-    """Pretty-print an OVERRIDES dict the way it should appear in a notebook."""
-    lines = ["OVERRIDES = {"]
-    for key, value in overrides.items():
-        lines.append(f"    {key!r}: {value!r},")
-    lines.append("}")
-    return "\n".join(lines)
+def _overrides_literal(d: dict) -> str:
+    return "OVERRIDES = {\n" + "\n".join(f"    {k!r}: {v!r}," for k, v in d.items()) + "\n}"
 
 
-def _base_cells(spec: AblationSpec, num_configs: int) -> str:
-    guide = "4. For epps / views: set CHUNK_INDEX in cell [4]."
-    if spec.key not in CHUNK_CONFIG:
-        guide = "4. Run cell [4] to render and execute the command."
-    markdown = f"""# LeJEPA Ablation - {spec.title}
+def _render_cell(spec: AblationSpec, n: int) -> str:
+    if spec.key not in CHUNKS:
+        return f'command = render(SPEC_KEY, OVERRIDES, ENTRYPOINT)\nprint("# {spec.key}: {n} configs")'
+    chunk_size, num_chunks = CHUNKS[spec.key]
+    return f"""CHUNK_INDEX, CHUNK_SIZE, NUM_CHUNKS = 0, {chunk_size}, {num_chunks}
+command = render(
+    SPEC_KEY, OVERRIDES, ENTRYPOINT,
+    chunk_index=CHUNK_INDEX, chunk_size=CHUNK_SIZE,
+)
+print(f"# {{SPEC_KEY}} chunk {{CHUNK_INDEX}}/{{NUM_CHUNKS - 1}} of {n} configs")"""
+
+
+def render_one(spec: AblationSpec) -> str:
+    n, chunked = count_configs(spec), spec.key in CHUNKS
+    guide = "4. Set `CHUNK_INDEX` in cell [4]." if chunked else "4. Run cell [4] to render the command."
+    md = f"""# LeJEPA Ablation - {spec.title}
 - **Spec key**: `{spec.key}`
 - **Question**: {spec.question}
-- **Configs**: {num_configs}
+- **Configs**: {n}
 - **Status**: {spec.status}
 
 **Instructions**:
-1. Adjust `SOURCE` and `HF_CACHE` in cell [1] if your Kaggle slugs differ.
-2. First run only: uncomment cell [1b] to install offline wheels.
-3. Edit `OVERRIDES` in cell [3] to tune Kaggle-specific params.
+1. Adjust `SOURCE` / `DATA_ROOT` in cell [1] if your Kaggle slugs differ.
+2. First run only: uncomment `install_wheels(SOURCE)` in cell [1b].
+3. Edit `OVERRIDES` in cell [3].
 {guide}
 """
-    overrides_literal = _format_overrides_literal(DEFAULT_OVERRIDES)
-    return f"""{HEADER}
+    return f"""{HEADER}# %% [markdown]
+{_md(md)}
 
-# %% [markdown]
-{_md(markdown)}
-
-# %% [1] Setup env + sys.path
+# %%
+# [1] Setup
 SOURCE = "/kaggle/input/lejepa-mlproject"
-HF_CACHE = "/kaggle/input/lejepa-imagenette-hfcache"
+DATA_ROOT = "/kaggle/input/lejepa-data/data/imagenet10"
+SPEC_KEY = "{spec.key}"
 
-import os
 import sys
-
 sys.path.insert(0, SOURCE)
-from scripts.ablation_jupytext._common import setup_kaggle_env
+from scripts.ablation_jupytext.kaggle_setup import setup, patch_entrypoint, install_wheels, gpu_info, render
 
-paths = setup_kaggle_env(source=SOURCE, hf_cache=HF_CACHE, spec_key="{spec.key}")
+paths = setup(SOURCE, DATA_ROOT, spec_key=SPEC_KEY)
+ENTRYPOINT = patch_entrypoint(SOURCE, DATA_ROOT)
 print("Setup OK:", paths)
+print("Patched entrypoint:", ENTRYPOINT)
 
-# %% [1b] Install wheels (UNCOMMENT first run, then comment again)
-# !pip install {{SOURCE}}/wheels/*.whl --no-deps -q && echo "Wheels installed"
+# %%
+# [1b] First-run only: install offline wheels
+# install_wheels(SOURCE)
 
-# %% [2] GPU check
-import torch
+# %%
+# [2] GPU check
+gpu_info()
 
-print(f"PyTorch {{torch.__version__}} | CUDA {{torch.cuda.is_available()}}")
-for i in range(torch.cuda.device_count()):
-    props = torch.cuda.get_device_properties(i)
-    print(f"  GPU {{i}}: {{props.name}}  {{props.total_memory // 2**20}} MB")
+# %%
+# [3] Edit per-spec overrides
+{_overrides_literal(DEFAULT_OVERRIDES)}
 
-# %% [3] Edit per-spec overrides here (replaces baseline BASE_OVERRIDES values)
-{overrides_literal}
+# %%
+# [4] Render command
+{_render_cell(spec, n)}
 
-# %% [4] Render command
-"""
-
-
-def _execute_cells(spec_key: str) -> str:
-    return f"""
-
-# %% [5] Execute
+# %%
+# [5] Execute
 import subprocess
-
 print("Running:")
 print(command)
 ret = subprocess.run(command, shell=True, check=False)
 print(f"Exit code: {{ret.returncode}}")
-
-# %% [6] Dump CSV summary
-# !python -m stable_pretraining.cli dump-csv-logs {{paths['log_dir']}} ablation_{spec_key} max
 """
-
-
-def _chunk_block(spec: AblationSpec, num_configs: int) -> str:
-    chunk_size = CHUNK_CONFIG[spec.key]["chunk_size"]
-    num_chunks = CHUNK_CONFIG[spec.key]["num_chunks"]
-    return f"""CHUNK_INDEX = 0
-CHUNK_SIZE = {chunk_size}
-NUM_CHUNKS = {num_chunks}
-
-from scripts.ablation_jupytext._common import render_chunk
-
-if not 0 <= CHUNK_INDEX < NUM_CHUNKS:
-    raise ValueError(f"CHUNK_INDEX must be in 0..{{NUM_CHUNKS - 1}}")
-
-command = render_chunk("{spec.key}", OVERRIDES, CHUNK_INDEX, CHUNK_SIZE)
-print(f"# {spec.key} chunk {{CHUNK_INDEX}}/{{NUM_CHUNKS - 1}} of {num_configs} total configs")
-"""
-
-
-def _nochunk_block(spec: AblationSpec, num_configs: int) -> str:
-    return f"""from scripts.ablation_jupytext._common import render
-
-command = render("{spec.key}", OVERRIDES)
-print("# Configs: {num_configs}")
-"""
-
-
-def render_one(spec: AblationSpec) -> str:
-    num_configs = count_configs(spec)
-    block = (
-        _chunk_block(spec, num_configs)
-        if spec.key in CHUNK_CONFIG
-        else _nochunk_block(spec, num_configs)
-    )
-    return textwrap.dedent(
-        _base_cells(spec, num_configs) + block + _execute_cells(spec.key)
-    ).strip() + "\n"
 
 
 def main() -> None:
-    out_dir = ROOT / OUT_SUBDIR
-    out_dir.mkdir(parents=True, exist_ok=True)
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
     for spec in list_specs():
-        if spec.key in SKIP:
-            continue
-        if spec.key not in INCLUDE:
-            continue
-        path = out_dir / f"kaggle_{spec.key}.py"
-        path.write_text(render_one(spec), encoding="utf-8")
-        print(f"wrote {NOTEBOOK_DIR_REL}/kaggle_{spec.key}.py")
+        if spec.key in INCLUDE:
+            path = OUT_DIR / f"kaggle_{spec.key}.py"
+            path.write_text(render_one(spec), encoding="utf-8")
+            print(f"wrote {path.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

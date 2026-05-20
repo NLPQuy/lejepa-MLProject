@@ -1,106 +1,106 @@
 # Kaggle Ablation Notebooks
 
-These jupytext notebooks wrap the existing `scripts.ablations` specs for Kaggle. Each notebook owns a literal `OVERRIDES` dict (cell `[3]`) and renders the shell command via `dataclasses.replace` on the frozen `AblationSpec` — no global state is mutated. They reuse the repository renderer and training entrypoint without forking `scripts/ablations/`, `scripts/train_lejepa_ablation.py`, or `stable-pretraining/`.
+Slim jupytext notebooks (one per spec) that drive `scripts.ablations` on Kaggle.
+All Kaggle-specific helpers live in [`kaggle_setup.py`](kaggle_setup.py); each
+`kaggle_<spec>.py` is < 90 lines and only owns the user-editable bits
+(`OVERRIDES`, `CHUNK_INDEX`).
 
-Background: see `scripts/ablation_plan.md` when present, plus the root `plan_ablation_fix.md`.
+## Layout
 
-## Kaggle Datasets To Upload
+```
+scripts/ablation_jupytext/
+  kaggle_setup.py              # shared helpers (setup, patch_entrypoint, render, ...)
+  generate_kaggle_notebooks.py # template renderer
+  kaggle_<spec>.py             # 8 generated notebooks (do not hand-edit)
+```
 
-Upload these input datasets:
+## Kaggle Datasets
 
-- `lejepa-mlproject`: this repository snapshot, including `lejepa/`, `stable-pretraining/`, `scripts/` (which now contains `ablation_jupytext/`), and `wheels/`.
-- `lejepa-imagenette-hfcache`: the Hugging Face datasets cache for Imagenette, for example `frgfm___imagenette/...`.
+Upload two input datasets:
 
-The notebooks default to:
+- `lejepa-mlproject`: this repo snapshot — `lejepa/`, `stable-pretraining/`,
+  `scripts/` (incl. `ablation_jupytext/`), and `wheels/`.
+- `lejepa-data`: local Hugging Face Arrow dataset at
+  `data/imagenet10/{train,validation}/`.
+
+Defaults (edit in cell `[1]` if your slugs differ):
 
 ```python
 SOURCE = "/kaggle/input/lejepa-mlproject"
-HF_CACHE = "/kaggle/input/lejepa-imagenette-hfcache"
+DATA_ROOT = "/kaggle/input/lejepa-data/data/imagenet10"
 ```
-
-Edit those variables in cell `[1]` if your dataset slugs differ.
-
-## Offline Wheels
-
-Build wheels locally before uploading the project dataset:
-
-```bash
-pip wheel -r requirements.txt -w wheels/ --no-deps
-```
-
-The Kaggle notebooks are designed for Internet OFF. Cell `[1b]` installs from `SOURCE/wheels/*.whl` with `--no-deps`; uncomment it for the first run of a session, then comment it again.
 
 ## Workflow
 
-1. Open one notebook, for example `kaggle_drop_path.py`, with Jupytext or upload it as a Kaggle notebook.
-2. Confirm `SOURCE` and `HF_CACHE` in cell `[1]`.
-3. Uncomment and run cell `[1b]` once to install wheels.
-4. Edit `OVERRIDES` in cell `[3]` (per-notebook, see defaults below).
-5. Run the remaining cells.
-6. For `epps` and `views`, set `CHUNK_INDEX` in cell `[4]` before running. `epps` has 3 chunks of 9 configs; `views` has 2 chunks of 6 configs.
-7. Download `/kaggle/working/` after the run. Sync offline W&B logs locally with `wandb sync ./wandb/offline-*`.
+1. Open `kaggle_<spec>.py` as a Kaggle notebook (Jupytext converts on the fly).
+2. Cell `[1]` calls `setup()` + `patch_entrypoint()` (read-only source dataset
+   is copied to `/kaggle/working/train_lejepa_ablation_kaggle.py`).
+3. First run only: uncomment `install_wheels(SOURCE)` in cell `[1b]`.
+4. Edit `OVERRIDES` in cell `[3]`.
+5. For `epps`/`views` set `CHUNK_INDEX` in cell `[4]` (chunks: epps 3×9,
+   views 2×6).
+6. Run cells `[5]` (execute) and optionally `[6]` (dump CSV).
 
-## OVERRIDES (cell `[3]` defaults)
+Offline by default: cell `[1]` sets `HF_DATASETS_OFFLINE=1`, `WANDB_MODE=offline`
+and stubs `requests_cache` if missing.
 
-Each generated notebook embeds the literal dict below. Edit it in place; the renderer merges it into the spec via `dataclasses.replace`. Keys take precedence over both `spec.overrides` and `BASE_OVERRIDES`.
+## OVERRIDES defaults
+
+Embedded in each notebook; merged into `spec.overrides` via
+`dataclasses.replace`, then `commands.py` layers `BASE_OVERRIDES` underneath.
 
 | Key | Value |
 |---|---|
-| `dataset_name` | `imagenette` |
+| `dataset_name` | `imagenet10` |
 | `backbone` | `vit_small_patch16_224` |
 | `batch_size` | `512` |
 | `max_epochs` | `50` |
 | `resolution` | `224` |
 | `local_resolution` | `96` |
-| `patch_size` | `16` |
+| `patch_size` | `0` (auto = match backbone native) |
+| `num_workers` | `4` |
 | `precision` | `bf16-mixed` |
 | `accelerator` | `gpu` |
 | `devices` | `1` |
-| `num_workers` | `4` |
+
+`patch_size: 0` (or any value <= 0) tells the trainer to use the backbone's
+native patch size. Set a positive value only when intentionally ablating a
+non-native patch size; that triggers `MaskedEncoder._rebuild_patch_embed`.
 
 ## Time Estimates
 
-Estimates assume ViT-S/16, batch 512, 8 views, Imagenette 28K, bf16, and an RTX Pro 6000 96GB. Re-measure after the first real run.
+ViT-S/16, batch 512, 8 views, bf16, RTX Pro 6000 96GB:
 
-| Spec | Configs | Time/config | Total |
-|---|---:|---:|---:|
-| `drop_path` | 5 | ~30 min | ~2.5h |
-| `projector_depth` | 4 | ~30 min | ~2h |
-| `aggregation` | 3 | ~30 min | ~1.5h |
-| `sigreg_target` | 3 | ~35 min | ~1.7h |
-| `predictor` | 3 | ~30 min | ~1.5h |
-| `patch_masking` | 6 | ~30 min | ~3h |
-| `views` | 11, 2 chunks | ~30 min | ~5.5h, ~2.7h/chunk |
-| `epps` | 27, 3 chunks | ~30 min | ~13.5h, ~4.5h/chunk |
+| Spec | Configs | Total |
+|---|---:|---:|
+| `drop_path` | 5 | ~2.5h |
+| `projector_depth` | 4 | ~2h |
+| `aggregation` | 3 | ~1.5h |
+| `sigreg_target` | 3 | ~1.7h |
+| `predictor` | 3 | ~1.5h |
+| `patch_masking` | 6 | ~3h |
+| `views` | 11 (2 chunks) | ~5.5h |
+| `epps` | 27 (3 chunks) | ~13.5h |
 
 ## Skipped Specs
 
-- `projector_dims`: skipped because the grid includes `embedding_dim`, while LeJEPA derives the actual embed dimension from timm. Running it now would duplicate work and risk misleading results until model support is clarified.
-- `reg_tokens`: skipped because register-token support is checked at import time against the original backbone. Enabling it cleanly needs model-support work in the spec/model path, outside this notebook conversion.
+- `projector_dims`: grid duplicates `embedding_dim` which timm derives from
+  the backbone; needs spec work first.
+- `reg_tokens`: register-token support is asserted at import; needs model
+  changes.
 
 ## Regenerate
-
-After changing ablation specs, regenerate the notebooks locally:
 
 ```bash
 python scripts/ablation_jupytext/generate_kaggle_notebooks.py
 ```
 
-This writes the eight generated files `scripts/ablation_jupytext/kaggle_<key>.py`.
+`generate_kaggle_notebooks.py` is the source of truth for the template.
 
-## Note on Folder Name
+## Wheels
 
-The folder uses an underscore (`ablation_jupytext`) so the notebooks can use package-style imports. With the repository root on `sys.path`, helper imports are regular dotted imports:
+Build offline wheels before uploading the project dataset:
 
-```python
-sys.path.insert(0, SOURCE)
-from scripts.ablation_jupytext._common import setup_kaggle_env, render, render_chunk
+```bash
+pip wheel -r requirements.txt -w wheels/ --no-deps
 ```
-
-## Helpers in `_common.py`
-
-| Helper | Purpose |
-|---|---|
-| `setup_kaggle_env(...)` | Set env vars, sys.path, MPL/HF cache dirs, stub `requests_cache` if missing. |
-| `render(spec_key, overrides, *, smoke=False)` | Render one spec command. Uses `dataclasses.replace(spec, overrides=...)`; does **not** mutate `BASE_OVERRIDES`. |
-| `render_chunk(spec_key, overrides, chunk_index, chunk_size)` | Same but slices a long sweep into one chunk (used by `epps`, `views`). |
