@@ -23,6 +23,7 @@ STABLE_PRETRAINING_ROOT = REPO_ROOT / "stable-pretraining"
 MPLCONFIGDIR = Path("/tmp/lejepa_mplconfig")
 MPLCONFIGDIR.mkdir(parents=True, exist_ok=True)
 os.environ.setdefault("MPLCONFIGDIR", str(MPLCONFIGDIR))
+os.environ["SPT_LIGHT_IMPORT"] = "0"
 if str(STABLE_PRETRAINING_ROOT) not in sys.path:
     sys.path.insert(0, str(STABLE_PRETRAINING_ROOT))
 

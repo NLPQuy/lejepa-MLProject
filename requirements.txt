@@ -1,0 +1,51 @@
+# LeJEPA ablation environment
+# Cài đặt:
+#   conda create -n lejepa python=3.10 -y && conda activate lejepa
+#   # PyTorch: chọn index phù hợp GPU (vd CUDA 12.1):
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+#   pip install -r requirements.txt
+#   pip install -e .
+#   pip install -e stable-pretraining
+
+# ---- Core deep learning ----
+torch
+torchvision
+torchmetrics
+lightning
+timm
+opt-einsum
+
+# ---- Config / orchestration (Hydra multirun, ablation runner) ----
+hydra-core
+hydra-submitit-launcher
+omegaconf
+submitit
+typer
+
+# ---- Data ----
+datasets
+huggingface-hub
+pyarrow==20.0.0
+pillow>=11.3.0
+pandas
+scikit-learn>=1.7.0
+minari[hdf5]>=0.5.3
+
+# ---- Logging / utilities ----
+wandb
+loguru
+richuru
+rich
+tabulate
+prettytable
+requests-cache
+zstandard
+pyyaml
+matplotlib
+numpy
+
+# ---- Transformers (used by stable-pretraining) ----
+transformers
+
+# ---- Test ----
+pytest
