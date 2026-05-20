@@ -15,7 +15,10 @@ from urllib.parse import urlparse
 import rich.progress
 from filelock import FileLock
 from loguru import logger as logging
-from requests_cache import CachedSession
+try:
+    from requests_cache import CachedSession
+except ImportError:
+    from requests import Session as CachedSession  # fallback: no caching
 from rich.progress import (
     BarColumn,
     MofNCompleteColumn,
