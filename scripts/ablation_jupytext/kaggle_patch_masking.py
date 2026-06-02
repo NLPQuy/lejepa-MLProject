@@ -51,7 +51,7 @@ OVERRIDES = {
     'dataset_name': 'imagenet10',
     'backbone': 'vit_small_patch16_224',
     'batch_size': 512,
-    'max_epochs': 50,
+    'max_epochs': 100,
     'resolution': 224,
     'local_resolution': 96,
     'patch_size': 0,
