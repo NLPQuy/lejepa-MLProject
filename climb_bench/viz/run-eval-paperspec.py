@@ -80,7 +80,7 @@ try:  # eval script: prefer the copy next to THIS runner
     SCRIPT = os.path.join(HERE, "eval-frozen-paperspec.py")
     assert os.path.exists(SCRIPT)
 except (NameError, AssertionError):
-    SCRIPT = find_one(f"{INPUT}/**/climb_bench/viz/eval-frozen-paperspec.py", "eval script")
+    SCRIPT = find_one(f"{INPUT}/**/lejepa-climb-bench/viz/eval-frozen-paperspec.py", "eval script")
 
 CKPT_ROOT = find_one(f"{INPUT}/**/lejepa-ckpts", "lejepa-ckpts dataset")
 DATA = os.path.dirname(find_one(f"{INPUT}/**/data/imagenet10/validation", "imagenet10 dataset"))
