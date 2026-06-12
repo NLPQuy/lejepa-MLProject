@@ -1,0 +1,13 @@
+{
+  "tag": "deepsup_100",
+  "ckpt": "/kaggle/input/datasets/mlbang/lejepa-ckpts/batch_2/batch2-idea10-ckpt/checkpoints/exp10-deepsup-vits/exp10-deepsup-vits-epoch=099.ckpt",
+  "backbone": "vit_small_patch16_224",
+  "feature": "concat_cls_last2_layernorm",
+  "probe": "AdamW lr1e-3 wd1e-6 cosine",
+  "probe_epochs": 100,
+  "n_train": 28407,
+  "n_val": 11775,
+  "top1": 0.8894,
+  "top5": 0.9907,
+  "best_probe_epoch": 19
+}

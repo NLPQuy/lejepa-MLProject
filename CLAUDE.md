@@ -212,3 +212,20 @@ Jupytext `.py` notebook targeting Kaggle with ImageNet-1K loaded as a local `Ima
 | `sigreg_target` | `"proj"` | Where to apply SIGReg: `"proj"`, `"embed"`, or `"both"` |
 
 Linear probe evaluation uses **concatenated CLS tokens from the last two layers** + `LayerNorm`, with AdamW at `lr=1e-3` and `weight_decay=1e-6`.
+
+## Research track: `climb_bench/`
+
+Active research goal: improve LeJEPA on **Imagenette** ("ImageNet-10" here == fast.ai's 10-class subset, ~9.5k train), pretrain in-domain 400 epochs, eval with a **frozen** `vit_small_patch16_224` (online linear probe + kNN). Low-data regime → data-efficiency / anti-overfit dominate.
+
+Iteration pipeline (branch `clim-bench`):
+1. **Ideate** with the `/benchmark-climb-ideation` skill → `climb_bench/ideation/batch-<N>.md` (output path overridden from the skill default).
+2. **Plan** → `climb_bench/ideation/plan-batch-<N>.md`.
+3. **Implement** → `climb_bench/batch<N>/`: thin `exp<x>.py` runners + `_common.py` (shared trainer, extracted from `benchmarks/imagenet10/lejepa-vit-small.py`) + `_variants.py` (batch-local variant classes) + `run-batch<N>.py` (jupytext Kaggle-offline orchestrator).
+4. **Analyze/eval** → `climb_bench/viz/`, all batch-parameterized (`--batch batch_<N>` / `BATCH=`): `viz_metrics.py` online-metric curves + ranking (reads `metric_results/<batch>/`); `eval-frozen-paperspec.py` the paper-spec frozen probe = concat CLS last-2 + LN + AdamW wd 1e-6 (supports `--qk_norm`/`--conv_stem` to rebuild exp2/exp6 archs); `run-eval-paperspec.py` unified Kaggle GPU runner (per-batch `PLANS` registry, self-locating via glob, loads full Lightning `.ckpt` directly so NO extract step needed); `viz_paperspec.py` paper-spec bar chart (reads `eval_results/<batch>/`). `extract_backbones.py` is now legacy/optional (direct ckpt load supersedes it). Findings in `climb_bench/tracker/` (one `batch<N>-analysis.md` per batch; reusable `analysis_template.md`). **NB: the online `OnlineProbe` used to rank ideas is NOT the paper eval recipe** (single CLS, no LN, lr 0.03) — re-run `eval-frozen-paperspec.py` on idea checkpoints for paper-comparable numbers.
+5. **Leo-bench (paper comparison)** → `climb_bench/leobench/PLAN.md`. NB: local `data/imagenet10` = the 10 Imagenette classes but **~28k train (≈2.2× the paper's inet10=13k)** — valid for ablation Δ, not for absolute comparison to paper Table 5.
+
+Conventions when implementing variants:
+- Reuse the three swap mechanisms: `model.sigreg = ...`, subclass `LeJEPA` overriding `_compute_loss`, or `LeJEPA(projector=...)`. Variant logic goes in a `_variants.py` module; runners only import + wire. Give additive terms a weight-0 off-switch that reduces *exactly* to baseline.
+- jupytext orchestrators: **double-`#`** (`# # !python ...`) for inert command cells — single-`#` magics get auto-activated on read (`comment_magics`). No `[...]` in `# %%` cell titles.
+- Existing variants in `stable_pretraining/methods/lejepa_variants.py` (SRHT, Hyvärinen, Adversarial max-sliced, FM-SIGReg, FM-Invariance) + batch-1 ideas are already taken — new batches must not duplicate them.
+- Local conda env `lejepa` has torchvision 0.20.1 but the repo needs 0.26.0; full data pipeline only runs on Kaggle (pinned wheels) — smoke-test at model level locally.
