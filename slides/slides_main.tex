@@ -18,6 +18,7 @@
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 \usepackage{xcolor}
+\usepackage{colortbl}
 \usepackage{graphicx}
 \usepackage{mathtools}
 \usepackage{mdframed}
@@ -1087,70 +1088,27 @@ Cần $T$ vừa \textbf{differentiable}, vừa \textbf{scalable}, vừa \textbf{
 
 \begin{frame}{Thách Thức: Kiểm Tra Phân Phối Trong Không Gian Cao Chiều}
 
-\begin{columns}[T]
-\column{0.52\textwidth}
+\vspace{1em}
+\begin{center}
+\renewcommand{\arraystretch}{1.8}
+\begin{tabular}{@{} l c c c @{}}
+\toprule
+\textbf{Phương pháp} & \textbf{Differentiable} & \textbf{Scalable} $\mathcal{O}(N)$ & \textbf{Provably Correct} \\
+\midrule
+\textbf{MMD} & \textcolor{mgood}{\cmark} & \textcolor{mbad}{\xmark} \footnotesize ($\mathcal{O}(N^2)$) & \textcolor{mgood}{\cmark} \\
+\textbf{KL Divergence} & \textcolor{mbad}{\xmark} \footnotesize (unstable) & \textcolor{mgood}{\cmark} & \textcolor{mgood}{\cmark} \\
+\textbf{Test chuẩn (BHEP, Mardia)} & \textcolor{mgood}{\cmark} & \textcolor{mbad}{\xmark} \footnotesize ($\mathcal{O}(N^2)$) & \textcolor{mgood}{\cmark} \\
+\midrule
+\rowcolor{mgood!15}
+\textbf{SIGReg (Ours)} & \textcolor{mgood}{\textbf{\cmark}} & \textcolor{mgood}{\textbf{\cmark}} & \textcolor{mgood}{\textbf{\cmark}} \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\textbf{Yêu cầu của một regularizer tốt:}
-
-\vspace{0.4em}
-\begin{itemize}\setlength\itemsep{5pt}
-  \item[\textcolor{mgood}{\textbf{\checkmark}}]
-    \textbf{Differentiable} — huấn luyện dựa trên gradient
-  \item[\textcolor{mgood}{\textbf{\checkmark}}]
-    \textbf{$\mathcal{O}(N)$} — scale lên millions samples
-  \item[\textcolor{mgood}{\textbf{\checkmark}}]
-    \textbf{Provably correct} — hội tụ đến $\mathcal{N}(0,I)$
-\end{itemize}
-
-\vspace{0.6em}
-\textbf{Các phương pháp chuẩn đều thất bại:}
-
-\vspace{0.3em}
-\begin{tikzpicture}
-\begin{axis}[
-  width=6.2cm, height=3.5cm,
-  xbar, bar width=7pt, bar shift=0pt,
-  xlabel={Complexity}, xlabel style={font=\small},
-  symbolic y coords={SIGReg, Anderson-D., Cramér-vM, KL Div., MMD},
-  ytick=data, yticklabel style={font=\scriptsize},
-  xticklabel style={font=\tiny},
-  xmin=0, xmax=4,
-  xtick={0.5,1.5,3.0},
-  xticklabels={$\mathcal{O}(N)$,$\mathcal{O}(N\log N)$,$\mathcal{O}(N^2)$},
-  grid=none, axis x line=bottom, axis y line=left,
-  enlarge y limits=0.15,
-]
-  \addplot[fill=mgood!75, draw=mgood, line width=0.8pt] coordinates
-    {(0.5,SIGReg)};
-  \addplot[fill=mbad!50, draw=mbad, line width=0.8pt] coordinates
-    {(1.5,Anderson-D.) (1.5,Cramér-vM) (3,KL Div.) (3,MMD)};
-  \node[mgood, font=\tiny\bfseries, anchor=west] at (axis cs:0.55,SIGReg) {$\star$ chosen};
-\end{axis}
-\end{tikzpicture}
-
-\column{0.44\textwidth}
-\vspace{0.3em}
-
-\begin{badbox}
-\footnotesize \textbf{MMD} (Maximum Mean Discrepancy): chứng minh được nhưng $\mathcal{O}(N^2)$ — không thể mở rộng tốt.
-\end{badbox}
-
-\vspace{0.4em}
-\begin{badbox}
-\footnotesize \textbf{KL Divergence:} gradient không ổn định khi $p\approx 0$, không differentiable.
-\end{badbox}
-
-\vspace{0.4em}
-\begin{badbox}
-\footnotesize \textbf{Test multivariate chuẩn} (BHEP, Mardia): đều $\mathcal{O}(N^2)$ — không thể dùng với mini-batch.
-\end{badbox}
-
-\vspace{0.5em}
+\vspace{1.5em}
 \begin{accentbox}
-\footnotesize \textbf{Giải pháp:} Phân rã bài toán $K$-chiều thành $M$ bài toán 1D độc lập qua random projection.
+\footnotesize \textbf{Giải pháp SIGReg:} Phân rã bài toán $K$-chiều thành $M$ bài toán 1D độc lập qua \textbf{random projection} (Cramér-Wold), giúp đạt được cả 3 tiêu chí!
 \end{accentbox}
-
-\end{columns}
 
 \end{frame}
 
@@ -1158,62 +1116,56 @@ Cần $T$ vừa \textbf{differentiable}, vừa \textbf{scalable}, vừa \textbf{
 % ─── [BATCH 2] 3 families — Moments unstable ─────────────────────────────────
 \begin{frame}{Họ Test 1: Moments — Mạnh Nhưng Gradient Explode}
 
-\begin{columns}[T]
-\column{0.50\textwidth}
-
-\textbf{Extended Jarque-Bera (EJB)} đo độ lệch khỏi Gaussian bằng cách gom \textbf{4 thống kê mô tả} (mean, variance, skewness, kurtosis) vào một score duy nhất.
-
-\vspace{0.3em}
-Score càng lớn $\rightarrow$ phân phối càng sai lệch so với $\mathcal{N}(0,1)$.
-
-\vspace{0.5em}
+\vspace{2.5em}
+\begin{center}
 \begin{tikzpicture}
 \begin{axis}[
-  width=6.0cm, height=3.2cm,
-  xlabel={Moment order $k$},
-  ylabel={$\|\nabla_z \mathcal{L}_k\|$},
-  xlabel style={font=\small}, ylabel style={font=\small},
-  tick label style={font=\tiny},
-  xmin=1, xmax=6, ymin=0, ymax=70,
-  grid=major, grid style={mgray!15},
+  width=12cm, height=5.5cm,
+  xlabel={Moment order $K$},
+  ylabel={$\|\nabla_z \mathcal{L}_K\|$},
+  xmin=1, xmax=6.2, ymin=0, ymax=140,
+  grid=none,
+  axis x line=bottom, axis y line=left,
+  clip=false,
+  xtick={1,2,3,4,5,6},
+  ytick=\empty,
 ]
-  \addplot[mbad, very thick, domain=1:6, samples=20] {2.5^x};
-  \fill[mbad!15] (axis cs:4,0) rectangle (axis cs:6,70);
-  \node[mbad, font=\tiny, align=center] at (axis cs:5, 35)
-    {unstable\\region};
-  \draw[mgray, dashed] (axis cs:4,0) -- (axis cs:4,70);
+  % Vùng rủi ro (Unstable Region) dịch sang 4.2
+  \fill[mbad!10] (axis cs:4.2,0) rectangle (axis cs:6.2,140);
+  \draw[mbad, dashed, thick] (axis cs:4.2,0) -- (axis cs:4.2,140);
+  
+  % Đường cong chia 2 màu (an toàn vs nổ)
+  \addplot[mprimary, ultra thick, domain=1:4.2, samples=20] {2.5^x};
+  \addplot[mbad, ultra thick, domain=4.2:5.38, samples=20] {2.5^x};
+  
+  % Chú thích
+  \node[mprimary, align=center] at (axis cs:2.5, 40) {
+    \small\bfseries Shortcut\\[0.2em]
+    \footnotesize (Định lý 3)
+  };
+  
+  % Chú thích Vùng Unstable
+  \node[mbad, align=center] at (axis cs:5.3, 40) {
+    \large\bfseries VÙNG UNSTABLE\\[0.4em]
+    \small \textbf{Gradient Explode}\\[0.1em]
+    \small (Hàm mũ)
+  };
+  
+  % EJB callout (không dùng mũi tên)
+  \node[align=center, fill=mlight, draw=mgray!50, rounded corners, font=\footnotesize] (ejb) at (axis cs:2.5, 90) {
+    \textbf{Extended Jarque-Bera (EJB)}\\
+    Gom 4 moments ($K=4$)
+  };
+  
 \end{axis}
 \end{tikzpicture}
+\end{center}
 
-
-\column{0.46\textwidth}
-\vspace{0.3em}
-
+\vspace{1.5em}
 \begin{badbox}
-\footnotesize\textbf{Định lý 3.} Với $K$ moment hữu hạn, điểm cực tiểu \emph{không phải là duy nhất}: nhiều phân phối khác nhau đều có thể có cùng $K$ moment đầu như Gaussian.
+\footnotesize \textbf{Kết luận:} Sự tiến thoái lưỡng nan: Tăng $K$ để vá lỗi shortcut sẽ trực tiếp đẩy mô hình vào vùng Gradient Explode.
 \end{badbox}
 
-\vspace{0.5em}
-\textbf{Vấn đề nan giải:} thêm nhiều moment hơn không giải quyết được vấn đề mà còn tạo ra vấn đề mới.
-
-\vspace{0.5em}
-\begin{tabular}{@{}lll@{}}
-\toprule
- & $K$ nhỏ & $K$ lớn \\
-\midrule
-Nhận diện & \textcolor{mbad}{yếu} — nhiều & \textcolor{mgood}{mạnh} \\
-& shortcut & \\
-Gradient & \textcolor{mgood}{ổn định} & \textcolor{mbad}{explode} theo \\
-& & hàm mũ \\
-\bottomrule
-\end{tabular}
-
-\vspace{0.6em}
-\begin{badbox}
-\footnotesize\textbf{Không thể có cả hai:} tăng $K$ để nhận diện tốt hơn thì gradient bùng nổ → quá trình huấn luyện mất ổn định.
-\end{badbox}
-
-\end{columns}
 \end{frame}
 
 
@@ -1221,13 +1173,13 @@ Gradient & \textcolor{mgood}{ổn định} & \textcolor{mbad}{explode} theo \\
 \begin{frame}{Họ Test 2: CDF — Chính Xác Nhưng Không Differentiable}
 
 \vspace{0.4em}
-Họ test CDF đo khoảng cách giữa hai hàm phân bố tích luỹ. Tuy nhiên, việc tính toán thực nghiệm yêu cầu thao tác \textbf{sắp xếp} dữ liệu, gây ra hai hạn chế chí mạng cho học sâu:
+Họ test CDF đo khoảng cách giữa hai hàm phân bố tích luỹ. Thao tác \textbf{sắp xếp} (sort) dữ liệu tạo ra 2 nút thắt chí mạng:
 
 \vspace{1.2em}
 \begin{columns}[T]
 \column{0.48\textwidth}
 \begin{center}
-\textcolor{mbad}{\textbf{\large \xmark\ Vấn đề 1: Non-parallel}}
+\textcolor{mbad}{\textbf{\large Vấn đề 1: Non-parallel}}
 
 \vspace{0.8em}
 \begin{tikzpicture}[every node/.style={font=\scriptsize}]
@@ -1240,14 +1192,11 @@ Họ test CDF đo khoảng cách giữa hai hàm phân bố tích luỹ. Tuy nhi
   \node[rbox, minimum width=3.4cm, minimum height=0.55cm, font=\scriptsize, inner sep=4pt]
     at (1.6, -0.9) {bottleneck — breaks DDP};
 \end{tikzpicture}
-
-\vspace{0.8em}
-\footnotesize Multi-GPU phải đồng bộ hóa toàn bộ dữ liệu trước khi sắp xếp $\Rightarrow$ tạo ra nút thắt cổ chai nghiêm trọng.
 \end{center}
 
 \column{0.48\textwidth}
 \begin{center}
-\textcolor{mbad}{\textbf{\large \xmark\ Vấn đề 2: Non-differentiable}}
+\textcolor{mbad}{\textbf{\large Vấn đề 2: Non-differentiable}}
 
 \vspace{0.8em}
 \begin{tikzpicture}[every node/.style={font=\scriptsize}]
@@ -1264,9 +1213,6 @@ Họ test CDF đo khoảng cách giữa hai hàm phân bố tích luỹ. Tuy nhi
   \node[mbad, font=\scriptsize, align=center] at (1.6,-1.2)
     {sub-gradient\\non-smooth};
 \end{tikzpicture}
-
-\vspace{0.8em}
-\footnotesize Cần differentiable sort relaxation $\Rightarrow$ sinh thêm siêu tham số và sai số xấp xỉ.
 \end{center}
 \end{columns}
 
@@ -1278,16 +1224,18 @@ Họ test CDF đo khoảng cách giữa hai hàm phân bố tích luỹ. Tuy nhi
 % ─── [BATCH 2] Epps-Pulley (ECF) ─────────────────────────────────────────────
 \begin{frame}{Họ Test 3: ECF — Stable, Scalable, Provable}
 
-\vspace{0.2em}
-\textbf{Epps-Pulley (EP) test} so sánh phân phối qua \textbf{miền tần số (ECF)}: tính trung bình các sóng $e^{itx}$.
+\vspace{0.5em}
+\begin{columns}[c]
+\column{0.46\textwidth}
+\small
+\textbf{Empirical Characteristic Function (ECF):}
+\[ \hat{\phi}_X(t) = \frac{1}{N}\sum_{n=1}^N e^{it X_n} \]
 
-\vspace{0.8em}
-\begin{columns}[T]
+\vspace{0.3em}
+\textbf{Epps-Pulley (EP):} Tối thiểu hoá sai số:
+\[ EP = \int_{-\infty}^{\infty} \left| \hat{\phi}_X(t) - \phi_{\mathcal{N}}(t) \right|^2 w(t) dt \]
+
 \column{0.48\textwidth}
-
-Vì $|e^{itx}| = 1$, giá trị ECF luôn ổn định.
-
-\vspace{0.8em}
 \begin{center}
 \begin{tikzpicture}
 \begin{axis}[
@@ -1316,27 +1264,28 @@ Vì $|e^{itx}| = 1$, giá trị ECF luôn ổn định.
 \end{axis}
 \end{tikzpicture}
 \end{center}
-
-\column{0.48\textwidth}
-\vspace{0.2em}
-
-\textcolor{mgood}{\textbf{\large \checkmark\ Differentiable}}\\[2pt]
-\footnotesize Gradient tự nhiên từ trung bình, không cần phép \emph{sort}.
-
-\vspace{0.6em}
-\textcolor{mgood}{\textbf{\large \checkmark\ $\mathcal{O}(N)$ \& DDP-friendly}}\\[2pt]
-\footnotesize Song song hoá dễ dàng qua \texttt{all\_reduce}.
-
-\vspace{0.6em}
-\begin{primarybox}
-\footnotesize \textbf{Định lý 4: Bounded Gradient}\\[2pt]
-Gradient luôn \textbf{bị chặn an toàn} $\leq 4\sigma^2/N$ $\Rightarrow$ loại bỏ rủi ro exploding gradient.
-\end{primarybox}
-
 \end{columns}
 
-\vspace{1.0em}
-\takeaway{$|e^{itx}|=1$: Chìa khoá cho một hàm Loss 100\% song song hoá và siêu ổn định}
+\vspace{1.5em}
+\begin{columns}[T]
+\column{0.32\textwidth}
+\begin{goodbox}
+\centering \textbf{Differentiable}\\[4pt]
+\footnotesize Không cần sort $\Rightarrow$ $\nabla$ mượt mà.
+\end{goodbox}
+
+\column{0.32\textwidth}
+\begin{goodbox}
+\centering \textbf{Scalable $\mathcal{O}(N)$}\\[4pt]
+\footnotesize Phép tổng $\sum$ dễ \texttt{all\_reduce}.
+\end{goodbox}
+
+\column{0.33\textwidth}
+\begin{accentbox}
+\centering \textbf{Provably Stable}\\[4pt]
+\footnotesize $|e^{itx}|=1 \Rightarrow$ Gradient giới hạn.
+\end{accentbox}
+\end{columns}
 \end{frame}
 
 
@@ -1413,23 +1362,15 @@ Chiếu xuống $M$ hướng ngẫu nhiên $\mathbf{u} \in \mathbb{S}^{K-1}$:
 \textbf{Test 1D: Epps-Pulley (ECF)}
 \[EP = N\!\int |\hat\phi_X(t) - \phi(t)|^2 w(t)\,dt\]
 
-$\hat\phi_X(t) = \tfrac{1}{N}\sum e^{itX_j}$ — luôn nằm trong $[-1,1]$.
+{\footnotesize $\hat\phi_X(t) = \tfrac{1}{N}\sum e^{itX_j} \in [-1,1]$}
 
-\vspace{0.4em}
+\vspace{0.8em}
 \begin{goodbox}
-\footnotesize \textbf{Định lý 4:} Gradient EP bị chặn bởi $\frac{4\sigma^2}{N}$ — không bao giờ explode.
+\footnotesize \textbf{Định lý 4:} Gradient EP bị chặn bởi $\frac{4\sigma^2}{N}$.
 \end{goodbox}
 
-\vspace{0.4em}
-\begin{primarybox}
-\footnotesize \textbf{SIGReg} = trung bình EP trên $M$ hướng ngẫu nhiên.\\[2pt]
-$\mathcal{O}(N)$ · differentiable · DDP-friendly.
-\end{primarybox}
-
-\vspace{0.4em}
-\begin{accentbox}
-\footnotesize $M = 16$ hướng đủ nhờ tính trơn của DNN + SGD resampling tích lũy.
-\end{accentbox}
+\vspace{0.8em}
+\textbf{SIGReg} = trung bình EP trên $M$ hướng ngẫu nhiên.
 
 \end{columns}
 
@@ -1453,21 +1394,8 @@ $\mathbb{A}=\{\mathbf{a}_1,\ldots,\mathbf{a}_M\}$: tập hướng ngẫu nhiên 
 $T$ được chọn là Epps-Pulley.
 \end{accentbox}
 
-\vspace{0.5em}
-\begin{tikzpicture}[every node/.style={font=\small}]
-  \node[gbox, minimum width=2.3cm, minimum height=0.8cm, align=center] (d) at (0,0)
-    {\textbf{Differentiable}\\ \scriptsize ECF = average};
-  \node[gbox, minimum width=2.3cm, minimum height=0.8cm, align=center] (s) at (2.7,0)
-    {\textbf{$\mathcal{O}(N)$}\\ \scriptsize no sort needed};
-  \node[gbox, minimum width=2.3cm, minimum height=0.8cm, align=center] (p) at (5.4,0)
-    {\textbf{Provably}\\ \scriptsize Cramér-Wold};
-  \draw[thick, mgood!50] (d.east)--(s.west);
-  \draw[thick, mgood!50] (s.east)--(p.west);
-\end{tikzpicture}
-
-\vspace{0.3em}
-\textbf{Tại sao average thay vì max?}\\
-Max $\Rightarrow$ gradient sparse (chỉ 1 hướng được update). Average $\Rightarrow$ gradient dense, quá trình huấn luyện ổn định hơn.
+\vspace{1em}
+\emph{Chú thích: dùng average thay vì max $\rightarrow$ gradient dense.}
 
 \column{0.46\textwidth}
 \vspace{0.3em}
@@ -1497,18 +1425,6 @@ def SIGReg(x, global_step, M=1024):
     err = (ecf_r-phi).square() + ecf_i.square()
     return (err * phi).mean() * x.size(0)
 \end{lstlisting}
-% def SIGReg(x, global\_step, M=1024):\\
-% \quad g = torch.Generator(device=x.device)\\
-% \quad g.manual\_seed(global\_step) \# sync GPUs\\
-% \quad A = torch.randn(x.size(1), M, generator=g)\\
-% \quad A /= A.norm(p=2, dim=0) \# unit vectors\\
-% \quad t = torch.linspace(-5, 5, 17)\\
-% \quad phi = torch.exp(-0.5 * t**2) \# N(0,1) CF\\
-% \quad x\_t = (x @ A).unsqueeze(-1) * t\\
-% \quad ecf\_r = x\_t.cos().mean(0)\\
-% \quad ecf\_i = x\_t.sin().mean(0)\\
-% \quad err = (ecf\_r-phi).square() + ecf\_i.square()\\
-% \quad return (err * phi).mean() * x.size(0)
 \end{mdframed}
 
 \end{columns}
@@ -1723,21 +1639,13 @@ Core code (lines) & 1000+ & 500+ & \textbf{$\approx$50} \\
 \vspace{0.3em}
 
 \begin{primarybox}
-\footnotesize \textbf{Thiết lập mặc định khuyên dùng:}\\[3pt]
-$\lambda = 0.05$\\
-$V_g=2$ global views, $V_l=6$ local\\
-batch size $\geq 128$\\
-$M=1024$ slices\\
-17 quadrature points, $t\in[-5,5]$
+\footnotesize \textbf{Config mặc định:} $\lambda=0.05 \cdot V=2g+6l \cdot bs \geq 128 \cdot M=1024 \cdot 17\text{ pts, } t\in[-5,5]$.
 \end{primarybox}
 
-\vspace{0.5em}
+\vspace{1.5em}
 \begin{goodbox}
-\footnotesize $\lambda$ robust trên dải rộng (Figure 8 trong paper: stable $\lambda\in[0.01, 0.1]$) — không cần grid search tỉ mỉ.
+\footnotesize \textbf{Robust:} $\lambda \in [0.01, 0.1]$ (Fig.8).
 \end{goodbox}
-
-\vspace{0.5em}
-\textbf{Scaling law với số views:} peak $\lambda$ tỉ lệ thuận với $V$ — nếu tăng views thì tăng $\lambda$ tương ứng.
 
 \end{columns}
 \end{frame}

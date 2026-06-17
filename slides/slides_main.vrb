@@ -1,0 +1,50 @@
+\frametitle{SIGReg: Định Nghĩa Chính Thức và Cài đặt}
+
+\begin{columns}[T]
+\column{0.50\textwidth}
+
+\begin{accentbox}
+\footnotesize\textbf{Định nghĩa 2 — SIGReg}
+\[
+  \mathrm{SIGReg}_T(\mathbb{A},\{f_\theta(\mathbf{x}_n)\})
+  \triangleq \frac{1}{|\mathbb{A}|}\sum_{\mathbf{a}\in\mathbb{A}}
+  T\!\left(\{\mathbf{a}^\top f_\theta(\mathbf{x}_n)\}_{n=1}^N\right)
+\]
+$\mathbb{A}=\{\mathbf{a}_1,\ldots,\mathbf{a}_M\}$: tập hướng ngẫu nhiên trên $\mathbb{S}^{K-1}$.\\
+$T$ được chọn là Epps-Pulley.
+\end{accentbox}
+
+\vspace{1em}
+\emph{Chú thích: dùng average thay vì max $\rightarrow$ gradient dense.}
+
+\column{0.46\textwidth}
+\vspace{0.3em}
+
+\textbf{PyTorch — 50 dòng:}
+
+\vspace{0.2em}
+\begin{mdframed}[
+  topline=false,bottomline=false,rightline=false,
+  linewidth=2pt,linecolor=mprimary!50,
+  backgroundcolor=mdark!5,
+  innerleftmargin=6pt,innerrightmargin=4pt,
+  innertopmargin=4pt,innerbottommargin=4pt
+]
+\tiny\ttfamily
+\begin{lstlisting}[language=Python,basicstyle=\tiny\ttfamily]
+def SIGReg(x, global_step, M=1024):
+    g = torch.Generator(device=x.device)
+    g.manual_seed(global_step)  # sync GPUs
+    A = torch.randn(x.size(1), M, generator=g)
+    A /= A.norm(p=2, dim=0)    # unit vectors
+    t = torch.linspace(-5, 5, 17)
+    phi = torch.exp(-0.5 * t**2)
+    x_t = (x @ A).unsqueeze(-1) * t
+    ecf_r = x_t.cos().mean(0)
+    ecf_i = x_t.sin().mean(0)
+    err = (ecf_r-phi).square() + ecf_i.square()
+    return (err * phi).mean() * x.size(0)
+\end{lstlisting}
+\end{mdframed}
+
+\end{columns}
