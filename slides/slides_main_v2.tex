@@ -1578,10 +1578,11 @@ def SIGReg(x, global_step, M=1024):
 \begin{center}
 \[
   \mathcal{L}_{\rm LeJEPA}
-  = \underbrace{(1-\lambda)\cdot\mathcal{L}_{\rm pred}}_{\displaystyle\text{views phải agree}}
+  = \underbrace{\textcolor{mbad}{(1-\lambda)\cdot\mathcal{L}_{\rm pred}}}_{\displaystyle\textcolor{mbad!80!black}{\text{views phải agree}}}
   \;+\;
-  \underbrace{\lambda\cdot\text{SIGReg}}_{\displaystyle\text{push về }\mathcal{N}(\mathbf{0},I)}
+  \underbrace{\textcolor{mgood}{\lambda\cdot\text{SIGReg}}}_{\displaystyle\textcolor{mgood!80!black}{\text{push về }\mathcal{N}(\mathbf{0},I)}}
 \]
+{\scriptsize\color{mgray} Khuyến nghị: $\lambda \approx 0.05$}
 \end{center}
 
 \vspace{-0.3em}
@@ -1642,15 +1643,15 @@ def SIGReg(x, global_step, M=1024):
 \vspace{0.2em}
 \resizebox{\linewidth}{!}{%
 \footnotesize
-\begin{tabular}{@{}lccc@{}}
+\begin{tabular}{@{}l c c >{\columncolor{mgood!12}}c@{}}
 \toprule
  & DINO & I-JEPA & \textbf{LeJEPA} \\
 \midrule
 Lý thuyết         & \textcolor{mbad}{\xmark} & \textcolor{mbad}{\xmark} & \textcolor{mgood}{\textbf{\cmark}} \\
 \# hyperparams    & $\geq$7 & $\geq$5 & \textbf{1\ ($\lambda$)} \\
 Architecture      & ViT  & ViT   & \textbf{Any} \\
-Stop-gradient     & cần  & cần   & \textbf{không} \\
-Teacher-student   & cần  & cần   & \textbf{không} \\
+Stop-gradient     & \textcolor{mbad}{\xmark}  & \textcolor{mbad}{\xmark}   & \textcolor{mgood}{\textbf{\cmark}} \\
+Teacher-student   & \textcolor{mbad}{\xmark}  & \textcolor{mbad}{\xmark}   & \textcolor{mgood}{\textbf{\cmark}} \\
 Core code (lines) & 1000+ & 500+ & \textbf{$\approx$50} \\
 \bottomrule
 \end{tabular}}
