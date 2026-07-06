@@ -25,12 +25,12 @@
 # %%
 # [1] Setup
 SOURCE = "/kaggle/input/datasets/mlbang/lejepa-ml-project"
-DATA_ROOT = "/kaggle/input/datasets/mlbang/lejepa-data/data/imagenet10"
+DATA_ROOT = "/kaggle/input/datasets/phamphuhoa/lejepa7/lejepa-ml-project/data/imagenet10"
 SPEC_KEY = "epps"
 
 import sys
 sys.path.insert(0, SOURCE)
-from scripts.ablation_jupytext.kaggle_setup import setup, patch_entrypoint, install_wheels, gpu_info
+from scripts.ablation_jupytext.kaggle_setup import setup, patch_entrypoint, install_wheels, gpu_info, render
 
 paths = setup(SOURCE, DATA_ROOT, spec_key=SPEC_KEY)
 ENTRYPOINT = patch_entrypoint(SOURCE, DATA_ROOT)
@@ -39,7 +39,7 @@ print("Patched entrypoint:", ENTRYPOINT)
 
 # %%
 # [1b] First-run only: install offline wheels
-# install_wheels(SOURCE)
+install_wheels(SOURCE)
 
 # %%
 # [2] GPU check
@@ -63,17 +63,15 @@ OVERRIDES = {
 
 # %%
 # [4] Render command — run a sub-range of cases (indices into the full 27-case grid)
-# Chunk -> index range (split each across sessions to stay under Kaggle's 12h limit):
-#   chunk 0 (num_slices=512):  [0:9]   e.g. 0,5  then 5,9
-#   chunk 1 (num_slices=1024): [9:18]  e.g. 9,14 then 14,18  (slower; consider 9,12/12,15/15,18)
-#   chunk 2 (num_slices=4096): [18:27] e.g. 18,23 then 23,27
+# Split each across sessions to stay under Kaggle's 12h limit (~1.12h/config):
+#   0,7  then 7,14  then 14,21  then 21,27   (4 sessions, ~8h each)
 import dataclasses
 from itertools import product
 from scripts.ablations.commands import render_command
 from scripts.ablations.common import CommandOptions
 from scripts.ablations.specs import get_spec
 
-CASE_START, CASE_STOP = 0, 5
+CASE_START, CASE_STOP = 0, 7
 
 spec = get_spec(SPEC_KEY)
 keys = list(spec.grid)

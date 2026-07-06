@@ -49,7 +49,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 **LeJEPA** is a self-supervised learning library implementing *Sketched Isotropic Gaussian Regularization* (**SIGReg**), the core objective of the paper [arXiv:2511.08544](https://arxiv.org/abs/2511.08544). The repository contains:
 - `lejepa/` — the pip-installable core library of statistical tests
 - `stable-pretraining/` — a PyTorch Lightning training harness (separate package)
-- `train_eval_vit_l.py` — a Kaggle/Colab-oriented training script for ViT-L on ImageNet-1K
+- `train_eval_vit_b.py` — a Kaggle/Colab-oriented training script for ViT-B/16 on ImageNet-1K
 - `scripts/` — Hydra-based sweep launchers
 
 ## Installation
@@ -61,7 +61,7 @@ pip install lejepa
 # Or from source
 pip install -e .
 
-# Training harness (needed for scripts/train_lejepa_ablation.py and train_eval_vit_l.py)
+# Training harness (needed for scripts/train_lejepa_ablation.py and train_eval_vit_b.py)
 cd stable-pretraining && pip install -e .
 
 # Minimal example dependencies
@@ -165,7 +165,7 @@ The center for the invariance loss is computed from **global views only** (`all_
 ### Training entry points
 
 **Minimal (self-contained, no stable-pretraining)**  
-Described in `MINIMAL.md` — a ~130-line script using `timm`, `datasets`, `wandb`, and `hydra`.
+Described in `docs/MINIMAL.md` — a ~130-line script using `timm`, `datasets`, `wandb`, and `hydra`. (The `mnist.py` invocation below is illustrative from that doc; there is no `mnist.py` in this checkout.)
 
 ```bash
 python mnist.py +lamb=0.02 +V=4 +proj_dim=16 +lr=2e-3 +bs=256 +epochs=800
@@ -195,7 +195,7 @@ that file does not exist in this checkout.
 `scripts/launch_inet10.py` generates a shell command for a multi-backbone sweep
 on ImageNet-10, but the generated target references missing `scripts/je.py`.
 
-**Kaggle / large-scale (train_eval_vit_l.py)**  
+**Kaggle / large-scale (train_eval_vit_b.py)**  
 Jupytext `.py` notebook targeting Kaggle with ImageNet-1K loaded as a local `ImageFolder`. Sets `HF_DATASETS_CACHE=/dev/shm` for RAM-based caching and uses `GITHUB_TOKEN` / `HF_TOKEN` secrets for repo + hub access.
 
 ## Key Hyperparameters
@@ -220,9 +220,9 @@ Active research goal: improve LeJEPA on **Imagenette** ("ImageNet-10" here == fa
 Iteration pipeline (branch `clim-bench`):
 1. **Ideate** with the `/benchmark-climb-ideation` skill → `climb_bench/ideation/batch-<N>.md` (output path overridden from the skill default).
 2. **Plan** → `climb_bench/ideation/plan-batch-<N>.md`.
-3. **Implement** → `climb_bench/batch<N>/`: thin `exp<x>.py` runners + `_common.py` (shared trainer, extracted from `benchmarks/imagenet10/lejepa-vit-small.py`) + `_variants.py` (batch-local variant classes) + `run-batch<N>.py` (jupytext Kaggle-offline orchestrator).
+3. **Implement** → `climb_bench/batch<N>/`: thin `exp<x>.py` runners + `_common.py` (shared trainer, extracted from `stable-pretraining/benchmarks/imagenet10/lejepa-vit-small.py`) + `_variants.py` (batch-local variant classes) + `run-batch<N>.py` (jupytext Kaggle-offline orchestrator).
 4. **Analyze/eval** → `climb_bench/viz/`, all batch-parameterized (`--batch batch_<N>` / `BATCH=`): `viz_metrics.py` online-metric curves + ranking (reads `metric_results/<batch>/`); `eval-frozen-paperspec.py` the paper-spec frozen probe = concat CLS last-2 + LN + AdamW wd 1e-6 (supports `--qk_norm`/`--conv_stem` to rebuild exp2/exp6 archs); `run-eval-paperspec.py` unified Kaggle GPU runner (per-batch `PLANS` registry, self-locating via glob, loads full Lightning `.ckpt` directly so NO extract step needed); `viz_paperspec.py` paper-spec bar chart (reads `eval_results/<batch>/`). `extract_backbones.py` is now legacy/optional (direct ckpt load supersedes it). Findings in `climb_bench/tracker/` (one `batch<N>-analysis.md` per batch; reusable `analysis_template.md`). **NB: the online `OnlineProbe` used to rank ideas is NOT the paper eval recipe** (single CLS, no LN, lr 0.03) — re-run `eval-frozen-paperspec.py` on idea checkpoints for paper-comparable numbers.
-5. **Leo-bench (paper comparison)** → `climb_bench/leobench/PLAN.md`. NB: local `data/imagenet10` = the 10 Imagenette classes but **~28k train (≈2.2× the paper's inet10=13k)** — valid for ablation Δ, not for absolute comparison to paper Table 5.
+5. **Leo-bench (paper comparison)** → `climb_bench/leobench/` (`PLAN.md` not yet created — dir is currently empty). NB: local `data/imagenet10` = the 10 Imagenette classes but **~28k train (≈2.2× the paper's inet10=13k)** — valid for ablation Δ, not for absolute comparison to paper Table 5.
 
 Conventions when implementing variants:
 - Reuse the three swap mechanisms: `model.sigreg = ...`, subclass `LeJEPA` overriding `_compute_loss`, or `LeJEPA(projector=...)`. Variant logic goes in a `_variants.py` module; runners only import + wire. Give additive terms a weight-0 off-switch that reduces *exactly* to baseline.

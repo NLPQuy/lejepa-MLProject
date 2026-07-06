@@ -84,6 +84,7 @@ baseline eval nhiều lần (full ckpt 0.8949; backbone .pt batch-1 0.8954) → 
 conv-stem là cái **duy nhất** thắng thật theo paper-spec (+2.5pp), **nhưng đây không phải cải tiến *LeJEPA*** mà là cải tiến *kiến trúc backbone*:
 
 1. **Không động đến đóng góp của LeJEPA** (loss SIGReg + invariance giữ nguyên). Nó chỉ thay `patch_embed` → trick "early convolutions help ViTs" (Xiao 2021), vốn giúp **mọi** phương pháp SSL/supervised.
+
 2. **Phá protocol benchmark**: bài toán ghim cứng *frozen `vit_small_patch16_224`*. conv-stem làm backbone không còn là vit_small chuẩn → +2.5pp **lẫn lộn** giữa "objective tốt hơn" và "encoder mạnh hơn / nhiều param hơn / inductive bias tốt hơn". Eval đã rebuild đúng kiến trúc (cờ `--conv_stem`, ConvStem 4 lớp conv) nên số là thật, nhưng **không quy công cho LeJEPA được**.
 3. **Confound chưa kiểm soát**: cần re-baseline cùng kiến trúc (conv-stem + phương pháp khác) để biết LeJEPA có hưởng lợi *nhiều hơn* không. Nếu mọi method lợi như nhau → free lunch kiến trúc.
 

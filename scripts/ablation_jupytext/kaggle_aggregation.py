@@ -25,7 +25,7 @@
 # %%
 # [1] Setup
 SOURCE = "/kaggle/input/datasets/mlbang/lejepa-ml-project"
-DATA_ROOT = "/kaggle/input/datasets/mlbang/lejepa-data/data/imagenet10"
+DATA_ROOT = "/kaggle/input/datasets/phamphuhoa/lejepa7/lejepa-ml-project/data/imagenet10"
 SPEC_KEY = "aggregation"
 
 import sys
@@ -39,7 +39,7 @@ print("Patched entrypoint:", ENTRYPOINT)
 
 # %%
 # [1b] First-run only: install offline wheels
-# install_wheels(SOURCE)
+install_wheels(SOURCE)
 
 # %%
 # [2] GPU check

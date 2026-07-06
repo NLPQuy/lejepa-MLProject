@@ -7,7 +7,8 @@ and ablation command rendering.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
+import json
 import os
 from pathlib import Path
 import re
@@ -16,6 +17,7 @@ import types
 from typing import Any
 
 import torch
+from torch import nn
 from torch.utils.data import DataLoader
 
 
@@ -81,6 +83,9 @@ class TrainConfig:
     patch_mask_crop_ratio: float = 0.0
     autostop: bool = False
     seed: int = 42
+    save_checkpoints: bool = False
+    results_dir: str = ""
+    paper_probe_epochs: int = 100
 
 
 ConfigStore.instance().store(name="train_config", node=TrainConfig)
@@ -307,13 +312,134 @@ def _build_module(cfg: TrainConfig) -> LeJEPA:
     return module
 
 
-def _build_trainer(cfg: TrainConfig) -> pl.Trainer:
+def _run_tag(cfg: TrainConfig) -> str:
+    """Unique, filesystem-safe name per (multirun) job so results don't collide."""
+    try:
+        from hydra.core.hydra_config import HydraConfig
+
+        job = HydraConfig.get().job
+        name = job.override_dirname or f"job{job.num}"
+        if len(name) > 80:
+            import hashlib
+
+            name = f"job{job.num}_{hashlib.md5(name.encode()).hexdigest()[:8]}"
+    except Exception:
+        name = "single"
+    return re.sub(r"[^A-Za-z0-9._=-]+", "_", name) or "single"
+
+
+def _results_dir(cfg: TrainConfig) -> Path:
+    root = cfg.results_dir or os.environ.get("LEJEPA_RESULTS_DIR", "ablation_results")
+    out = Path(root) / _run_tag(cfg)
+    out.mkdir(parents=True, exist_ok=True)
+    return out
+
+
+def _build_callbacks(cfg: TrainConfig, ckpt_dir: Path) -> list:
+    callbacks: list = []
+    if cfg.save_checkpoints:
+        callbacks.append(
+            pl.pytorch.callbacks.ModelCheckpoint(
+                dirpath=str(ckpt_dir),
+                filename="{epoch:03d}",
+                save_top_k=-1,
+                every_n_epochs=max(cfg.max_epochs // 2, 1),
+                save_last=True,
+            )
+        )
+    return callbacks
+
+
+def _timm_vit(module: LeJEPA):
+    """The raw timm ViT, unwrapping the MaskedEncoder used by the patch-masking spec."""
+    return getattr(module.backbone, "vit", module.backbone)
+
+
+@torch.no_grad()
+def _extract_features(vit, loader, device) -> tuple[torch.Tensor, torch.Tensor]:
+    """Concat CLS of the last two ViT blocks (paper-spec frozen feature)."""
+    vit.eval()
+    feats, labs = [], []
+    for batch in loader:
+        imgs = batch["image"].to(device, non_blocking=True)
+        outs = vit.get_intermediate_layers(imgs, n=2, return_prefix_tokens=True, norm=True)
+        cls = torch.cat([o[1][:, 0] for o in outs], dim=1)  # [B, backbone_embed_dim * 2]
+        feats.append(cls.float().cpu())
+        labs.append(batch["label"].long())
+    return torch.cat(feats), torch.cat(labs)
+
+
+def _train_paper_probe(tr_x, tr_y, va_x, va_y, device, epochs, lr=1e-3, wd=1e-6, bs=1024) -> dict:
+    """Paper linear-probe: LayerNorm + Linear, AdamW, warmup + cosine. Returns best val acc."""
+    dim = tr_x.shape[1]
+    probe = nn.Sequential(nn.LayerNorm(dim), nn.Linear(dim, 10)).to(device)
+    opt = torch.optim.AdamW(probe.parameters(), lr=lr, weight_decay=wd)
+    warmup = max(1, epochs // 10)
+    sched = torch.optim.lr_scheduler.SequentialLR(
+        opt,
+        [
+            torch.optim.lr_scheduler.LinearLR(opt, 0.01, 1.0, warmup),
+            torch.optim.lr_scheduler.CosineAnnealingLR(opt, epochs - warmup),
+        ],
+        [warmup],
+    )
+    tr_x, tr_y = tr_x.to(device), tr_y.to(device)
+    va_x, va_y = va_x.to(device), va_y.to(device)
+    crit = nn.CrossEntropyLoss()
+    n = tr_x.shape[0]
+    best = {"top1": 0.0, "top5": 0.0, "epoch": -1}
+    for ep in range(epochs):
+        probe.train()
+        perm = torch.randperm(n, device=device)
+        for i in range(0, n, bs):
+            idx = perm[i : i + bs]
+            opt.zero_grad()
+            crit(probe(tr_x[idx]), tr_y[idx]).backward()
+            opt.step()
+        sched.step()
+        probe.eval()
+        with torch.no_grad():
+            logits = probe(va_x)
+            top1 = (logits.argmax(1) == va_y).float().mean().item()
+            top5 = (logits.topk(5, 1).indices == va_y[:, None]).any(1).float().mean().item()
+        if top1 > best["top1"]:
+            best = {"top1": top1, "top5": top5, "epoch": ep}
+    return best
+
+
+def _paper_eval(cfg: TrainConfig, module: LeJEPA) -> dict:
+    """Frozen paper-spec linear probe on the trained backbone (concat CLS last-2 + LN)."""
+    device = next(module.parameters()).device
+    vit = _timm_vit(module)
+    transform = _val_transform(cfg)
+
+    def _loader(split: str) -> DataLoader:
+        dataset = _build_dataset(cfg.dataset_name, split, transform, cfg)
+        return DataLoader(dataset, batch_size=cfg.batch_size, num_workers=cfg.num_workers)
+
+    tr_x, tr_y = _extract_features(vit, _loader("train"), device)
+    va_x, va_y = _extract_features(vit, _loader("validation"), device)
+    best = _train_paper_probe(tr_x, tr_y, va_x, va_y, device, cfg.paper_probe_epochs)
+    return {
+        "feature": "concat_cls_last2_layernorm",
+        "probe": "AdamW lr1e-3 wd1e-6 cosine",
+        "probe_epochs": cfg.paper_probe_epochs,
+        "n_train": int(tr_x.shape[0]),
+        "n_val": int(va_x.shape[0]),
+        "top1": round(best["top1"], 4),
+        "top5": round(best["top5"], 4),
+        "best_probe_epoch": best["epoch"],
+    }
+
+
+def _build_trainer(cfg: TrainConfig, callbacks: list, logger) -> pl.Trainer:
     return pl.Trainer(
         max_epochs=cfg.max_epochs,
         max_steps=cfg.max_steps,
         num_sanity_val_steps=0,
-        logger=False,
-        enable_checkpointing=False,
+        logger=logger,
+        enable_checkpointing=cfg.save_checkpoints,
+        callbacks=callbacks,
         accelerator=cfg.accelerator,
         devices=cfg.devices,
         precision=cfg.precision,
@@ -329,7 +455,11 @@ def main(raw_cfg: DictConfig) -> None:
 
     data = _build_data(cfg)
     module = _build_module(cfg)
-    trainer = _build_trainer(cfg)
+
+    results_dir = _results_dir(cfg)
+    callbacks = _build_callbacks(cfg, results_dir / "checkpoints")
+    logger = pl.pytorch.loggers.CSVLogger(save_dir=str(results_dir), name="csv_logs")
+    trainer = _build_trainer(cfg, callbacks, logger)
 
     manager = spt.Manager(trainer=trainer, module=module, data=data, seed=cfg.seed)
     manager()
@@ -339,7 +469,17 @@ def main(raw_cfg: DictConfig) -> None:
         raise RuntimeError("fit/loss_step was not logged")
     if not torch.isfinite(final_loss).item():
         raise RuntimeError(f"non-finite final loss: {final_loss.item()}")
+
+    paper_eval = _paper_eval(cfg, module)
+    summary = {
+        "config": asdict(cfg),
+        "final_loss": float(final_loss.item()),
+        "paper_eval": paper_eval,
+    }
+    (results_dir / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     print(f"LeJEPA final loss: {final_loss.item():.6f}")
+    print(f"LeJEPA PAPER-SPEC top1={paper_eval['top1']} top5={paper_eval['top5']}")
+    print(f"LeJEPA results dir: {results_dir}")
 
 
 if __name__ == "__main__":

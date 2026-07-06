@@ -24,8 +24,8 @@
 
 # %%
 # [1] Setup
-SOURCE = "/kaggle/input/lejepa-mlproject"
-DATA_ROOT = "/kaggle/input/lejepa-data/data/imagenet10"
+SOURCE = "/kaggle/input/datasets/mlbang/lejepa-ml-project"
+DATA_ROOT = "/kaggle/input/datasets/phamphuhoa/lejepa7/lejepa-ml-project/data/imagenet10"
 SPEC_KEY = "patch_masking"
 
 import sys
@@ -39,7 +39,7 @@ print("Patched entrypoint:", ENTRYPOINT)
 
 # %%
 # [1b] First-run only: install offline wheels
-# install_wheels(SOURCE)
+install_wheels(SOURCE)
 
 # %%
 # [2] GPU check
