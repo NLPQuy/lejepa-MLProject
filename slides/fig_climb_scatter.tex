@@ -1,0 +1,35 @@
+\documentclass[border=2pt]{standalone}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\definecolor{mprimary}{HTML}{2C3E6B}
+\definecolor{mgood}{HTML}{5B8C6B}
+\definecolor{mbad}{HTML}{B85450}
+\definecolor{mgray}{HTML}{9E9E9E}
+\definecolor{mlightred}{HTML}{F2E6E5}
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+    width=8.6cm, height=6.4cm,
+    xlabel={$\Delta$ online (pp)}, ylabel={$\Delta$ paper-spec (pp)},
+    xmin=-5.6, xmax=4.8, ymin=-4.2, ymax=3.2,
+    tick label style={font=\small}, label style={font=\small},
+    grid=both, grid style={mgray!20}]
+  \addplot[draw=none, fill=mlightred, opacity=0.5] coordinates
+    {(0,0) (4.8,0) (4.8,-4.2) (0,-4.2)} \closedcycle;
+  \draw[mgray, thick] (axis cs:-5.6,0) -- (axis cs:4.8,0);
+  \draw[mgray, thick] (axis cs:0,-4.2) -- (axis cs:0,3.2);
+  \addplot[only marks, mark=*, mgood, mark size=3pt] coordinates {(4.0,2.59)};
+  \node[font=\small, mgood, anchor=east] at (axis cs:3.85,2.59) {conv-stem};
+  \addplot[only marks, mark=*, mbad, mark size=2.4pt] coordinates
+    {(1.0,-0.40) (0.5,-0.38) (0.6,-0.05) (0.8,-0.66)};
+  \node[font=\small, mbad, anchor=west] at (axis cs:1.05,-0.40) {QK-Norm};
+  \node[font=\small, mbad, anchor=west] at (axis cs:0.65,-1.05) {SWA/PCGrad};
+  \node[font=\small, mbad, anchor=south west] at (axis cs:0.85,-0.62) {idea4};
+  \addplot[only marks, mark=*, mprimary, mark size=2.4pt] coordinates {(0.7,0.23) (0.4,0.01)};
+  \node[font=\small, mprimary, anchor=south west] at (axis cs:0.72,0.26) {SAM};
+  \addplot[only marks, mark=*, mgray, mark size=2.4pt] coordinates {(-2.8,-3.33) (-5.0,-3.75)};
+  \node[font=\small, mgray, anchor=west] at (axis cs:-4.55,-3.75) {Muon/LLRD};
+\end{axis}
+\end{tikzpicture}
+\end{document}

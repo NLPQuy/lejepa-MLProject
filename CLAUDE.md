@@ -222,10 +222,33 @@ Iteration pipeline (branch `clim-bench`):
 2. **Plan** → `climb_bench/ideation/plan-batch-<N>.md`.
 3. **Implement** → `climb_bench/batch<N>/`: thin `exp<x>.py` runners + `_common.py` (shared trainer, extracted from `stable-pretraining/benchmarks/imagenet10/lejepa-vit-small.py`) + `_variants.py` (batch-local variant classes) + `run-batch<N>.py` (jupytext Kaggle-offline orchestrator).
 4. **Analyze/eval** → `climb_bench/viz/`, all batch-parameterized (`--batch batch_<N>` / `BATCH=`): `viz_metrics.py` online-metric curves + ranking (reads `metric_results/<batch>/`); `eval-frozen-paperspec.py` the paper-spec frozen probe = concat CLS last-2 + LN + AdamW wd 1e-6 (supports `--qk_norm`/`--conv_stem` to rebuild exp2/exp6 archs); `run-eval-paperspec.py` unified Kaggle GPU runner (per-batch `PLANS` registry, self-locating via glob, loads full Lightning `.ckpt` directly so NO extract step needed); `viz_paperspec.py` paper-spec bar chart (reads `eval_results/<batch>/`). `extract_backbones.py` is now legacy/optional (direct ckpt load supersedes it). Findings in `climb_bench/tracker/` (one `batch<N>-analysis.md` per batch; reusable `analysis_template.md`). **NB: the online `OnlineProbe` used to rank ideas is NOT the paper eval recipe** (single CLS, no LN, lr 0.03) — re-run `eval-frozen-paperspec.py` on idea checkpoints for paper-comparable numbers.
-5. **Leo-bench (paper comparison)** → `climb_bench/leobench/` (`PLAN.md` not yet created — dir is currently empty). NB: local `data/imagenet10` = the 10 Imagenette classes but **~28k train (≈2.2× the paper's inet10=13k)** — valid for ablation Δ, not for absolute comparison to paper Table 5.
+5. **Leo-bench (paper comparison)** — NB: "leobench" is the *action* of climbing the paper benchmark, **not a directory** (`climb_bench/leobench/` was never created). NB: local `data/imagenet10` = the 10 Imagenette classes but **~28k train (≈2.2× the paper's inet10=13k)** — valid for ablation Δ, not for absolute comparison to paper Table 5.
+6. **Report to slides** → the benchmark-climb story (batch-1/2 results) is written as a 4-frame section in `slides/slides_main.tex` (`\section{Nghiên cứu mở rộng: Tự leo benchmark Imagenette}`): F1 framing, F2 baseline-overfit (+2.4pp free via best-ckpt), F3 optimizer-dead-end + conv-stem-as-separate-arch-track, F4 methodology lesson (online ranking ≠ paper recipe). Frames pull numbers from `tracker/batch{1,2}-analysis.md` + `viz/eval_results/`. **Currently wrapped in `\iffalse … \fi`** (temporarily hidden pending edits — unhide by deleting that pair). Its 3 charts are standalone-compiled PDFs (`slides/fig_climb_{overfit,optbars,scatter}.tex` → `.pdf`, `\includegraphics`'d) because inline pgfplots `axis` breaks beamer's frame-body collection — mirror the deck's existing A/B/C convention. **Build note: the deck uses BibTeX, so build with `pdflatex → bibtex → pdflatex → pdflatex`** (bare `pdflatex ×2` leaves the "Tài Liệu Tham Khảo" frame empty when no `slides_main.bbl` exists).
 
 Conventions when implementing variants:
 - Reuse the three swap mechanisms: `model.sigreg = ...`, subclass `LeJEPA` overriding `_compute_loss`, or `LeJEPA(projector=...)`. Variant logic goes in a `_variants.py` module; runners only import + wire. Give additive terms a weight-0 off-switch that reduces *exactly* to baseline.
 - jupytext orchestrators: **double-`#`** (`# # !python ...`) for inert command cells — single-`#` magics get auto-activated on read (`comment_magics`). No `[...]` in `# %%` cell titles.
 - Existing variants in `stable_pretraining/methods/lejepa_variants.py` (SRHT, Hyvärinen, Adversarial max-sliced, FM-SIGReg, FM-Invariance) + batch-1 ideas are already taken — new batches must not duplicate them.
 - Local conda env `lejepa` has torchvision 0.20.1 but the repo needs 0.26.0; full data pipeline only runs on Kaggle (pinned wheels) — smoke-test at model level locally.
+
+## SIGReg ablation study (hyperparameters + components) — status & follow-ups (PAUSED)
+
+Benchmark of LeJEPA across hyperparameter/component settings. **Ran, analyzed, and put
+on slides; NOT rerunning for now.** Pick this up from here if asked to extend/rerun.
+
+**Where things are:**
+- Raw Kaggle output (notebook `mlinh776/lejepa-ablation-full`, 22 versions) → `ablation_raw/*.zip` → merged into `ablation_results/` (62 jobs, 8 ablations).
+- Aggregate: `scripts/ablations/collect_summaries.py` (reads `summary.json`→`paper_eval`, **not** `metrics.csv` which has only loss) → `ablation_results/ablation_summary.{csv,md}`.
+- Figures: `scripts/ablations/viz_ablation.py` (heatmaps A/B, bars C/E/F, tornado D) + `viz_paper_tables.py` (paper-style tables a–e) → `ablation_results/figures/`.
+- Analysis: `climb_bench/tracker/ablation-measured-analysis.md`. Slides A/B/C in `slides/slides_main.tex` (frames after the commented paper-stability frame).
+
+**Known limitations (read before rerunning / quoting numbers):**
+1. **Pipeline is UNDER-FIT.** `train_lejepa_ablation.py:152` `_train_transform` has **only `RandomResizedCrop`** — missing ALL photometric aug that the project baseline `climb_bench/batch1/_common.py:39` (`_photometric_transforms`: flip/color-jitter/grayscale/blur/solarize) uses. → anchor top1 **59.5%** vs project baseline **89.5%** (`eval_results/batch_2/baseline_100.json`). Absolute NOT comparable; only internal Δ. Structural conclusions (collapse at `sigreg=embed`/`projector=Linear`, `num_slices↑`, predictor-not-needed) hold; regularization conclusions (`drop_path`/`patch_mask`/views "don't help") are confounded by the under-fit regime.
+2. **Single seed (42), no error bars** → small Δ (1–2pt) indistinguishable from noise.
+3. Harness diffs vs baseline (all in Comparability table of the analysis note): batch 512 vs 128, λ 0.05 vs 0.02, fp16 vs bf16.
+
+**Follow-ups, priority order (Kaggle GPU only — local can't run full pipeline):**
+1. **Fix aug** — add `_photometric_transforms` to `_train_transform` (mirror `_common.py`). ~5 lines, biggest impact.
+2. **Multi-seed** (2–3) for small-Δ ablations → error bars.
+3. **batch_size ablation** — code ready (`TrainConfig.batch_size`), just add a spec grid; directly quantifies the batch confound. Best-value of the untried ablations.
+4. `projector_dim` works (1-D); **`embedding_dim` NOT settable** (LeJEPA derives it from backbone, `lejepa.py:410`). `reg_tokens` code exists but timm `vit_small` support is env-dependent (may fail). **`cls2` aggregator NOT implemented** (`lejepa.py:383` accepts only `cls`/`mean`/`cls_mean`).

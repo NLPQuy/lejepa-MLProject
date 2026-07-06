@@ -1,0 +1,36 @@
+\documentclass[border=2pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\definecolor{mprimary}{HTML}{2C3E6B}
+\definecolor{maccent}{HTML}{C8A951}
+\definecolor{mbad}{HTML}{B85450}
+\definecolor{mgray}{HTML}{9E9E9E}
+\definecolor{mlightred}{HTML}{F2E6E5}
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+    width=8.2cm, height=5.4cm,
+    xlabel={epoch}, ylabel={online linear-probe top1 (\%)},
+    xmin=0, xmax=240, ymin=50, ymax=92,
+    xtick={0,50,100,150,200}, ytick={60,70,80,90},
+    tick label style={font=\small}, label style={font=\small},
+    grid=both, grid style={mgray!20},
+    every axis plot/.append style={thick}]
+  \addplot[draw=none, fill=mlightred, opacity=0.6] coordinates
+    {(81,50) (240,50) (240,92) (81,92)} \closedcycle;
+  \addplot[mprimary, mark=none, smooth] coordinates
+    {(10,55.0) (34,80.0) (60,85.4) (81,87.2) (120,86.4) (170,85.2) (233,84.7)};
+  \addplot[only marks, mark=*, maccent, mark size=2.4pt] coordinates {(81,87.2)};
+  \node[font=\small, maccent, anchor=south] at (axis cs:81,87.5) {đỉnh 87.2};
+  \addplot[only marks, mark=*, mbad, mark size=2.4pt] coordinates {(233,84.7)};
+  \node[font=\small, mbad, anchor=west] at (axis cs:196,82.9) {last 84.7};
+  \draw[<->, mbad, thick] (axis cs:212,87.2) -- (axis cs:212,84.7);
+  \node[font=\small\bfseries, mbad, anchor=west] at (axis cs:140,90.6) {$-2.4$ pp};
+  \node[font=\small\itshape, mbad, anchor=north] at (axis cs:165,58) {vùng overfit};
+\end{axis}
+\end{tikzpicture}
+\end{document}

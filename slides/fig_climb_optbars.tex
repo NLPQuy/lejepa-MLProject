@@ -1,0 +1,30 @@
+\documentclass[border=2pt]{standalone}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\definecolor{mprimary}{HTML}{2C3E6B}
+\definecolor{mgood}{HTML}{5B8C6B}
+\definecolor{mbad}{HTML}{B85450}
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+    width=8.6cm, height=6.0cm,
+    xbar, y=0.46cm, bar width=0.30cm,
+    xlabel={$\Delta$ top1 vs baseline (pp, paper-spec)},
+    xmin=-4.4, xmax=1.1,
+    xtick={-4,-3,-2,-1,0,1},
+    enlarge y limits=0.10,
+    symbolic y coords={Muon,LLRD,{Sched-Free},{deep-sup},QK-Norm,SWA,PCGrad,{prog-stoch},SAM},
+    ytick={Muon,LLRD,{Sched-Free},{deep-sup},QK-Norm,SWA,PCGrad,{prog-stoch},SAM},
+    tick label style={font=\small}, label style={font=\small},
+    nodes near coords, nodes near coords style={font=\footnotesize},
+    nodes near coords align={horizontal},
+    every axis plot/.append style={draw=none, bar shift=0pt}]
+  \addplot[fill=mgood] coordinates {(0.23,SAM) (0.01,{prog-stoch})};
+  \addplot[fill=mbad] coordinates
+    {(-0.05,PCGrad) (-0.38,SWA) (-0.40,QK-Norm) (-0.55,{deep-sup})
+     (-0.77,{Sched-Free}) (-3.33,LLRD) (-3.75,Muon)};
+  \draw[mprimary, thick, dashed] (axis cs:0,Muon) -- (axis cs:0,SAM);
+\end{axis}
+\end{tikzpicture}
+\end{document}

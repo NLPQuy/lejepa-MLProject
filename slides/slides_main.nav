@@ -80,10 +80,15 @@
 \headcommand {\beamer@framepages {34}{34}}
 \headcommand {\slideentry {4}{0}{8}{34/35}{}{0}}
 \headcommand {\beamer@framepages {34}{35}}
-\headcommand {\slideentry {4}{0}{9}{36/36}{}{0}}
+\headcommand {\beamer@sectionpages {27}{35}}
+\headcommand {\beamer@subsectionpages {27}{35}}
+\headcommand {\sectionentry {5}{\translate {References}}{36}{\translate {References}}{0}}
+\headcommand {\slideentry {5}{0}{0}{36/36}{}{0}}
 \headcommand {\beamer@framepages {36}{36}}
-\headcommand {\beamer@partpages {1}{36}}
-\headcommand {\beamer@subsectionpages {27}{36}}
-\headcommand {\beamer@sectionpages {27}{36}}
-\headcommand {\beamer@documentpages {36}}
-\headcommand {\gdef \inserttotalframenumber {32}}
+\headcommand {\slideentry {5}{0}{0}{36/37}{}{0}}
+\headcommand {\beamer@framepages {36}{37}}
+\headcommand {\beamer@partpages {1}{37}}
+\headcommand {\beamer@subsectionpages {27}{37}}
+\headcommand {\beamer@sectionpages {27}{37}}
+\headcommand {\beamer@documentpages {37}}
+\headcommand {\gdef \inserttotalframenumber {33}}

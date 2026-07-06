@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.5.15)  7 JUL 2026 00:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.5.15)  7 JUL 2026 01:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1987,12 +1987,12 @@ Overfull \vbox (1.02383pt too high) detected at line 1796
 ] [27
 
 ]
-<A_epps_heatmap.pdf, id=225, 945.8613pt x 308.03859pt>
+<A_epps_heatmap.pdf, id=229, 945.8613pt x 308.03859pt>
 File: A_epps_heatmap.pdf Graphic file (type pdf)
 <use A_epps_heatmap.pdf>
 Package pdftex.def Info: A_epps_heatmap.pdf  used on input line 2064.
 (pdftex.def)             Requested size: 183.23842pt x 59.6748pt.
-<B_views_heatmap.pdf, id=226, 369.12471pt x 311.96503pt>
+<B_views_heatmap.pdf, id=230, 369.12471pt x 311.96503pt>
 File: B_views_heatmap.pdf Graphic file (type pdf)
 <use B_views_heatmap.pdf>
 Package pdftex.def Info: B_views_heatmap.pdf  used on input line 2064.
@@ -2011,7 +2011,7 @@ Overfull \vbox (12.39336pt too high) detected at line 2064
 [28
 
  <./A_epps_heatmap.pdf> <./B_views_heatmap.pdf>]
-<E_arch_bars.pdf, id=355, 1020.21103pt x 268.60301pt>
+<E_arch_bars.pdf, id=359, 1020.21103pt x 268.60301pt>
 File: E_arch_bars.pdf Graphic file (type pdf)
 <use E_arch_bars.pdf>
 Package pdftex.def Info: E_arch_bars.pdf  used on input line 2099.
@@ -2028,7 +2028,7 @@ Overfull \vbox (5.2206pt too high) detected at line 2099
 [29
 
  <./E_arch_bars.pdf>]
-<F_reg_bars.pdf, id=413, 733.81342pt x 283.057pt>
+<F_reg_bars.pdf, id=417, 733.81342pt x 283.057pt>
 File: F_reg_bars.pdf Graphic file (type pdf)
 <use F_reg_bars.pdf>
 Package pdftex.def Info: F_reg_bars.pdf  used on input line 2140.
@@ -2041,7 +2041,7 @@ Package mdframed Info: mdframed inside a box
  [30
 
  <./F_reg_bars.pdf>]
-<dog.png, id=467, 246.6816pt x 246.6816pt>
+<dog.png, id=471, 246.6816pt x 246.6816pt>
 File: dog.png Graphic file (type png)
 <use dog.png>
 Package pdftex.def Info: dog.png  used on input line 2219.
@@ -2074,31 +2074,41 @@ Package mdframed Info: mdframed inside a box
 ]
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2331.
+(mdframed)              on input line 2484.
 Package mdframed Info: mdframed inside a box 
- mdframed uses option nobreak mdframed on input line 2331.
+ mdframed uses option nobreak mdframed on input line 2484.
  [33
 
 ]
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2382.
+(mdframed)              on input line 2535.
 Package mdframed Info: mdframed inside a box 
- mdframed uses option nobreak mdframed on input line 2382.
+ mdframed uses option nobreak mdframed on input line 2535.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2382.
+(mdframed)              on input line 2535.
 Package mdframed Info: mdframed inside a box 
- mdframed uses option nobreak mdframed on input line 2382.
+ mdframed uses option nobreak mdframed on input line 2535.
 
 [34
 
 ] [35
 
 
-]
-No file slides_main.bbl.
-[36
+] (./slides_main.bbl
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\translate ' on input line 1.
+
+
+LaTeX Font Warning: Font shape `T5/cmss/m/it' in size <5> not available
+(Font)              Font shape `T5/cmss/m/sl' tried instead on input line 15.
+
+) [36
+
+] [37
+
 
 ]
 \tf@nav=\write6
@@ -2120,14 +2130,14 @@ L3 programming layer <2024-01-22>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `slides_main.out' has not changed.
-(rerunfilecheck)             Checksum: D1413ACA20640FF53B82C4FD5B6E79CB;687.
+(rerunfilecheck)             Checksum: C717E6577D901BE979D77F4345576636;780.
  ) 
 Here is how much of TeX's memory you used:
- 43403 strings out of 475597
- 999459 string characters out of 5783339
+ 43491 strings out of 475597
+ 1001341 string characters out of 5783339
  1964975 words of memory out of 5000000
- 64636 multiletter control sequences out of 15000+600000
- 619176 words of font info for 162 fonts, out of 8000000 for 9000
+ 64702 multiletter control sequences out of 15000+600000
+ 620174 words of font info for 163 fonts, out of 8000000 for 9000
  309 hyphenation exceptions out of 8191
  128i,21n,123p,1878b,2472s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb>
@@ -2172,10 +2182,10 @@ ts/type1/vntex/vnr/vnssbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/vnte
 x/vnr/vnssi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnssi8.p
 fb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnssi9.pfb></usr/share/
 texlive/texmf-dist/fonts/type1/vntex/vnr/vntt8.pfb>
-Output written on slides_main.pdf (36 pages, 1557656 bytes).
+Output written on slides_main.pdf (37 pages, 1565245 bytes).
 PDF statistics:
- 712 PDF objects out of 1000 (max. 8388607)
- 383 compressed objects within 4 object streams
- 77 named destinations out of 1000 (max. 500000)
- 112 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 750 PDF objects out of 1000 (max. 8388607)
+ 419 compressed objects within 5 object streams
+ 96 named destinations out of 1000 (max. 500000)
+ 120 words of extra memory for PDF output out of 10000 (max. 10000000)
 

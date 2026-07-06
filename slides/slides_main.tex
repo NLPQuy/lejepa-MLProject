@@ -2275,6 +2275,159 @@ $\Rightarrow$ Tự động phân tách cấu trúc mà không cần bất kỳ a
 \end{frame}
 
 
+% ═══════════════════════════════════════════════════════════════════════════════
+% NGHIÊN CỨU MỞ RỘNG — TỰ LEO BENCHMARK (đóng góp của nhóm)
+% TẠM ẨN: đang chỉnh sửa thêm. Bật lại bằng cách xoá cặp \iffalse ... \fi bao quanh.
+% ═══════════════════════════════════════════════════════════════════════════════
+\iffalse
+\section{Nghiên cứu mở rộng: Tự leo benchmark Imagenette}
+
+% ─── F1: Framing ─────────────────────────────────────────────────────────────
+\begin{frame}{Nghiên Cứu Mở Rộng: Tự Leo Benchmark Imagenette Với LeJEPA}
+
+{\small\textbf{\color{mbad}Mục tiêu:} Vượt baseline LeJEPA trên bài toán \emph{low-data} (Imagenette $\sim$9.5k ảnh) — nơi \textbf{chống overfit \& hiệu quả dữ liệu} là đòn bẩy chính.}
+\vspace{0.3em}
+
+\begin{columns}[T]
+\column{0.46\textwidth}
+\footnotesize
+\textbf{\color{mprimary}Luật chơi (bám protocol paper):}
+\begin{itemize}\itemsep2pt
+  \item Encoder \textbf{đóng băng} \texttt{vit\_small\_patch16\_224} — cố định, không đổi kiến trúc
+  \item Pretrain in-domain, eval bằng \textbf{paper-spec probe}: concat CLS 2 lớp cuối + LayerNorm, AdamW lr\,1e-3 wd\,1e-6
+  \item Mỗi ý tưởng có \textbf{công tắc weight-0} rút về \emph{đúng} baseline
+\end{itemize}
+\vspace{0.4em}
+\textbf{\color{mprimary}Baseline paper-spec top1 = \textbf{89.5\%}}\\
+{\scriptsize\color{mgray}(2 batch $\times$ 13 ý tưởng: batch-1 = loss-term, batch-2 = optimizer/kiến trúc)}
+
+\column{0.52\textwidth}
+\centering
+\scriptsize
+\begin{tikzpicture}[
+    node distance=0.32cm and 0.35cm,
+    stage/.style={draw=mprimary, thick, rounded corners=2pt, fill=mlight,
+                  minimum width=1.55cm, minimum height=0.7cm, align=center, font=\scriptsize},
+    arr/.style={->, thick, mprimary}]
+  \node[stage] (i) {Ideate\\{\tiny (skill)}};
+  \node[stage, right=of i] (p) {Plan};
+  \node[stage, below=of p] (r) {Run\\{\tiny Kaggle GPU}};
+  \node[stage, left=of r] (e) {Eval\\{\tiny frozen probe}};
+  \draw[arr] (i) -- (p);
+  \draw[arr] (p) -- (r);
+  \draw[arr] (r) -- (e);
+  \draw[arr] (e) -- (i);
+\end{tikzpicture}
+\vspace{0.4em}
+
+{\footnotesize\color{mgood}\textbf{13 ý tưởng} $\to$ eval frozen $\to$ chọn cái sống sót}
+\end{columns}
+
+\takeaway{Đây là phần nhóm tự thực hiện: một quy trình leo benchmark có kỷ luật — mọi ý tưởng đều so với baseline 89.5\% dưới đúng recipe eval của paper, encoder giữ nguyên}
+
+\end{frame}
+
+
+% ─── F2: Overfit finding ─────────────────────────────────────────────────────
+\begin{frame}{Phát Hiện Lớn Nhất Không Phải Một Ý Tưởng — Mà Là Baseline OVERFIT}
+
+{\small\textbf{\color{mbad}Quan sát:} linear-probe leo nhanh, đạt \textbf{đỉnh $\sim$ep81} rồi \emph{tụt dần} — 400 epoch là quá dài cho 9.5k ảnh.}
+\vspace{0.2em}
+
+\begin{columns}[T]
+\column{0.56\textwidth}
+\centering
+\includegraphics[width=\linewidth]{fig_climb_overfit.pdf}
+
+\column{0.44\textwidth}
+\footnotesize
+\textbf{\color{mgood}Hệ quả:}
+\begin{itemize}\itemsep2pt
+  \item Chọn \textbf{best-checkpoint} (theo kNN/RankMe) $\Rightarrow$ \textbf{+2.4pp gần như miễn phí}, không cần cơ chế mới
+  \item \emph{Best}-ckpt, không phải \emph{last}-ckpt, mới là metric trung thực
+\end{itemize}
+\vspace{0.5em}
+\textbf{\color{mprimary}Các ý tưởng loss-term (paper-spec top1):}\\[0.2em]
+\scriptsize
+\begin{tabular}{@{}lc@{}}
+\toprule
+Ý tưởng & top1 (\%) \\
+\midrule
+\textbf{baseline} & \textbf{89.5} \\
+uniformity (idea4) & 88.9 {\scriptsize\color{mbad}($-0.7$)} \\
+DynTanh (idea7) & \textcolor{mbad}{59.2} \\
+coding-rate (idea3) & \textcolor{mbad}{26.7 (collapse)} \\
+\bottomrule
+\end{tabular}
+\end{columns}
+
+\takeaway{Đòn bẩy lớn nhất không nằm ở việc thêm loss-term mà ở \emph{chống overfit lúc pretrain}: chỉ riêng chọn best-checkpoint đã bù lại 2.4pp bị mất cuối train}
+
+\end{frame}
+
+
+% ─── F3: Optimizer dead-end + conv-stem track riêng ──────────────────────────
+\begin{frame}{Chỉnh Optimizer Là Ngõ Cụt — Một Kết Quả Âm Có Giá Trị}
+
+{\small\textbf{\color{mbad}Batch-2:} 10 ý tưởng optimizer/hình-học-training, \textbf{eval đủ 10/10} theo recipe paper.}
+\vspace{0.2em}
+
+\begin{columns}[T]
+\column{0.60\textwidth}
+\centering
+\includegraphics[width=\linewidth]{fig_climb_optbars.pdf}
+
+\column{0.40\textwidth}
+\footnotesize
+\textbf{\color{mbad}0/9} ý tưởng optimizer vượt baseline: SAM/prog-stoch chỉ \emph{chạm} baseline (trong nhiễu), 7 cái còn lại dưới baseline.
+\vspace{0.5em}
+
+\begin{mdframed}[linecolor=maccent, linewidth=1pt, backgroundcolor=mlightgold,
+                 roundcorner=3pt, innertopmargin=3pt, innerbottommargin=3pt,
+                 innerleftmargin=4pt, innerrightmargin=4pt]
+\scriptsize
+\textbf{\color{mprimary}Track riêng: kiến trúc}\\[0.15em]
+\textbf{conv-stem: $+2.6$pp} (92.1\%) — \emph{cái duy nhất} thắng thật.\\[0.2em]
+\textcolor{mbad}{\textbf{Nhưng:}} đổi \texttt{patch\_embed} $\to$ stem 4-conv $\Rightarrow$ \textbf{phá} định danh \texttt{vit\_small} đóng băng. Là cải tiến \emph{backbone}, KHÔNG quy công cho LeJEPA.
+\end{mdframed}
+\end{columns}
+
+\takeaway{Theo đúng luật chơi (frozen vit\_small), tinh chỉnh optimizer là ngõ cụt — một kết quả âm có giá trị; lợi ích conv-stem là của kiến trúc, phải báo cáo tách track kèm số param/FLOPs}
+
+\end{frame}
+
+
+% ─── F4: Methodology lesson — online ≠ paper recipe ──────────────────────────
+\begin{frame}{Bài Học Đo Lường: Ranking Online KHÔNG Sống Sót Qua Recipe Paper}
+
+{\small\textbf{\color{mbad}Cạm bẫy:} probe online rẻ (single CLS, lr\,0.03) dùng để \emph{xếp hạng} lệch $\sim$2.5pp so với probe paper-spec.}
+\vspace{0.2em}
+
+\begin{columns}[T]
+\column{0.58\textwidth}
+\centering
+\includegraphics[width=\linewidth]{fig_climb_scatter.pdf}
+
+\column{0.42\textwidth}
+\footnotesize
+Cả cụm \textbf{dương nhẹ online} (+0.4..+1.0pp) — QK-Norm, SWA, PCGrad, idea4 — \textbf{đều rơi $\le 0$} dưới recipe paper (\textcolor{mbad}{vùng đỏ}).
+\vspace{0.5em}
+
+\textbf{\color{mgood}Quy tắc rút ra:}
+\begin{itemize}\itemsep2pt
+  \item Online chỉ đáng tin để \textbf{loại} cái dở
+  \item Chỉ biên \textbf{$\gtrsim 0.02$} mới trụ được qua recipe paper (chỉ conv-stem)
+  \item Đòn bẩy thật = \textbf{anti-overfit lúc pretrain} $\to$ hướng cho batch tiếp theo
+\end{itemize}
+\end{columns}
+
+\takeaway{Chọn sai thước đo có thể "phát minh" ra tiến bộ không có thật — mọi kết luận climb phải chốt trên đúng recipe eval của paper, không phải trên probe rẻ dùng để rank}
+
+\end{frame}
+\fi
+% ═══ HẾT phần tạm ẩn (Nghiên cứu mở rộng) ═══
+
+
 % ─── Conclusion ───────────────────────────────────────────────────────────────
 \begin{frame}[plain]
 \begin{center}
