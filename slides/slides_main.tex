@@ -79,6 +79,16 @@
   backgroundcolor=mlightgold
 ]{accentbox}
 
+\newmdenv[
+  linewidth=1.6pt, linecolor=mgood!85!mprimary,
+  roundcorner=3pt,
+  innerleftmargin=10pt, innerrightmargin=8pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  backgroundcolor=mlightsage
+]{insightbox}
+
+\newcommand{\kw}[1]{\textbf{\color{mprimary}#1}}
+
 %% ─── Takeaway Banner ─────────────────────────────────────────────────────────
 \newcommand{\takeaway}[1]{%
   \vfill
@@ -196,14 +206,14 @@
 \end{frame}
 
 \begin{frame}{Nội Dung Trình Bày}
-\vspace{0.8cm}
+\vspace{0.65cm}
 \begin{center}
-\begin{tikzpicture}[x=3.5cm, y=1cm]
-  \tikzstyle{stepbox} = [draw=mprimary!40, fill=white, rounded corners=6pt, text width=2.6cm, align=center, inner sep=6pt, minimum height=1.6cm, line width=1.2pt]
+\begin{tikzpicture}[x=2.48cm, y=1cm]
+  \tikzstyle{stepbox} = [draw=mprimary!40, fill=white, rounded corners=6pt, text width=2.15cm, align=center, inner sep=5pt, minimum height=1.58cm, line width=1.2pt]
   \tikzstyle{stepnum} = [circle, fill=mprimary, text=white, font=\large\bfseries, inner sep=0pt, minimum size=0.8cm]
   
   %% Connecting Line
-  \draw[line width=2pt, mprimary!20] (0, 1.5) -- (3, 1.5);
+  \draw[line width=2pt, mprimary!20] (0, 1.5) -- (4, 1.5);
 
   %% Step 1
   \node[stepbox, draw=mprimary] (b1) at (0, -0.2) {\textbf{\color{mprimary}WHAT}\\[3pt]\scriptsize Học biểu diễn là gì?};
@@ -225,10 +235,15 @@
   \node[stepnum, fill=maccent] (n4) at (3, 1.5) {4};
   \draw[thick, maccent] (n4) -- (b4);
 
+  %% Step 5
+  \node[stepbox, draw=mprimary!85!mgood] (b5) at (4, -0.2) {\textbf{\color{mprimary!85!mgood}EXTENSION}\\[3pt]\scriptsize Nghiên cứu mở rộng CLIMB};
+  \node[stepnum, fill=mprimary!85!mgood] (n5) at (4, 1.5) {5};
+  \draw[thick, mprimary!85!mgood] (n5) -- (b5);
+
 \end{tikzpicture}
 \end{center}
 
-\vspace{0.5cm}
+\vspace{0.45cm}
 \begin{accentbox}
 \centering\small
 \textit{“LeJEPA: Tối giản hóa self-supervised learning bằng nền tảng lý thuyết vững chắc.”}
@@ -2276,156 +2291,295 @@ $\Rightarrow$ Tự động phân tách cấu trúc mà không cần bất kỳ a
 
 
 % ═══════════════════════════════════════════════════════════════════════════════
-% NGHIÊN CỨU MỞ RỘNG — TỰ LEO BENCHMARK (đóng góp của nhóm)
-% TẠM ẨN: đang chỉnh sửa thêm. Bật lại bằng cách xoá cặp \iffalse ... \fi bao quanh.
+% NGHIÊN CỨU MỞ RỘNG — BENCHMARK CLIMB (đóng góp của nhóm)
+% Research-story rewrite: two hypotheses plus a separate conv-stem track.
 % ═══════════════════════════════════════════════════════════════════════════════
-\iffalse
-\section{Nghiên cứu mở rộng: Tự leo benchmark Imagenette}
+\section{Nghiên cứu mở rộng: Benchmark Climb trên Imagenette}
 
-% ─── F1: Framing ─────────────────────────────────────────────────────────────
-\begin{frame}{Nghiên Cứu Mở Rộng: Tự Leo Benchmark Imagenette Với LeJEPA}
 
-{\small\textbf{\color{mbad}Mục tiêu:} Vượt baseline LeJEPA trên bài toán \emph{low-data} (Imagenette $\sim$9.5k ảnh) — nơi \textbf{chống overfit \& hiệu quả dữ liệu} là đòn bẩy chính.}
-\vspace{0.3em}
+% ─── CLIMB 1: Research question ──────────────────────────────────────────────
+\begin{frame}{Câu hỏi nghiên cứu: headroom còn nằm ở đâu?}
 
 \begin{columns}[T]
-\column{0.46\textwidth}
-\footnotesize
-\textbf{\color{mprimary}Luật chơi (bám protocol paper):}
-\begin{itemize}\itemsep2pt
-  \item Encoder \textbf{đóng băng} \texttt{vit\_small\_patch16\_224} — cố định, không đổi kiến trúc
-  \item Pretrain in-domain, eval bằng \textbf{paper-spec probe}: concat CLS 2 lớp cuối + LayerNorm, AdamW lr\,1e-3 wd\,1e-6
-  \item Mỗi ý tưởng có \textbf{công tắc weight-0} rút về \emph{đúng} baseline
-\end{itemize}
-\vspace{0.4em}
-\textbf{\color{mprimary}Baseline paper-spec top1 = \textbf{89.5\%}}\\
-{\scriptsize\color{mgray}(2 batch $\times$ 13 ý tưởng: batch-1 = loss-term, batch-2 = optimizer/kiến trúc)}
-
 \column{0.52\textwidth}
-\centering
-\scriptsize
-\begin{tikzpicture}[
-    node distance=0.32cm and 0.35cm,
-    stage/.style={draw=mprimary, thick, rounded corners=2pt, fill=mlight,
-                  minimum width=1.55cm, minimum height=0.7cm, align=center, font=\scriptsize},
-    arr/.style={->, thick, mprimary}]
-  \node[stage] (i) {Ideate\\{\tiny (skill)}};
-  \node[stage, right=of i] (p) {Plan};
-  \node[stage, below=of p] (r) {Run\\{\tiny Kaggle GPU}};
-  \node[stage, left=of r] (e) {Eval\\{\tiny frozen probe}};
-  \draw[arr] (i) -- (p);
-  \draw[arr] (p) -- (r);
-  \draw[arr] (r) -- (e);
-  \draw[arr] (e) -- (i);
-\end{tikzpicture}
-\vspace{0.4em}
 
-{\footnotesize\color{mgood}\textbf{13 ý tưởng} $\to$ eval frozen $\to$ chọn cái sống sót}
+\begin{primarybox}
+\footnotesize
+\textbf{Bối cảnh:} Sau pretrain \kw{LeJEPA}, backbone được freeze trong bước \kw{frozen-linear eval}; chỉ train probe tuyến tính và baseline trên Imagenette vẫn rất mạnh.
+\end{primarybox}
+
+\vspace{0.6em}
+\footnotesize
+\textbf{\color{mprimary}Hai giả thuyết còn lại:}
+\begin{itemize}\itemsep3pt
+  \item \textbf{Objective / representation head:} thêm tín hiệu hình học hoặc đổi projector có thể cải thiện SIGReg.
+  \item \textbf{Training geometry / optimizer / inductive bias:} mục tiêu có thể ổn, nhưng dynamics hoặc stem của ViT còn là nút nghẽn.
+\end{itemize}
+
+\column{0.46\textwidth}
+\begin{accentbox}
+\footnotesize
+\textbf{Giao thức đánh giá:}\\[0.25em]
+\scriptsize
+\kw{Backbone}: frozen encoder.\\[0.15em]
+\kw{Feature}: concat CLS từ 2 block cuối + LayerNorm.\\[0.15em]
+\kw{Probe}: linear classifier với AdamW.\\[0.15em]
+\kw{Metric}: top1 và $\Delta$ so với \textbf{baseline cùng setup}.
+\end{accentbox}
+
+\vspace{0.55em}
+\begin{goodbox}
+\centering\footnotesize
+\textbf{Mốc tham chiếu:}\\[0.2em]
+\kw{Objective/head}: \textbf{89.54\%}\\
+\kw{Optimizer/training}: \textbf{89.49\%}
+\end{goodbox}
+
 \end{columns}
 
-\takeaway{Đây là phần nhóm tự thực hiện: một quy trình leo benchmark có kỷ luật — mọi ý tưởng đều so với baseline 89.5\% dưới đúng recipe eval của paper, encoder giữ nguyên}
+\takeaway{Câu hỏi không phải ``đã thử bao nhiêu'', mà là headroom nằm ở mục tiêu, dynamics huấn luyện, hay inductive bias của backbone}
 
 \end{frame}
 
 
-% ─── F2: Overfit finding ─────────────────────────────────────────────────────
-\begin{frame}{Phát Hiện Lớn Nhất Không Phải Một Ý Tưởng — Mà Là Baseline OVERFIT}
-
-{\small\textbf{\color{mbad}Quan sát:} linear-probe leo nhanh, đạt \textbf{đỉnh $\sim$ep81} rồi \emph{tụt dần} — 400 epoch là quá dài cho 9.5k ảnh.}
-\vspace{0.2em}
+% ─── CLIMB 2: Objective and representation head ──────────────────────────────
+\begin{frame}{Hướng 1: Objective và representation head}
 
 \begin{columns}[T]
 \column{0.56\textwidth}
 \centering
-\includegraphics[width=\linewidth]{fig_climb_overfit.pdf}
+\includegraphics[width=\linewidth]{fig_climb_objective_bars.pdf}
 
-\column{0.44\textwidth}
+\vspace{0.2em}
+{\scriptsize\color{mgray} Frozen linear top1; đường nét đứt = baseline 89.54\%.}
+
+\column{0.42\textwidth}
 \footnotesize
-\textbf{\color{mgood}Hệ quả:}
-\begin{itemize}\itemsep2pt
-  \item Chọn \textbf{best-checkpoint} (theo kNN/RankMe) $\Rightarrow$ \textbf{+2.4pp gần như miễn phí}, không cần cơ chế mới
-  \item \emph{Best}-ckpt, không phải \emph{last}-ckpt, mới là metric trung thực
-\end{itemize}
-\vspace{0.5em}
-\textbf{\color{mprimary}Các ý tưởng loss-term (paper-spec top1):}\\[0.2em]
+
+\textbf{\color{mprimary}Đọc kết quả:}\\[0.25em]
 \scriptsize
-\begin{tabular}{@{}lc@{}}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}p{1.55cm}p{3.25cm}@{}}
 \toprule
-Ý tưởng & top1 (\%) \\
+\textbf{Can thiệp} & \textbf{Diễn giải} \\
 \midrule
-\textbf{baseline} & \textbf{89.5} \\
-uniformity (idea4) & 88.9 {\scriptsize\color{mbad}($-0.7$)} \\
-DynTanh (idea7) & \textcolor{mbad}{59.2} \\
-coding-rate (idea3) & \textcolor{mbad}{26.7 (collapse)} \\
+uniformity & 88.88\%: gần baseline nhưng thấp hơn, nên tín hiệu spread toàn cục chưa đủ. \\
+DynTanh & 59.24\%: thay chuẩn hóa projector làm hỏng interface với SIGReg. \\
+coding-rate & 26.73\%: log-det/full-rank volume quá mạnh, dẫn đến collapse. \\
 \bottomrule
 \end{tabular}
+
+\vspace{0.6em}
+\begin{insightbox}
+\scriptsize
+\textbf{Insight:} Các can thiệp trực tiếp vào \kw{geometry} không tạo \kw{headroom rõ}; càng mạnh tay càng dễ phá cân bằng của baseline.
+\end{insightbox}
+
 \end{columns}
 
-\takeaway{Đòn bẩy lớn nhất không nằm ở việc thêm loss-term mà ở \emph{chống overfit lúc pretrain}: chỉ riêng chọn best-checkpoint đã bù lại 2.4pp bị mất cuối train}
+\takeaway{SIGReg đã có cơ chế phân phối mạnh; thêm geometry phụ cần rất cẩn thận vì có thể cạnh tranh với chính mục tiêu baseline}
 
 \end{frame}
 
 
-% ─── F3: Optimizer dead-end + conv-stem track riêng ──────────────────────────
-\begin{frame}{Chỉnh Optimizer Là Ngõ Cụt — Một Kết Quả Âm Có Giá Trị}
-
-{\small\textbf{\color{mbad}Batch-2:} 10 ý tưởng optimizer/hình-học-training, \textbf{eval đủ 10/10} theo recipe paper.}
-\vspace{0.2em}
+% ─── CLIMB 3: Insight from direction 1 ───────────────────────────────────────
+\begin{frame}{Insight hướng 1: SIGReg + MLP projector là điểm cân bằng}
 
 \begin{columns}[T]
-\column{0.60\textwidth}
+\column{0.47\textwidth}
 \centering
-\includegraphics[width=\linewidth]{fig_climb_optbars.pdf}
+\vspace{0.95cm}
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  node distance=0.58cm,
+  part/.style={draw=mprimary!55, fill=mlight, rounded corners=3pt,
+               minimum width=2.55cm, minimum height=0.72cm,
+               align=center, font=\footnotesize},
+  core/.style={draw=mgood!70, fill=mlightsage, rounded corners=3pt,
+               minimum width=2.55cm, minimum height=0.72cm,
+               align=center, font=\footnotesize\bfseries},
+  warn/.style={draw=mbad!70, fill=mlightred, rounded corners=3pt,
+               minimum width=2.55cm, minimum height=0.72cm,
+               align=center, font=\footnotesize\bfseries},
+  arr/.style={->, thick, mprimary!70}]
+  \node[part] (enc) {ViT-S\\{\tiny frozen eval body}};
+  \node[core, right=0.7cm of enc] (proj) {MLP projector\\{\tiny BN + nonlinear}};
+  \node[core, right=0.7cm of proj, yshift=0.35cm] (sig) {SIGReg};
+  \node[core, right=0.7cm of proj, yshift=-0.35cm] (inv) {Invariance};
+  \draw[arr] (enc) -- (proj);
+  \draw[arr] (proj.east) -- ++(0.25,0) |- (sig.west);
+  \draw[arr] (proj.east) -- ++(0.25,0) |- (inv.west);
+  \node[warn, below=1.0cm of proj, text width=3.1cm] (risk) {Geometry phụ quá mạnh\\{\tiny coding-rate collapse}};
+  \draw[mbad!55, dashed, ->, thick] (risk.north) -- (proj.south);
+  \node[warn, above=0.82cm of proj, text width=3.1cm] (norm) {Đổi normalization\\{\tiny DynTanh thất bại}};
+  \draw[mbad!55, dashed, ->, thick] (norm.south) -- (proj.north);
+\end{tikzpicture}
+}
 
-\column{0.40\textwidth}
+\column{0.51\textwidth}
 \footnotesize
-\textbf{\color{mbad}0/9} ý tưởng optimizer vượt baseline: SAM/prog-stoch chỉ \emph{chạm} baseline (trong nhiễu), 7 cái còn lại dưới baseline.
-\vspace{0.5em}
-
-\begin{mdframed}[linecolor=maccent, linewidth=1pt, backgroundcolor=mlightgold,
-                 roundcorner=3pt, innertopmargin=3pt, innerbottommargin=3pt,
-                 innerleftmargin=4pt, innerrightmargin=4pt]
+\begin{goodbox}
 \scriptsize
-\textbf{\color{mprimary}Track riêng: kiến trúc}\\[0.15em]
-\textbf{conv-stem: $+2.6$pp} (92.1\%) — \emph{cái duy nhất} thắng thật.\\[0.2em]
-\textcolor{mbad}{\textbf{Nhưng:}} đổi \texttt{patch\_embed} $\to$ stem 4-conv $\Rightarrow$ \textbf{phá} định danh \texttt{vit\_small} đóng băng. Là cải tiến \emph{backbone}, KHÔNG quy công cho LeJEPA.
-\end{mdframed}
+\textbf{Điểm cân bằng hiện tại}\\[0.2em]
+Baseline nối \kw{invariance} với \kw{SIGReg} qua \kw{projector MLP} đủ capacity. Đây không chỉ là chi tiết kỹ thuật; nó là interface phân phối.
+\end{goodbox}
+
+\vspace{0.45em}
+\begin{accentbox}
+\scriptsize
+\textbf{Vì sao kết quả âm vẫn hữu ích}\\[0.2em]
+\begin{itemize}\itemsep2pt
+  \item \textbf{Uniformity} gần baseline: thêm spread nhẹ chưa tạo lợi thế.
+  \item \textbf{Coding-rate collapse}: auxiliary geometry có thể xung đột với SIGReg.
+  \item \textbf{DynTanh thất bại}: projector normalization không phải phần có thể bỏ tùy ý.
+\end{itemize}
+\end{accentbox}
+
+\vspace{0.45em}
+\begin{insightbox}
+\scriptsize
+\textbf{Kết luận hướng 1:} Muốn cải thiện \kw{objective}, cần thiết kế cùng \kw{projector}; không gắn thêm loss như một thành phần độc lập.
+\end{insightbox}
+
 \end{columns}
 
-\takeaway{Theo đúng luật chơi (frozen vit\_small), tinh chỉnh optimizer là ngõ cụt — một kết quả âm có giá trị; lợi ích conv-stem là của kiến trúc, phải báo cáo tách track kèm số param/FLOPs}
+\takeaway{Bài học chính: LeJEPA không chỉ là loss; SIGReg, invariance, và projector MLP tạo thành một cân bằng khá mong manh}
 
 \end{frame}
 
 
-% ─── F4: Methodology lesson — online ≠ paper recipe ──────────────────────────
-\begin{frame}{Bài Học Đo Lường: Ranking Online KHÔNG Sống Sót Qua Recipe Paper}
-
-{\small\textbf{\color{mbad}Cạm bẫy:} probe online rẻ (single CLS, lr\,0.03) dùng để \emph{xếp hạng} lệch $\sim$2.5pp so với probe paper-spec.}
-\vspace{0.2em}
+% ─── CLIMB 4: Optimizer and training geometry ────────────────────────────────
+\begin{frame}{Hướng 2: Optimizer và training geometry}
 
 \begin{columns}[T]
 \column{0.58\textwidth}
 \centering
-\includegraphics[width=\linewidth]{fig_climb_scatter.pdf}
+\includegraphics[width=\linewidth]{fig_climb_optbars.pdf}
 
-\column{0.42\textwidth}
+\vspace{0.15em}
+{\scriptsize\color{mgray} Frozen top1 delta so với baseline 89.49\%; conv-stem được tách khỏi chart này.}
+
+\column{0.40\textwidth}
 \footnotesize
-Cả cụm \textbf{dương nhẹ online} (+0.4..+1.0pp) — QK-Norm, SWA, PCGrad, idea4 — \textbf{đều rơi $\le 0$} dưới recipe paper (\textcolor{mbad}{vùng đỏ}).
-\vspace{0.5em}
 
-\textbf{\color{mgood}Quy tắc rút ra:}
-\begin{itemize}\itemsep2pt
-  \item Online chỉ đáng tin để \textbf{loại} cái dở
-  \item Chỉ biên \textbf{$\gtrsim 0.02$} mới trụ được qua recipe paper (chỉ conv-stem)
-  \item Đòn bẩy thật = \textbf{anti-overfit lúc pretrain} $\to$ hướng cho batch tiếp theo
-\end{itemize}
+\begin{primarybox}
+\scriptsize
+\textbf{Cụm gần baseline}\\[0.15em]
+\textbf{SAM} (+0.23pp), \textbf{stoch-depth} (+0.01pp), \textbf{PCGrad} (-0.05pp): sát baseline, chưa là thắng lợi rõ.
+\end{primarybox}
+
+\vspace{0.22em}
+\begin{accentbox}
+\scriptsize
+\textbf{Nhóm cơ chế}\\[0.15em]
+\kw{Flat minima / schedule}: SAM, SWA, stoch-depth.\\
+\kw{Optimizer replacement}: Muon, Schedule-Free, LLRD.\\
+\kw{Gradient geometry}: PCGrad.\\
+\kw{Attention / depth}: QK-Norm, deep supervision.
+\end{accentbox}
+
+\vspace{0.22em}
+\begin{badbox}
+\scriptsize
+\textbf{Muon} (-3.75pp) và \textbf{LLRD} (-3.33pp) làm xấu frozen features rõ rệt.
+\end{badbox}
+
 \end{columns}
 
-\takeaway{Chọn sai thước đo có thể "phát minh" ra tiến bộ không có thật — mọi kết luận climb phải chốt trên đúng recipe eval của paper, không phải trên probe rẻ dùng để rank}
+\takeaway{Trên fixed ViT-S, các can thiệp dynamics không mở ra headroom ổn định; baseline AdamW + cosine vẫn là neo rất mạnh}
 
 \end{frame}
-\fi
-% ═══ HẾT phần tạm ẩn (Nghiên cứu mở rộng) ═══
+
+
+% ─── CLIMB 5: Conv-stem architecture co-design ───────────────────────────────
+\begin{frame}{Conv-stem: architecture co-design riêng}
+
+\begin{columns}[T]
+\column{0.52\textwidth}
+\centering
+\includegraphics[width=\linewidth]{fig_climb_convstem.pdf}
+
+\vspace{0.15em}
+{\scriptsize\color{mgray} Thay patchify stride-16 bằng stem 4 conv; ViT body và CLS readout giữ tương thích.}
+
+\column{0.46\textwidth}
+\footnotesize
+
+\begin{goodbox}
+\scriptsize
+\textbf{Kết quả rõ nhất}\\[0.15em]
+\kw{Patchify baseline}: \textbf{89.49\%}\\
+\kw{Conv-stem}: \textbf{92.08\%}\\
+$\Delta$: \textbf{+2.59pp}
+\end{goodbox}
+
+\vspace{0.45em}
+\begin{primarybox}
+\scriptsize
+\textbf{Nguồn ý tưởng:} Xiao et al., \emph{Early Convolutions Help Transformers See Better}, NeurIPS 2021 \citep{xiao2021early}.\\[0.2em]
+\kw{Early convs} thêm locality / translation bias trước transformer blocks.
+\end{primarybox}
+
+\vspace{0.45em}
+\begin{badbox}
+\scriptsize
+\textbf{Giới hạn diễn giải:} Đây là cải thiện về \emph{backbone inductive bias}, chưa phải bằng chứng rằng objective LeJEPA tốt hơn.
+\end{badbox}
+
+\end{columns}
+
+\takeaway{Conv-stem cho thấy headroom đáng kể đến từ kiến trúc đầu vào; vì vậy kết quả này nên được báo cáo như architecture co-design, không gộp với objective hay optimizer}
+
+\end{frame}
+
+
+% ─── CLIMB 6: Synthesis ──────────────────────────────────────────────────────
+\begin{frame}{Tổng hợp: LeJEPA objective đã rất khó cải thiện trên fixed ViT-S}
+
+\begin{columns}[T]
+\column{0.50\textwidth}
+\begin{primarybox}
+\scriptsize
+\textbf{Kết luận trên fixed ViT-S}\\[0.2em]
+\begin{itemize}\itemsep3pt
+  \item \textbf{Objective/head add-ons} không tạo winner rõ trước baseline 89.54\%.
+  \item \textbf{Optimizer/training-geometry} không vượt được baseline 89.49\% một cách thuyết phục.
+  \item Các thất bại vẫn có ý nghĩa: projector nhạy, auxiliary geometry có thể xung đột với SIGReg.
+\end{itemize}
+\end{primarybox}
+
+\vspace{0.45em}
+\begin{insightbox}
+\scriptsize
+\textbf{Headroom còn thấy được}\\[0.2em]
+\kw{Architecture co-design}: conv-stem đạt \textbf{92.08\%} (\textbf{+2.59pp}) nhờ inductive bias đầu vào, cần track đánh giá riêng.
+\end{insightbox}
+
+\column{0.48\textwidth}
+\begin{accentbox}
+\scriptsize
+\textbf{Thiếu bằng chứng trước khi claim rộng hơn}\\[0.2em]
+\begin{itemize}\itemsep3pt
+  \item multi-seed để tách nhiễu khỏi hiệu ứng thật;
+  \item params/FLOPs cho conv-stem;
+  \item same-stem baselines cho method không phải LeJEPA;
+  \item frozen eval cho best pretrain checkpoint nếu bàn về early stopping/overfit.
+\end{itemize}
+\end{accentbox}
+
+\vspace{0.45em}
+\begin{badbox}
+\scriptsize
+\textbf{Không nên claim:} Conv-stem là cải thiện objective, hoặc các delta nhỏ là winner phổ quát ngoài setup Imagenette/frozen ViT-S này.
+\end{badbox}
+
+\end{columns}
+
+\takeaway{Bức tranh hiện tại: objective LeJEPA đã khó cải thiện trên fixed ViT-S; headroom đáng theo đuổi nằm ở co-design kiến trúc và kiểm chứng mạnh hơn}
+
+\end{frame}
+
+% ═══ HẾT phần Nghiên cứu mở rộng ═══
 
 
 % ─── Conclusion ───────────────────────────────────────────────────────────────
