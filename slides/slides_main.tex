@@ -81,6 +81,17 @@
   backgroundcolor=mlightgold
 ]{accentbox}
 
+
+\newmdenv[
+  linewidth=1.6pt, linecolor=mgood!85!mprimary,
+  roundcorner=3pt,
+  innerleftmargin=10pt, innerrightmargin=8pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  backgroundcolor=mlightsage
+]{insightbox}
+
+\newcommand{\kw}[1]{\textbf{\color{mprimary}#1}}
+
 %% ─── Takeaway Banner ─────────────────────────────────────────────────────────
 \newcommand{\takeaway}[1]{%
   \vfill
@@ -198,14 +209,14 @@
 \end{frame}
 
 \begin{frame}{Nội Dung Trình Bày}
-\vspace{0.8cm}
+\vspace{0.65cm}
 \begin{center}
-\begin{tikzpicture}[x=3.5cm, y=1cm]
-  \tikzstyle{stepbox} = [draw=mprimary!40, fill=white, rounded corners=6pt, text width=2.6cm, align=center, inner sep=6pt, minimum height=1.6cm, line width=1.2pt]
+\begin{tikzpicture}[x=2.60cm, y=1cm]
+  \tikzstyle{stepbox} = [draw=mprimary!40, fill=white, rounded corners=6pt, text width=1.90cm, align=center, inner sep=4pt, minimum height=1.55cm, line width=1.2pt]
   \tikzstyle{stepnum} = [circle, fill=mprimary, text=white, font=\large\bfseries, inner sep=0pt, minimum size=0.8cm]
   
   %% Connecting Line
-  \draw[line width=2pt, mprimary!20] (0, 1.5) -- (3, 1.5);
+  \draw[line width=2pt, mprimary!20] (0, 1.5) -- (4, 1.5);
 
   %% Step 1
   \node[stepbox, draw=mprimary] (b1) at (0, -0.2) {\textbf{\color{mprimary}WHAT}\\[3pt]\scriptsize Học biểu diễn là gì?};
@@ -227,10 +238,15 @@
   \node[stepnum, fill=maccent] (n4) at (3, 1.5) {4};
   \draw[thick, maccent] (n4) -- (b4);
 
+  %% Step 5
+  \node[stepbox, draw=mprimary!85!mgood] (b5) at (4, -0.2) {\textbf{\color{mprimary!85!mgood}EXTENSION}\\[3pt]\scriptsize Nghiên cứu mở rộng CLIMB};
+  \node[stepnum, fill=mprimary!85!mgood] (n5) at (4, 1.5) {5};
+  \draw[thick, mprimary!85!mgood] (n5) -- (b5);
+
 \end{tikzpicture}
 \end{center}
 
-\vspace{0.5cm}
+\vspace{0.45cm}
 \begin{accentbox}
 \centering\small
 \textit{“LeJEPA: Tối giản hóa self-supervised learning bằng nền tảng lý thuyết vững chắc.”}
@@ -2073,7 +2089,127 @@ $\Rightarrow$ Phải chắp vá bằng các heuristic phụ để tránh sụp �
 % \end{frame}
 
 
+% ─── Ablation A: siêu tham số của mục tiêu học ───────────────────────────────
+\begin{frame}{Ablation A — Siêu tham số của mục tiêu học (SIGReg \& multi-view)}
+
+{\small\textbf{\color{mbad}Câu hỏi:} SIGReg nhạy thế nào với lưới tích phân Epps-Pulley? Cần bao nhiêu view (tổng / global)?}
+\vspace{0.4em}
+
+\begin{columns}[T]
+\column{0.52\textwidth}
+\scriptsize
+\textbf{Epps-Pulley} — top1 (\%), đủ 27 cấu hình:\\[0.2em]
+\begin{tabular}{@{}llccc@{}}
+\toprule
+integ. & slices & \multicolumn{3}{c}{\texttt{n\_points}} \\
+\cmidrule(lr){3-5}
+ & & 5 & 17 & 41 \\
+\midrule
+$[-1,1]$ & 512  & 59.3 & 59.5 & 60.6 \\
+         & 1024 & 63.8 & 63.9 & 63.2 \\
+         & 4096 & \textbf{70.1} & 69.5 & 69.2 \\
+$[-3,3]$ & 512  & 55.6 & 55.4 & 56.1 \\
+         & 1024 & 60.8 & 59.5 & 60.0 \\
+         & 4096 & 67.1 & 67.3 & 67.0 \\
+$[-5,5]$ & 512  & 57.6 & 54.9 & 55.1 \\
+         & 1024 & 58.2 & 59.2 & 59.2 \\
+         & 4096 & 63.3 & 66.8 & 66.8 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.4em}
+\textbf{Số view} ($V$): \; 4:\,\textbf{72.8} \; 6:\,65.7 \; 8:\,60.6 \; 10:\,57.1
+
+\column{0.46\textwidth}
+\centering
+\includegraphics[width=\linewidth]{A_epps_heatmap.pdf}\\[0.4em]
+\includegraphics[width=0.60\linewidth]{B_views_heatmap.pdf}
+\end{columns}
+
+\takeaway{Chỉ \texttt{num\_slices} là đòn bẩy thật — nhiều lát cắt cho ước lượng SIGReg mịn hơn; \texttt{n\_points}/$t_{\max}$ gần trung tính, cho thấy SIGReg ổn định với lưới tích phân (đúng như paper)}
+
+\end{frame}
+
+
+% ─── Ablation B: thành phần kiến trúc ────────────────────────────────────────
+\begin{frame}{Ablation B — Thành phần kiến trúc (nơi \& cách áp mục tiêu)}
+
+{\small\textbf{\color{mbad}Câu hỏi:} Áp SIGReg ở đâu (proj/embed)? Projector cần phi tuyến? Có cần predictor? Token nào nuôi projector?}
+
+{\centering\includegraphics[width=0.80\linewidth]{E_arch_bars.pdf}\par}
+
+\begin{columns}[T]
+\column{0.56\textwidth}
+\scriptsize
+\begin{tabular}{@{}ll@{}}
+\toprule
+Thành phần & top1 (tốt $\to$ tệ) \\
+\midrule
+SIGReg target & proj \textbf{59.5} $\gg$ \textcolor{mbad}{embed 23.7 / both 24.9} \\
+Projector     & MLP4 61.3 $>$ MLP 59.5 $>$ MLP2 $>$ \textcolor{mbad}{Linear 23.4} \\
+Predictor     & \textbf{none 59.5} $\gg$ mlp 48.3 $>$ linear 43.9 \\
+Aggregator    & cls \textbf{59.5} $\approx$ cls\_mean $>$ mean 55.8 \\
+\bottomrule
+\end{tabular}
+
+\column{0.44\textwidth}
+\footnotesize
+\textbf{\color{mgood}Trả lời:}
+\begin{itemize}\itemsep1pt
+  \item SIGReg \textbf{bắt buộc} trên projection; projector \textbf{phải phi tuyến} — đặt sai $\Rightarrow$ collapse
+  \item \textbf{Không cần predictor}; CLS đơn đã đủ
+\end{itemize}
+\end{columns}
+
+\takeaway{Collapse có ranh giới rõ theo thiết kế — chỉ xảy ra khi áp SIGReg sai chỗ (embedding) hoặc projector không đủ phi tuyến; đặt đúng thì SIGReg tự chống collapse, khỏi cần predictor}
+
+\end{frame}
+
+
+% ─── Ablation C: regularization augmentation ─────────────────────────────────
+\begin{frame}{Ablation C — Regularization kiểu augmentation}
+
+{\small\textbf{\color{mbad}Câu hỏi:} Tỉ lệ patch-masking nào tối ưu? LeJEPA nhạy với stochastic depth (drop-path) không?}
+\vspace{0.4em}
+
+\begin{columns}[T]
+\column{0.54\textwidth}
+\centering
+\includegraphics[width=\linewidth]{F_reg_bars.pdf}
+
+\column{0.44\textwidth}
+\scriptsize
+\textbf{Patch-mask ratio:}\\[0.2em]
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+ratio & 0.0 & 0.1 & 0.2 & 0.3 & 0.5 & 0.7 \\
+\midrule
+top1 & \textbf{61.1} & 59.8 & 60.2 & 59.5 & 59.4 & 59.3 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.6em}
+\textbf{Drop-path rate:}\\[0.2em]
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+rate & 0.0 & 0.05 & 0.1 & 0.2 & 0.4 \\
+\midrule
+top1 & \textbf{61.7} & 60.5 & 59.5 & 59.8 & 58.2 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.7em}
+\small\textbf{\color{mgood}Trả lời:} cả hai đạt đỉnh tại \textbf{0.0} — augmentation-reg \textbf{không giúp} ở low-data.
+\end{columns}
+
+\takeaway{Trái kỳ vọng: tắt mask \& drop-path lại tốt nhất (mô hình chưa ở chế độ overfit)}
+
+\end{frame}
+
+
 % % ─── [BATCH 4] Emergent semantics ────────────────────────────────────────────
+% Disabled for the current main slide flow.
+\iffalse
 \begin{frame}{Emergent Semantics: Không Supervision — Vẫn Học Được Cấu Trúc}
 
 \begin{columns}[T]
@@ -2206,6 +2342,299 @@ $\Rightarrow$ Tự động phân tách cấu trúc mà không cần bất kỳ a
 \end{columns}
 
 \end{frame}
+\fi
+
+
+% ═══════════════════════════════════════════════════════════════════════════════
+% NGHIÊN CỨU MỞ RỘNG — BENCHMARK CLIMB (đóng góp của nhóm)
+% Research-story rewrite: two hypotheses plus a separate conv-stem track.
+% ═══════════════════════════════════════════════════════════════════════════════
+\section{Nghiên cứu mở rộng: Benchmark Climb trên Imagenette}
+
+
+% ─── CLIMB 1: Research question ──────────────────────────────────────────────
+\begin{frame}{Câu hỏi nghiên cứu: headroom còn nằm ở đâu?}
+
+\begin{columns}[T]
+\column{0.52\textwidth}
+
+\begin{primarybox}
+\footnotesize
+\textbf{Bối cảnh:} Sau pretrain \kw{LeJEPA}, backbone được freeze trong bước \kw{frozen-linear eval}; chỉ train probe tuyến tính và baseline trên Imagenette vẫn rất mạnh.
+\end{primarybox}
+
+\vspace{0.6em}
+\footnotesize
+\textbf{\color{mprimary}Hai giả thuyết còn lại:}
+\begin{itemize}\itemsep3pt
+  \item \textbf{Objective / representation head:} thêm tín hiệu hình học hoặc đổi projector có thể cải thiện SIGReg.
+  \item \textbf{Training geometry / optimizer / inductive bias:} mục tiêu có thể ổn, nhưng dynamics hoặc stem của ViT còn là nút nghẽn.
+\end{itemize}
+
+\column{0.46\textwidth}
+\begin{accentbox}
+\footnotesize
+\textbf{Giao thức đánh giá:}\\[0.25em]
+\scriptsize
+\kw{Backbone}: frozen encoder.\\[0.15em]
+\kw{Feature}: concat CLS từ 2 block cuối + LayerNorm.\\[0.15em]
+\kw{Probe}: linear classifier với AdamW.\\[0.15em]
+\kw{Metric}: top1 và $\Delta$ so với \textbf{baseline cùng setup}.
+\end{accentbox}
+
+\vspace{0.55em}
+\begin{goodbox}
+\centering\footnotesize
+\textbf{Mốc tham chiếu:}\\[0.2em]
+\kw{Objective/head}: \textbf{89.54\%}\\
+\kw{Optimizer/training}: \textbf{89.49\%}
+\end{goodbox}
+
+\end{columns}
+
+\takeaway{Câu hỏi không phải ``đã thử bao nhiêu'', mà là headroom nằm ở mục tiêu, dynamics huấn luyện, hay inductive bias của backbone}
+
+\end{frame}
+
+
+% ─── CLIMB 2: Objective and representation head ──────────────────────────────
+\begin{frame}{Hướng 1: Objective và representation head}
+
+\begin{columns}[T]
+\column{0.56\textwidth}
+\centering
+\includegraphics[width=\linewidth]{fig_climb_objective_bars.pdf}
+
+\vspace{0.2em}
+{\scriptsize\color{mgray} Frozen linear top1; đường nét đứt = baseline 89.54\%.}
+
+\column{0.42\textwidth}
+\footnotesize
+
+\textbf{\color{mprimary}Đọc kết quả:}\\[0.25em]
+\scriptsize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}p{1.55cm}p{3.25cm}@{}}
+\toprule
+\textbf{Can thiệp} & \textbf{Diễn giải} \\
+\midrule
+uniformity & 88.88\%: gần baseline nhưng thấp hơn, nên tín hiệu spread toàn cục chưa đủ. \\
+DynTanh & 59.24\%: thay chuẩn hóa projector làm hỏng interface với SIGReg. \\
+coding-rate & 26.73\%: log-det/full-rank volume quá mạnh, dẫn đến collapse. \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.6em}
+\begin{insightbox}
+\scriptsize
+\textbf{Insight:} Các can thiệp trực tiếp vào \kw{geometry} không tạo \kw{headroom rõ}; càng mạnh tay càng dễ phá cân bằng của baseline.
+\end{insightbox}
+
+\end{columns}
+
+\takeaway{SIGReg đã có cơ chế phân phối mạnh; thêm geometry phụ cần rất cẩn thận vì có thể cạnh tranh với chính mục tiêu baseline}
+
+\end{frame}
+
+
+% ─── CLIMB 3: Insight from direction 1 ───────────────────────────────────────
+\begin{frame}{Insight hướng 1: SIGReg + MLP projector là điểm cân bằng}
+
+\begin{columns}[T]
+\column{0.47\textwidth}
+\centering
+\vspace{0.95cm}
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  node distance=0.58cm,
+  part/.style={draw=mprimary!55, fill=mlight, rounded corners=3pt,
+               minimum width=2.55cm, minimum height=0.72cm,
+               align=center, font=\footnotesize},
+  core/.style={draw=mgood!70, fill=mlightsage, rounded corners=3pt,
+               minimum width=2.55cm, minimum height=0.72cm,
+               align=center, font=\footnotesize\bfseries},
+  warn/.style={draw=mbad!70, fill=mlightred, rounded corners=3pt,
+               minimum width=2.55cm, minimum height=0.72cm,
+               align=center, font=\footnotesize\bfseries},
+  arr/.style={->, thick, mprimary!70}]
+  \node[part] (enc) {ViT-S\\{\tiny frozen eval body}};
+  \node[core, right=0.7cm of enc] (proj) {MLP projector\\{\tiny BN + nonlinear}};
+  \node[core, right=0.7cm of proj, yshift=0.35cm] (sig) {SIGReg};
+  \node[core, right=0.7cm of proj, yshift=-0.35cm] (inv) {Invariance};
+  \draw[arr] (enc) -- (proj);
+  \draw[arr] (proj.east) -- ++(0.25,0) |- (sig.west);
+  \draw[arr] (proj.east) -- ++(0.25,0) |- (inv.west);
+  \node[warn, below=1.0cm of proj, text width=3.1cm] (risk) {Geometry phụ quá mạnh\\{\tiny coding-rate collapse}};
+  \draw[mbad!55, dashed, ->, thick] (risk.north) -- (proj.south);
+  \node[warn, above=0.82cm of proj, text width=3.1cm] (norm) {Đổi normalization\\{\tiny DynTanh thất bại}};
+  \draw[mbad!55, dashed, ->, thick] (norm.south) -- (proj.north);
+\end{tikzpicture}
+}
+
+\column{0.51\textwidth}
+\footnotesize
+\begin{goodbox}
+\scriptsize
+\textbf{Điểm cân bằng hiện tại}\\[0.2em]
+Baseline nối \kw{invariance} với \kw{SIGReg} qua \kw{projector MLP} đủ capacity. Đây không chỉ là chi tiết kỹ thuật; nó là interface phân phối.
+\end{goodbox}
+
+\vspace{0.45em}
+\begin{accentbox}
+\scriptsize
+\textbf{Vì sao kết quả âm vẫn hữu ích}\\[0.2em]
+\begin{itemize}\itemsep2pt
+  \item \textbf{Uniformity} gần baseline: thêm spread nhẹ chưa tạo lợi thế.
+  \item \textbf{Coding-rate collapse}: auxiliary geometry có thể xung đột với SIGReg.
+  \item \textbf{DynTanh thất bại}: projector normalization không phải phần có thể bỏ tùy ý.
+\end{itemize}
+\end{accentbox}
+
+\vspace{0.45em}
+\begin{insightbox}
+\scriptsize
+\textbf{Kết luận hướng 1:} Muốn cải thiện \kw{objective}, cần thiết kế cùng \kw{projector}; không gắn thêm loss như một thành phần độc lập.
+\end{insightbox}
+
+\end{columns}
+
+\takeaway{Bài học chính: LeJEPA không chỉ là loss; SIGReg, invariance, và projector MLP tạo thành một cân bằng khá mong manh}
+
+\end{frame}
+
+
+% ─── CLIMB 4: Optimizer and training geometry ────────────────────────────────
+\begin{frame}{Hướng 2: Optimizer và training geometry}
+
+\begin{columns}[T]
+\column{0.58\textwidth}
+\centering
+\includegraphics[width=\linewidth]{fig_climb_optbars.pdf}
+
+\vspace{0.15em}
+{\scriptsize\color{mgray} Frozen top1 delta so với baseline 89.49\%; conv-stem được tách khỏi chart này.}
+
+\column{0.40\textwidth}
+\footnotesize
+
+\begin{primarybox}
+\scriptsize
+\textbf{Cụm gần baseline}\\[0.15em]
+\textbf{SAM} (+0.23pp), \textbf{stoch-depth} (+0.01pp), \textbf{PCGrad} (-0.05pp): sát baseline, chưa là thắng lợi rõ.
+\end{primarybox}
+
+\vspace{0.22em}
+\begin{accentbox}
+\scriptsize
+\textbf{Nhóm cơ chế}\\[0.15em]
+\kw{Flat minima / schedule}: SAM, SWA, stoch-depth.\\
+\kw{Optimizer replacement}: Muon, Schedule-Free, LLRD.\\
+\kw{Gradient geometry}: PCGrad.\\
+\kw{Attention / depth}: QK-Norm, deep supervision.
+\end{accentbox}
+
+\vspace{0.22em}
+\begin{badbox}
+\scriptsize
+\textbf{Muon} (-3.75pp) và \textbf{LLRD} (-3.33pp) làm xấu frozen features rõ rệt.
+\end{badbox}
+
+\end{columns}
+
+\takeaway{Trên fixed ViT-S, các can thiệp dynamics không mở ra headroom ổn định; baseline AdamW + cosine vẫn là neo rất mạnh}
+
+\end{frame}
+
+
+% ─── CLIMB 5: Conv-stem architecture co-design ───────────────────────────────
+\begin{frame}{Conv-stem: architecture co-design riêng}
+
+\begin{columns}[T]
+\column{0.52\textwidth}
+\centering
+\includegraphics[width=\linewidth]{fig_climb_convstem.pdf}
+
+\vspace{0.15em}
+{\scriptsize\color{mgray} Thay patchify stride-16 bằng stem 4 conv; ViT body và CLS readout giữ tương thích.}
+
+\column{0.46\textwidth}
+\footnotesize
+
+\begin{goodbox}
+\scriptsize
+\textbf{Kết quả rõ nhất}\\[0.15em]
+\kw{Patchify baseline}: \textbf{89.49\%}\\
+\kw{Conv-stem}: \textbf{92.08\%}\\
+$\Delta$: \textbf{+2.59pp}
+\end{goodbox}
+
+\vspace{0.45em}
+\begin{primarybox}
+\scriptsize
+\textbf{Nguồn ý tưởng:} Xiao et al., \emph{Early Convolutions Help Transformers See Better}, NeurIPS 2021 \citep{xiao2021early}.\\[0.2em]
+\kw{Early convs} thêm locality / translation bias trước transformer blocks.
+\end{primarybox}
+
+\vspace{0.45em}
+\begin{badbox}
+\scriptsize
+\textbf{Giới hạn diễn giải:} Đây là cải thiện về \emph{backbone inductive bias}, chưa phải bằng chứng rằng objective LeJEPA tốt hơn.
+\end{badbox}
+
+\end{columns}
+
+\takeaway{Conv-stem cho thấy headroom đáng kể đến từ kiến trúc đầu vào; vì vậy kết quả này nên được báo cáo như architecture co-design, không gộp với objective hay optimizer}
+
+\end{frame}
+
+
+% ─── CLIMB 6: Synthesis ──────────────────────────────────────────────────────
+\begin{frame}{Tổng hợp: LeJEPA objective đã rất khó cải thiện trên fixed ViT-S}
+
+\begin{columns}[T]
+\column{0.50\textwidth}
+\begin{primarybox}
+\scriptsize
+\textbf{Kết luận trên fixed ViT-S}\\[0.2em]
+\begin{itemize}\itemsep3pt
+  \item \textbf{Objective/head add-ons} không tạo winner rõ trước baseline 89.54\%.
+  \item \textbf{Optimizer/training-geometry} không vượt được baseline 89.49\% một cách thuyết phục.
+  \item Các thất bại vẫn có ý nghĩa: projector nhạy, auxiliary geometry có thể xung đột với SIGReg.
+\end{itemize}
+\end{primarybox}
+
+\vspace{0.45em}
+\begin{insightbox}
+\scriptsize
+\textbf{Headroom còn thấy được}\\[0.2em]
+\kw{Architecture co-design}: conv-stem đạt \textbf{92.08\%} (\textbf{+2.59pp}) nhờ inductive bias đầu vào, cần track đánh giá riêng.
+\end{insightbox}
+
+\column{0.48\textwidth}
+\begin{accentbox}
+\scriptsize
+\textbf{Thiếu bằng chứng trước khi claim rộng hơn}\\[0.2em]
+\begin{itemize}\itemsep3pt
+  \item multi-seed để tách nhiễu khỏi hiệu ứng thật;
+  \item params/FLOPs cho conv-stem;
+  \item same-stem baselines cho method không phải LeJEPA;
+  \item frozen eval cho best pretrain checkpoint nếu bàn về early stopping/overfit.
+\end{itemize}
+\end{accentbox}
+
+\vspace{0.45em}
+\begin{badbox}
+\scriptsize
+\textbf{Không nên claim:} Conv-stem là cải thiện objective, hoặc các delta nhỏ là winner phổ quát ngoài setup Imagenette/frozen ViT-S này.
+\end{badbox}
+
+\end{columns}
+
+\takeaway{Bức tranh hiện tại: objective LeJEPA đã khó cải thiện trên fixed ViT-S; headroom đáng theo đuổi nằm ở co-design kiến trúc và kiểm chứng mạnh hơn}
+
+\end{frame}
+
+% ═══ HẾT phần Nghiên cứu mở rộng ═══
 
 
 % ─── Conclusion ───────────────────────────────────────────────────────────────
