@@ -292,12 +292,12 @@ Code PyTorch chỉ ~15 dòng thực sự:
 
 ## Slide 21 — LeJEPA: Một Công Thức, Một Siêu Tham Số
 
-Và đây là toàn bộ LeJEPA:
+Sau tất cả lý thuyết và phân tích vừa rồi — toàn bộ LeJEPA gói trong một công thức:
 $$\mathcal{L}_{\rm LeJEPA} = (1-\lambda)\cdot\mathcal{L}_{\rm pred} + \lambda\cdot\text{SIGReg}$$
 
-Hai thành phần:
-- **Invariance loss** $\mathcal{L}_{\rm pred}$: ép các view của cùng một ảnh phải cho ra embedding giống nhau.
-- **SIGReg**: ép embedding về $\mathcal{N}(0, I)$.
+Hai thành phần, và trên slide hai màu này khớp thẳng với hai ô loss trong diagram:
+- **Invariance loss** $\mathcal{L}_{\rm pred}$ (đỏ): ép các view của cùng một ảnh phải cho ra embedding giống nhau.
+- **SIGReg** (xanh): ép embedding về $\mathcal{N}(0, I)$.
 
 $\lambda$ là siêu tham số duy nhất cân bằng giữa hai mục tiêu. Khuyến nghị: $\lambda = 0.05$.
 
@@ -311,6 +311,8 @@ So sánh với các phương pháp khác:
 | Stop-gradient | cần | cần | **không** |
 | Teacher-student | cần | cần | **không** |
 | Core code | 1000+ | 500+ | **~50** |
+
+Nhìn cột LeJEPA được tô sáng bên phải — ✗ đỏ là cái các phương pháp khác cần mà LeJEPA không cần, ✓ xanh là cái LeJEPA có mà họ không có.
 
 **Takeaway**: 1 loss · 1 hyperparameter · 0 heuristic · lý thuyết từ first principles.
 
