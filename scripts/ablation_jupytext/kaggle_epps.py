@@ -25,7 +25,7 @@
 # %%
 # [1] Setup
 SOURCE = "/kaggle/input/datasets/mlbang/lejepa-ml-project"
-DATA_ROOT = "/kaggle/input/datasets/mlbang/lejepa-data/data/imagenet10"
+DATA_ROOT = "/kaggle/input/datasets/phamphuhoa/lejepa7/lejepa-ml-project/data/imagenet10"
 SPEC_KEY = "epps"
 
 import sys
@@ -39,7 +39,7 @@ print("Patched entrypoint:", ENTRYPOINT)
 
 # %%
 # [1b] First-run only: install offline wheels
-# install_wheels(SOURCE)
+install_wheels(SOURCE)
 
 # %%
 # [2] GPU check
@@ -62,13 +62,32 @@ OVERRIDES = {
 }
 
 # %%
-# [4] Render command
-CHUNK_INDEX, CHUNK_SIZE, NUM_CHUNKS = 0, 9, 3
-command = render(
-    SPEC_KEY, OVERRIDES, ENTRYPOINT,
-    chunk_index=CHUNK_INDEX, chunk_size=CHUNK_SIZE,
+# [4] Render command — run a sub-range of cases (indices into the full 27-case grid)
+# Split each across sessions to stay under Kaggle's 12h limit (~1.12h/config):
+#   0,7  then 7,14  then 14,21  then 21,27   (4 sessions, ~8h each)
+import dataclasses
+from itertools import product
+from scripts.ablations.commands import render_command
+from scripts.ablations.common import CommandOptions
+from scripts.ablations.specs import get_spec
+
+CASE_START, CASE_STOP = 0, 7
+
+spec = get_spec(SPEC_KEY)
+keys = list(spec.grid)
+all_cases = [dict(zip(keys, vals)) for vals in product(*(spec.grid[k] for k in keys))]
+cases = all_cases[CASE_START:CASE_STOP]
+spec = dataclasses.replace(
+    spec, grid={}, cases=cases,
+    overrides={**spec.overrides, **OVERRIDES},
+    key=f"{SPEC_KEY}_sub{CASE_START}_{CASE_STOP}",
 )
-print(f"# {SPEC_KEY} chunk {CHUNK_INDEX}/{NUM_CHUNKS - 1} of 27 configs")
+opts = CommandOptions(
+    target=f"python {ENTRYPOINT}", multirun=True, smoke=False,
+    env={"HYDRA_FULL_ERROR": "1"},
+)
+command = render_command(spec, opts).command
+print(f"# {SPEC_KEY} cases {CASE_START + 1}..{CASE_STOP} of 27 configs")
 
 # %%
 # [5] Execute

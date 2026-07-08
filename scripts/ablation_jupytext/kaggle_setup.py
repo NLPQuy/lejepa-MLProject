@@ -19,8 +19,11 @@ def setup(source: str, data_root: str, spec_key: str, working: str = "/kaggle/wo
     os.environ.setdefault("HYDRA_FULL_ERROR", "1")
     Path(os.environ["MPLCONFIGDIR"]).mkdir(parents=True, exist_ok=True)
     ckpt_dir, log_dir = Path(working) / "checkpoints" / spec_key, Path(working) / "logs" / spec_key
+    results_dir = Path(working) / "results" / spec_key
     ckpt_dir.mkdir(parents=True, exist_ok=True)
     log_dir.mkdir(parents=True, exist_ok=True)
+    results_dir.mkdir(parents=True, exist_ok=True)
+    os.environ["LEJEPA_RESULTS_DIR"] = str(results_dir)
     for path in (f"{source}/stable-pretraining", source):
         if path not in sys.path:
             sys.path.insert(0, path)
@@ -42,6 +45,7 @@ def setup(source: str, data_root: str, spec_key: str, working: str = "/kaggle/wo
     return {
         "source": source, "data_root": data_root, "working": working,
         "ckpt_dir": str(ckpt_dir), "log_dir": str(log_dir),
+        "results_dir": str(results_dir),
     }
 
 

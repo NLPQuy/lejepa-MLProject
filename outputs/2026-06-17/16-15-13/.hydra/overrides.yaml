@@ -1,0 +1,11 @@
+- dataset_name=synthetic
+- max_steps=2
+- max_epochs=1
+- batch_size=4
+- num_workers=0
+- backbone=vit_tiny_patch16_224
+- bstat_num_slices=16
+- accelerator=cpu
+- devices=1
+- precision=32
+- results_dir=/tmp/abl_smoke

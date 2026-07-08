@@ -1,7 +1,11 @@
 checkpoints/
 .hf_cache/
 *.bak
-data/
+climb_bench/data/*
 venv/
 __pycache__/
 *.pyc
+.claude/
+ckpt_raw/*
+
+ckpt/*
