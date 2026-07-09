@@ -1083,6 +1083,40 @@ def print_results_table(results: dict):
     print(sep + "\n")
 
 
+def save_results_csv(results: dict, out_dir: Path = None) -> str:
+    """Lưu kết quả eval vào file CSV.
+
+    Returns:
+        Path đến file CSV đã lưu.
+    """
+    import csv
+    from datetime import datetime
+
+    if out_dir is None:
+        out_dir = Path("/kaggle/working") if _KAGGLE_RUN else LOG_DIR
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    csv_path  = out_dir / f"eval_results_{timestamp}.csv"
+
+    ds_order    = EVAL_DATASET_LABELS
+    shots_order = ["1", "10", "all"]
+
+    with open(csv_path, "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(["shots"] + ds_order + ["avg"])
+        for shot in shots_order:
+            row = [results.get(d, {}).get(shot, "") for d in ds_order]
+            nums = [v for v in row if v != ""]
+            avg  = sum(nums) / len(nums) if nums else ""
+            if isinstance(avg, float):
+                avg = round(avg, 2)
+            writer.writerow([shot] + row + [avg])
+
+    print(f"\n✓ Kết quả đã lưu vào: {csv_path}")
+    return str(csv_path)
+
+
 # %% [markdown]
 # ## 8. Main
 
@@ -1119,6 +1153,7 @@ def main(skip_pretrain: bool = False, checkpoint_path: str = None):
 
     print("\n=== LeJEPA ViT-B (1ep IN-1K) — Few-Shot Linear Probe ===")
     print_results_table(results)
+    save_results_csv(results)
     return results
 
 
@@ -1179,4 +1214,8 @@ if __name__ == "__main__" and not _is_notebook():
     )
 
 elif _is_notebook():
-    main()
+    if _KAGGLE_RUN:
+        _nb_ckpt = _find_kaggle_checkpoint()
+        main(skip_pretrain=True, checkpoint_path=_nb_ckpt)
+    else:
+        main()
