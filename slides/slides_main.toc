@@ -1,5 +1,0 @@
-\beamer@sectionintoc {1}{WHAT — Học biểu diễn là gì?}{4}{0}{1}
-\beamer@sectionintoc {2}{WHY — Tại sao JEPA thất bại?}{7}{0}{2}
-\beamer@sectionintoc {3}{HOW — Giải từ gốc rễ}{10}{0}{3}
-\beamer@sectionintoc {4}{Kết quả}{26}{0}{4}
-\beamer@sectionintoc {5}{Nghiên cứu mở rộng: Benchmark Climb trên Imagenette}{30}{0}{5}

@@ -1,0 +1,12 @@
+# LaTeX intermediate/compile artifacts
+*.aux
+*.log
+*.nav
+*.out
+*.toc
+*.snm
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz

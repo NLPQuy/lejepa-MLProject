@@ -211,12 +211,12 @@
 \begin{frame}{Nội Dung Trình Bày}
 \vspace{0.65cm}
 \begin{center}
-\begin{tikzpicture}[x=2.60cm, y=1cm]
-  \tikzstyle{stepbox} = [draw=mprimary!40, fill=white, rounded corners=6pt, text width=1.90cm, align=center, inner sep=4pt, minimum height=1.55cm, line width=1.2pt]
+\begin{tikzpicture}[x=3.15cm, y=1cm]
+  \tikzstyle{stepbox} = [draw=mprimary!40, fill=white, rounded corners=6pt, text width=2.35cm, align=center, inner sep=4pt, minimum height=1.55cm, line width=1.2pt]
   \tikzstyle{stepnum} = [circle, fill=mprimary, text=white, font=\large\bfseries, inner sep=0pt, minimum size=0.8cm]
-  
+
   %% Connecting Line
-  \draw[line width=2pt, mprimary!20] (0, 1.5) -- (4, 1.5);
+  \draw[line width=2pt, mprimary!20] (0, 1.5) -- (3, 1.5);
 
   %% Step 1
   \node[stepbox, draw=mprimary] (b1) at (0, -0.2) {\textbf{\color{mprimary}WHAT}\\[3pt]\scriptsize Học biểu diễn là gì?};
@@ -224,24 +224,19 @@
   \draw[thick, mprimary] (n1) -- (b1);
 
   %% Step 2
-  \node[stepbox, draw=mbad] (b2) at (1, -0.2) {\textbf{\color{mbad}WHY}\\[3pt]\scriptsize Tại sao JEPA thất bại?};
-  \node[stepnum, fill=mbad] (n2) at (1, 1.5) {2};
-  \draw[thick, mbad] (n2) -- (b2);
+  \node[stepbox, draw=mgood] (b2) at (1, -0.2) {\textbf{\color{mgood}HOW}\\[3pt]\scriptsize Giải quyết từ gốc rễ};
+  \node[stepnum, fill=mgood] (n2) at (1, 1.5) {2};
+  \draw[thick, mgood] (n2) -- (b2);
 
   %% Step 3
-  \node[stepbox, draw=mgood] (b3) at (2, -0.2) {\textbf{\color{mgood}HOW}\\[3pt]\scriptsize Giải quyết từ gốc rễ};
-  \node[stepnum, fill=mgood] (n3) at (2, 1.5) {3};
-  \draw[thick, mgood] (n3) -- (b3);
+  \node[stepbox, draw=maccent] (b3) at (2, -0.2) {\textbf{\color{maccent}RESULTS}\\[3pt]\scriptsize Đánh giá thực nghiệm};
+  \node[stepnum, fill=maccent] (n3) at (2, 1.5) {3};
+  \draw[thick, maccent] (n3) -- (b3);
 
   %% Step 4
-  \node[stepbox, draw=maccent] (b4) at (3, -0.2) {\textbf{\color{maccent}RESULTS}\\[3pt]\scriptsize Đánh giá thực nghiệm};
-  \node[stepnum, fill=maccent] (n4) at (3, 1.5) {4};
-  \draw[thick, maccent] (n4) -- (b4);
-
-  %% Step 5
-  \node[stepbox, draw=mprimary!85!mgood] (b5) at (4, -0.2) {\textbf{\color{mprimary!85!mgood}EXTENSION}\\[3pt]\scriptsize Nghiên cứu mở rộng CLIMB};
-  \node[stepnum, fill=mprimary!85!mgood] (n5) at (4, 1.5) {5};
-  \draw[thick, mprimary!85!mgood] (n5) -- (b5);
+  \node[stepbox, draw=mprimary!85!mgood] (b4) at (3, -0.2) {\textbf{\color{mprimary!85!mgood}EXTENSION}\\[3pt]\scriptsize Nghiên cứu mở rộng CLIMB};
+  \node[stepnum, fill=mprimary!85!mgood] (n4) at (3, 1.5) {4};
+  \draw[thick, mprimary!85!mgood] (n4) -- (b4);
 
 \end{tikzpicture}
 \end{center}
@@ -272,16 +267,17 @@
 % ─── SECTION DIVIDER ──────────────────────────────────────────────────────────
 \section{WHAT — Học biểu diễn là gì?}
 
-% ─── Slide 1: Foundation model goal ──────────────────────────────────────────
-\begin{frame}{Mục Tiêu: Encoder Ánh Xạ Thế Giới Vào Không Gian Có Ý Nghĩa}
+% ─── Slide 1+2 [MERGED]: Mục tiêu học biểu diễn + cơ chế JEPA ─────────────────
+\begin{frame}{Mục Tiêu Học Biểu Diễn \& Cơ Chế JEPA}
 
 \begin{columns}[T]
-\column{0.50\textwidth}
+\column{0.40\textwidth}
 
-Học $f_\theta : \mathbb{R}^D \to \mathbb{R}^K$ sao cho embedding \textbf{có ích cho mọi downstream task} — không cần nhãn trong lúc huấn luyện.
+Học $f_\theta : \mathbb{R}^D \to \mathbb{R}^K$ cho embedding \textbf{hữu ích cho mọi task} — không cần nhãn.
 
-\vspace{0.7em}
-\begin{tikzpicture}[scale=0.88, every node/.style={font=\small}]
+\vspace{0.5em}
+\begin{center}
+\begin{tikzpicture}[scale=0.80, every node/.style={font=\small}]
   %% Input
   \node[pbox, minimum width=1.0cm] (x) at (0,0) {$\mathbf{x}$};
   \node[font=\tiny, mgray, below=2pt of x] {ảnh / video / text};
@@ -314,43 +310,15 @@ Học $f_\theta : \mathbb{R}^D \to \mathbb{R}^K$ sao cho embedding \textbf{có �
   \draw[arr] (x) -- (enc);
   \draw[arr] (enc) -- (4.0, 0);
 \end{tikzpicture}
+\end{center}
 
-\column{0.47\textwidth}
-\vspace{0.4em}
+\column{0.60\textwidth}
 
-Một $f_\theta$ tốt phục vụ được nhiều task:
-
-\vspace{0.4em}
-\begin{tikzpicture}[every node/.style={font=\footnotesize}, scale=0.88]
-  \node[pbox, minimum width=0.7cm] (z) at (0,0) {$\mathbf{z}$};
-  \foreach \ang/\lbl/\col in {
-    70/Phân loại/mgood,
-    10/Segmentation/mprimary,
-    -45/Few-shot/maccent,
-    -100/Retrieval/mgray}{
-    \node[\col!90, align=left] (t) at (\ang:2.4cm) {\lbl};
-    \draw[->, thin, \col!60] (z) -- (t);
-  }
-\end{tikzpicture}
-
-\end{columns}
+\textbf{Cơ chế JEPA:} dự đoán trạng thái latent của view này từ view kia — không khôi phục pixel.
 
 \vspace{0.3em}
-\begin{primarybox}
-\footnotesize \textbf{Foundation model:} một hệ thống giải được nhiều downstream task sau khi huấn luyện một lần, không thay đổi tham số $\theta$.
-\end{primarybox}
-
-\end{frame}
-
-
-% ─── Slide 2: JEPA mechanism ─────────────────────────────────────────────────
-\begin{frame}{JEPA: Dự Đoán Trạng Thái Trừu Tượng — Không Phải Pixel}
-
-\begin{columns}[T]
-\column{0.56\textwidth}
-
-\vspace{0.3em}
-\begin{tikzpicture}[every node/.style={font=\tiny}, scale=0.82, transform shape]
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\tiny}, scale=0.80, transform shape]
   % Ảnh gốc
   \node[pbox, minimum width=0.9cm, minimum height=0.55cm] (src) at (0.0, 0.0) {$x$};
   \node[font=\tiny, below=3pt of src] {Ảnh gốc};
@@ -387,19 +355,10 @@ Một $f_\theta$ tốt phục vụ được nhiều task:
   \end{pgfonlayer}
   \node[font=\tiny, color=mgray, above=3pt of encbox] {chia sẻ trọng số};
 \end{tikzpicture}
+\end{center}
 
-\column{0.41\textwidth}
-\vspace{0.5em}
-
-\textbf{View} có thể là: crop, mask, blur, frame liền kề, modal khác…
-
-\vspace{0.6em}
-\begin{goodbox}
-\footnotesize \textbf{JEPA} $\neq$ reconstruction: không khôi phục pixel mà học ``thế giới thay đổi thế nào'' ở mức trừu tượng.
-\end{goodbox}
-
-\vspace{0.6em}
-Tuy nhiên, bài toán dự đoán có một \textbf{nghiệm tầm thường nguy hiểm}…
+\vspace{0.3em}
+Nhưng có nghiệm tầm thường: mọi $z$ về cùng một điểm $\to$ \textbf{collapse}.
 
 \end{columns}
 
@@ -409,9 +368,10 @@ Tuy nhiên, bài toán dự đoán có một \textbf{nghiệm tầm thường ng
 
 
 % ─── SECTION DIVIDER ──────────────────────────────────────────────────────────
-\section{WHY — Tại sao JEPA thất bại?}
+% \section{WHY — Tại sao JEPA thất bại?}  % [HIDDEN] các frame WHY đã ẩn
 
 
+\iffalse % ─── [HIDDEN] frames của phần WHY ───────────────────────────────────
 % ─── Slide 3: Collapse explained ─────────────────────────────────────────────
 \begin{frame}{Collapse — Khi Encoder Học Cách "Gian Lận"}
 
@@ -529,12 +489,14 @@ Việc cực tiểu hóa loss prediction $\|z_1 - \hat z_1\|^2$ có nghiệm hi�
 \takeaway{Câu hỏi sai: \emph{``tránh collapse thế nào?''} $\;\longrightarrow\;$ Câu hỏi đúng: \emph{``phân phối nào là tối ưu?''}}
 
 \end{frame}
+\fi % ─── [HIDDEN] hết phần WHY ──────────────────────────────────────────────
 
 
 % ─── SECTION DIVIDER ──────────────────────────────────────────────────────────
 \section{HOW — Giải từ gốc rễ}
 
 
+\iffalse % ─── [HIDDEN] frame "Phân phối nào tối ưu" ────────────────────────
 % ─── Slide 5: The right question ─────────────────────────────────────────────
 \begin{frame}{Phân phối Nào Là Tối Ưu Cho Foundation Model?}
 
@@ -674,6 +636,7 @@ Kết quả tương tự với kNN và kernel regression (Định lý 1 trong pa
 \end{columns}
 
 \end{frame}
+\fi % ─── [HIDDEN] hết frame "Phân phối nào tối ưu" ──────────────────────────
 
 
 % ─── [MERGED] Bổ đề 1 + Bổ đề 2 + Định lý 1 + Kết luận → 1 slide tóm gọn ──────
@@ -684,30 +647,42 @@ Kết quả tương tự với kNN và kernel regression (Định lý 1 trong pa
 % trực giác bias/variance + phát biểu định lý + design principle.
 \begin{frame}{Tóm Tắt: Vì Sao Isotropic Gaussian Là Tối Ưu}
 
-\begin{columns}[T]
-\column{0.33\textwidth}
-\begin{badbox}
-\footnotesize\textbf{Bổ đề 1 — Bias}\\[3pt]
-Hướng có trị riêng nhỏ bị ridge co mạnh hơn $\Rightarrow$ anisotropic luôn có task khiến bias cao hơn isotropic.
-\end{badbox}
-
-\column{0.33\textwidth}
-\begin{badbox}
-\footnotesize\textbf{Bổ đề 2 — Variance}\\[3pt]
-Trị riêng không đều $\Rightarrow$ decision boundary dao động mạnh hơn giữa các lần resample $\Rightarrow$ variance cao hơn.
-\end{badbox}
-
-\column{0.33\textwidth}
-\begin{goodbox}
-\footnotesize\textbf{Định lý 1 — Duy nhất}\\[3pt]
-Với cùng năng lượng $\mathrm{Tr}(\mathrm{Cov})=\kappa$, $\mathcal{N}(0,\kappa I/K)$ là điểm cực tiểu \textbf{duy nhất} của downstream risk — đúng cho linear probe, kNN, kernel.
-\end{goodbox}
-\end{columns}
-
-\vspace{0.8em}
+\vspace{0.4em}
 \begin{center}
-{\Large\bfseries\color{mprimary} $f_\theta(\mathbf{x}) \sim \mathcal{N}(\mathbf{0}, I)$}\\[4pt]
-{\small\color{mgray} Design principle duy nhất cần đạt — không cần heuristic}
+\begin{tikzpicture}[
+    lemma/.style={draw=mbad!55, fill=mlightred, rounded corners=4pt,
+                  text width=4.0cm, align=left, inner sep=6pt, font=\footnotesize,
+                  minimum height=1.5cm},
+    thm/.style={draw=mgood!70, fill=mlightsage, rounded corners=4pt,
+                text width=4.8cm, align=left, inner sep=7pt, font=\footnotesize,
+                minimum height=1.9cm},
+    concl/.style={draw=mprimary, fill=mprimary!8, rounded corners=5pt,
+                  align=center, inner sep=8pt},
+  ]
+  % Hai bổ đề (trái, xếp dọc)
+  \node[lemma] (l1) at (0, 1.35) {\textbf{Bổ đề 1 · Bias$\,\uparrow$}\\[2pt]
+    Trị riêng nhỏ $\to$ ridge co mạnh hơn.};
+  \node[lemma] (l2) at (0, -1.35) {\textbf{Bổ đề 2 · Variance$\,\uparrow$}\\[2pt]
+    Trị riêng lệch $\to$ boundary dao động.};
+
+  % Định lý (giữa)
+  \node[thm] (thm) at (7.6, 0) {\textbf{Định lý 1 — Duy nhất}\\[2pt]
+    Cố định $\mathrm{Tr}(\mathrm{Cov})=\kappa$: $\mathcal{N}(0,\kappa I/K)$ là cực tiểu
+    \textbf{duy nhất} — probe, kNN, kernel.};
+
+  % Gộp 2 bổ đề → mũi tên ⇒ định lý
+  \draw[thick, mbad!50] (l1.east) -| (3.6, 0);
+  \draw[thick, mbad!50] (l2.east) -| (3.6, 0);
+  \fill[mbad!50] (3.6, 0) circle (1.6pt);
+  \draw[-{Latex[length=2.8mm]}, very thick, mprimary] (3.6, 0) -- (thm.west);
+
+  % Kết luận: công thức (dưới, mũi tên xuống)
+  \node[concl] (f) at (7.6, -2.7)
+    {\large\bfseries\color{mprimary}$f_\theta(\mathbf{x}) \sim \mathcal{N}(\mathbf{0}, I)$};
+  \draw[-{Latex[length=2.8mm]}, very thick, mgood!80] (thm.south) -- (f.north);
+  \node[font=\scriptsize\itshape, mgray, below=3pt of f, align=center]
+    {Design principle duy nhất cần đạt — không cần heuristic.};
+\end{tikzpicture}
 \end{center}
 
 \takeaway{Anisotropy $\Rightarrow$ bias $\uparrow$ \& variance $\uparrow$ cho mọi downstream task — Isotropic Gaussian tối ưu mọi probe}
@@ -1287,125 +1262,114 @@ Họ test CDF đo khoảng cách giữa hai hàm phân bố tích luỹ. Thao t�
 % ─── [BATCH 2] Epps-Pulley (ECF) ─────────────────────────────────────────────
 \begin{frame}{Họ Test 3: ECF — Stable, Scalable, Provable}
 
-\vspace{0.5em}
-\begin{columns}[c]
-\column{0.46\textwidth}
-\small
-\textbf{Empirical Characteristic Function (ECF):}
-\[ \hat{\phi}_X(t) = \frac{1}{N}\sum_{n=1}^N e^{it X_n} \]
+\vfill
+% Công thức làm caption
+\begin{center}\small
+$\displaystyle \hat{\phi}_X(t) = \frac{1}{N}\sum_{n=1}^N e^{it X_n}$
+\qquad
+$\displaystyle EP = \int_{-\infty}^{\infty}
+   \bigl| \hat{\phi}_X(t) - \phi_{\mathcal{N}}(t) \bigr|^2 w(t)\,dt$
+\end{center}
 
 \vspace{0.3em}
-\textbf{Epps-Pulley (EP):} Tối thiểu hoá sai số:
-\[ EP = \int_{-\infty}^{\infty} \left| \hat{\phi}_X(t) - \phi_{\mathcal{N}}(t) \right|^2 w(t) dt \]
-
-\column{0.48\textwidth}
+% Plot hero — chú giải trực tiếp
 \begin{center}
 \begin{tikzpicture}
 \begin{axis}[
-  width=5.2cm, height=3.0cm,
+  width=11cm, height=4.6cm,
   xlabel={$t$ (tần số)}, ylabel={CF},
   xlabel style={font=\small}, ylabel style={font=\small},
   tick label style={font=\tiny},
-  xmin=-5, xmax=5, ymin=-0.3, ymax=1.2,
+  xmin=-5, xmax=5, ymin=-0.3, ymax=1.25,
   grid=major, grid style={mgray!15},
-  legend pos=outer north east,
-  legend style={font=\tiny, draw=none, fill=mgray!5},
+  clip=false, no marks,
 ]
-  \addplot[mprimary, very thick, domain=-5:5, samples=60]
-    {exp(-x^2/2)};
-  \addlegendentry{Target $\phi(t)$}
-  \addplot[maccent, thick, domain=-5:5, samples=80]
-    {exp(-x^2/2) + 0.22*sin(deg(3.5*x))*exp(-x^2/2.2) + 0.08*cos(deg(7*x))*exp(-x^2/3)};
-  \addlegendentry{Empirical $\hat\phi_X(t)$}
-  % highlight gap region
+  % vùng gap = EP (nền)
   \addplot[fill=mbad!12, draw=none, domain=-3.5:3.5, samples=80]
     {exp(-x^2/2) + 0.22*sin(deg(3.5*x))*exp(-x^2/2.2) + 0.08*cos(deg(7*x))*exp(-x^2/3)}
     \closedcycle;
   \addplot[fill=white, draw=none, domain=-3.5:3.5, samples=80]
     {exp(-x^2/2)} \closedcycle;
-  \node[font=\tiny, mgray, align=center] at (axis cs:2.8, 0.5) {gap\\$= EP$};
+  % hai đường
+  \addplot[mprimary, very thick, domain=-5:5, samples=60] {exp(-x^2/2)};
+  \addplot[maccent, thick, domain=-5:5, samples=80]
+    {exp(-x^2/2) + 0.22*sin(deg(3.5*x))*exp(-x^2/2.2) + 0.08*cos(deg(7*x))*exp(-x^2/3)};
+  % chú giải trực tiếp
+  \node[font=\footnotesize, mprimary, anchor=east] at (axis cs:-1.5,1.02) {Target $\phi(t)$};
+  \draw[mprimary, thin] (axis cs:-1.5,0.98) -- (axis cs:-0.55,0.86);
+  \node[font=\footnotesize, maccent!80!black, anchor=west] at (axis cs:1.7,0.92) {Empirical $\hat\phi_X(t)$};
+  \draw[maccent!80!black, thin] (axis cs:1.65,0.88) -- (axis cs:0.75,0.72);
+  \node[font=\footnotesize\bfseries, mbad!80!black] at (axis cs:2.0,1.12) {gap $=EP$};
+  \draw[mbad!70, thin] (axis cs:1.3,1.08) -- (axis cs:0.5,0.97);
 \end{axis}
 \end{tikzpicture}
 \end{center}
-\end{columns}
 
-\vspace{1.5em}
-\begin{columns}[T]
-\column{0.32\textwidth}
-\begin{goodbox}
-\centering \textbf{Differentiable}\\[4pt]
-\footnotesize Không cần sort $\Rightarrow$ $\nabla$ mượt mà.
-\end{goodbox}
-
-\column{0.32\textwidth}
-\begin{goodbox}
-\centering \textbf{Scalable $\mathcal{O}(N)$}\\[4pt]
-\footnotesize Phép tổng $\sum$ dễ \texttt{all\_reduce}.
-\end{goodbox}
-
-\column{0.33\textwidth}
-\begin{accentbox}
-\centering \textbf{Provably Stable}\\[4pt]
-\footnotesize $|e^{itx}|=1 \Rightarrow$ Gradient giới hạn.
-\end{accentbox}
-\end{columns}
+\vspace{0.5em}
+% 3 tính chất — chip neo dưới
+\begin{center}
+\begin{tikzpicture}[
+    chip/.style={draw=mgood!45, fill=mlightsage, rounded corners=8pt,
+                 minimum width=3.7cm, minimum height=1.4cm, align=center, inner sep=6pt}]
+  \node[chip] (c1) at (0,0)    {\footnotesize\textbf{\color{mgood!55!black}Differentiable}\\[4pt] không sort $\Rightarrow \nabla$ mượt};
+  \node[chip] (c2) at (4.3,0)  {\footnotesize\textbf{\color{mgood!55!black}Scalable $\mathcal{O}(N)$}\\[4pt] $\sum$ dễ \texttt{all\_reduce}};
+  \node[chip] (c3) at (8.6,0)  {\footnotesize\textbf{\color{mgood!55!black}Provably Stable}\\[4pt] $|e^{itx}|=1 \Rightarrow \nabla$ bị chặn};
+\end{tikzpicture}
+\end{center}
+\vfill
 \end{frame}
 
 
 % ─── Slide 7: SIGReg ─────────────────────────────────────────────────────────
 \begin{frame}{Cramér-Wold: Nếu Embedding Chuẩn Thì Mọi Hình Chiếu Đều Chuẩn}
 
-\begin{columns}[T]
-\column{0.35\textwidth}
+\begin{columns}[c]
+\column{0.40\textwidth}
 
-\textbf{Chiều dễ thấy:}
-\[
-  \mathbf{Z}\sim\mathcal{N}(\mathbf{0},I_K),\quad
-  \|\mathbf{u}\|_2=1
-\]
-\[
-  \mathbf{u}^{\top}\mathbf{Z}
-  \sim
-  \mathcal{N}\!\left(0,\mathbf{u}^{\top}I_K\mathbf{u}\right)
-  =
-  \mathcal{N}(0,1).
-\]
-
-\vspace{0.4em}
-\begin{goodbox}
-\footnotesize
-Nghĩa là nhìn từ \textbf{bất kỳ hướng nào}, embedding chuẩn đều cho cùng một đường cong chuông chuẩn 1D.
-\end{goodbox}
-
-\vspace{0.45em}
-\begin{primarybox}
-\footnotesize
-\textbf{Chiều ngược lại -- Cramér-Wold:}\\[2pt]
-Nếu mọi projection 1D đều khớp $\mathcal{N}(0,1)$ thì toàn bộ phân phối khớp $\mathcal{N}(\mathbf{0},I)$.
-\end{primarybox}
-
-\column{0.62\textwidth}
-\vspace{-0.65em}
 \begin{center}
-\includegraphics[width=\linewidth,height=0.62\textheight,keepaspectratio]{sigreg_gaussian_projection_line.png}
+\begin{tikzpicture}[
+    cw/.style={rounded corners=6pt, text width=3.7cm, align=center,
+               inner sep=8pt, font=\small}]
+  \node[cw, draw=mprimary!55, fill=mlight] (a) at (0,2.35)
+    {\textbf{Embedding}\\[3pt] $\mathbf{Z}\sim\mathcal{N}(\mathbf{0},I_K)$};
+  \node[cw, draw=mgood!55, fill=mlightsage] (b) at (0,0)
+    {\textbf{Mọi hình chiếu 1D}\\[3pt] $\mathbf{u}^{\top}\mathbf{Z}\sim\mathcal{N}(0,1)$};
+  % chiều xuôi (hiển nhiên)
+  \draw[-{Latex[length=2.6mm]}, thick, mprimary]
+    ([xshift=-0.75cm]a.south) -- node[left, font=\scriptsize, mprimary] {hiển nhiên}
+    ([xshift=-0.75cm]b.north);
+  % chiều ngược (Cramér–Wold)
+  \draw[-{Latex[length=2.6mm]}, thick, maccent!85!black]
+    ([xshift=0.75cm]b.north) -- node[right, font=\scriptsize, maccent!85!black] {Cramér–Wold}
+    ([xshift=0.75cm]a.south);
+\end{tikzpicture}
 \end{center}
 
-\vspace{-0.75em}
+\vspace{0.5em}
+{\footnotesize\color{mgray}
+$\mathbf{u}^{\top}\mathbf{Z}\sim\mathcal{N}(0,\mathbf{u}^{\top}I_K\mathbf{u})=\mathcal{N}(0,1)$ với $\|\mathbf{u}\|_2=1$.}
+
+\column{0.60\textwidth}
+\begin{center}
+\includegraphics[width=\linewidth,height=0.60\textheight,keepaspectratio]{sigreg_gaussian_projection_line.png}
+\end{center}
+
+\vspace{-0.6em}
 {\tiny\color{mgray}
-\textbf{Ghi chú:} Hình tạo bằng matplotlib từ dữ liệu mô phỏng Gaussian để trực quan hóa các hình chiếu 1D của Cramér-Wold/SIGReg; không phải kết quả thực nghiệm.
+\textbf{Ghi chú:} Hình mô phỏng Gaussian để trực quan hóa hình chiếu 1D; không phải kết quả thực nghiệm.
 }
 
 \end{columns}
 
 \vspace{-0.1em}
 \begin{mdframed}[
-  linecolor=maccent, linewidth=1.2pt,
+  linecolor=maccent, linewidth=1.5pt,
   backgroundcolor=mlightgold,
-  innertopmargin=3pt, innerbottommargin=3pt,
-  innerleftmargin=8pt, innerrightmargin=8pt,
+  innertopmargin=5pt, innerbottommargin=5pt,
+  innerleftmargin=10pt, innerrightmargin=10pt,
   roundcorner=3pt, skipabove=2pt, skipbelow=0pt
 ]
-\centering\footnotesize\bfseries\color{mprimary}
+\centering\small\bfseries\color{mprimary}
 Đây là target của SIGReg: mọi projection đều phải trông như $\mathcal{N}(0,1)$,
 rồi ta dùng các test 1D để kiểm điều đó trong thực tế.
 \end{mdframed}
@@ -1427,13 +1391,13 @@ rồi ta dùng các test 1D để kiểm điều đó trong thực tế.
 
 \vspace{0.15em}
 \begin{mdframed}[
-  linecolor=maccent, linewidth=1.2pt,
+  linecolor=maccent, linewidth=1.5pt,
   backgroundcolor=mlightgold,
-  innertopmargin=3pt, innerbottommargin=3pt,
-  innerleftmargin=8pt, innerrightmargin=8pt,
+  innertopmargin=5pt, innerbottommargin=5pt,
+  innerleftmargin=10pt, innerrightmargin=10pt,
   roundcorner=3pt, skipabove=2pt, skipbelow=0pt
 ]
-\centering\footnotesize\bfseries\color{mprimary}
+\centering\small\bfseries\color{mprimary}
 Bóng $(z_1,z_2)$ nhìn gần chuẩn, nhưng các bóng chứa $z_3$ lộ rõ hai cụm.\\[-1pt]
 Trực giác 2D: chỉ cần có hướng nhìn thấy lệch, SIGReg sẽ phạt qua các slice 1D.
 \end{mdframed}
@@ -1454,137 +1418,61 @@ Trực giác 2D: chỉ cần có hướng nhìn thấy lệch, SIGReg sẽ phạ
 
 \vspace{0.15em}
 \begin{mdframed}[
-  linecolor=maccent, linewidth=1.2pt,
+  linecolor=maccent, linewidth=1.5pt,
   backgroundcolor=mlightgold,
-  innertopmargin=3pt, innerbottommargin=3pt,
-  innerleftmargin=8pt, innerrightmargin=8pt,
+  innertopmargin=5pt, innerbottommargin=5pt,
+  innerleftmargin=10pt, innerrightmargin=10pt,
   roundcorner=3pt, skipabove=2pt, skipbelow=0pt
 ]
-\centering\footnotesize\bfseries\color{mprimary}
+\centering\small\bfseries\color{mprimary}
 Trong ví dụ này, slice $z_1$ và $z_2$ gần chuẩn nên penalty nhỏ.\\[-1pt]
 Slice $z_3$ lệch khỏi đường chuông chuẩn nên test 1D cho score lớn và SIGReg phạt.
 \end{mdframed}
 \end{frame}
 
 
-\begin{frame}{SIGReg: Đưa Embedding Về $\mathcal{N}(0,I)$ Ở Chi Phí $\mathcal{O}(N)$}
+% ─── [MERGED] SIGReg: trực giác + định nghĩa (code đã bỏ) ────────────────────
+\begin{frame}{SIGReg: Từ Trực Giác Đến Định Nghĩa}
 
-\begin{columns}[T]
-\column{0.50\textwidth}
-
-\textbf{Từ trực giác sang công thức:}
-\[
-  X \stackrel{d}{=} Y
-  \iff
+\vfill
+% 1) Trực giác (trên, nhỏ)
+\begin{center}
+\textbf{Trực giác (Cramér–Wold):} hai phân phối bằng nhau $\iff$ mọi hình chiếu 1D bằng nhau.\\[3pt]
+$X \stackrel{d}{=} Y \iff
   \langle \mathbf{u}, X\rangle \stackrel{d}{=}
-  \langle \mathbf{u}, Y\rangle,\;\forall \mathbf{u}\in\mathbb{S}^{K-1}.
-\]
-
-\vspace{0.2em}
-\begin{accentbox}
-\footnotesize
-Với mỗi minibatch embedding $\{z_n\}_{n=1}^{N}$, lấy $M$ hướng ngẫu nhiên và kiểm tra từng dãy vô hướng
-$\{\mathbf{u}_m^\top z_n\}_{n=1}^{N}$ so với $\mathcal{N}(0,1)$.
-\end{accentbox}
+  \langle \mathbf{u}, Y\rangle,\;\forall \mathbf{u}\in\mathbb{S}^{K-1}$
+\end{center}
 
 \vspace{0.6em}
-\textbf{Test 1D: Epps-Pulley (ECF)}
-{\footnotesize
-\[
-\begin{aligned}
-EP &= N\!\int |\hat\phi_X(t) - \phi_0(t)|^2 w(t)\,dt,\\[-1pt]
-\hat\phi_X(t)&=\frac{1}{N}\sum_{j=1}^{N} e^{itX_j}.
-\end{aligned}
-\]
-}
 
-$|e^{itX_j}|=1$ nên gradient ổn định và dễ song song hóa.
-
-\column{0.46\textwidth}
-
-\begin{primarybox}
-\footnotesize\textbf{SIGReg}
-\[
-  \mathrm{SIGReg}_T
-  =
-  \frac{1}{M}\sum_{m=1}^{M}
-  T\!\left(\{\mathbf{u}_m^\top z_n\}_{n=1}^{N}\right)
-\]
-\end{primarybox}
-
-\vspace{0.55em}
-\begin{goodbox}
-\footnotesize \textbf{Ý nghĩa tối ưu:}\\[2pt]
-Minimize SIGReg $\Rightarrow$ mọi hình chiếu 1D tiến gần $\mathcal{N}(0,1)$ $\Rightarrow$ toàn bộ embedding tiến về $\mathcal{N}(0,I)$.
-\end{goodbox}
-
-\vspace{0.55em}
-\begin{goodbox}
-\footnotesize \textbf{Định lý 4:} Gradient EP bị chặn bởi $\frac{4\sigma^2}{N}$.
-\end{goodbox}
-
-\vspace{0.55em}
-\begin{accentbox}
-\footnotesize $M=16$ hướng thường đủ nhờ tính trơn của DNN + SGD resampling tích lũy.\\[2pt]
-$\mathcal{O}(N)$ · differentiable · DDP-friendly.
-\end{accentbox}
-
-\end{columns}
-
-\end{frame}
-
-
-% ─── [BATCH 2] SIGReg definition + code ─────────────────────────────────────
-\begin{frame}[fragile]{SIGReg: Định Nghĩa Chính Thức và Cài đặt}
-
-\begin{columns}[T]
-\column{0.50\textwidth}
-
-\begin{accentbox}
-\footnotesize\textbf{Định nghĩa 2 — SIGReg}
-\[
+% 2) Định nghĩa — hero card bo góc, căn giữa
+\begin{center}
+\begin{mdframed}[roundcorner=9pt, linewidth=1.2pt, linecolor=mprimary!55,
+    backgroundcolor=mlight, userdefinedwidth=0.76\textwidth, align=center,
+    innertopmargin=9pt, innerbottommargin=9pt, innerleftmargin=14pt, innerrightmargin=14pt]
+\centering
+{\color{mprimary}\textbf{Định nghĩa — SIGReg}}\\[7pt]
+$\displaystyle
   \mathrm{SIGReg}_T(\mathbb{A},\{f_\theta(\mathbf{x}_n)\})
   \triangleq \frac{1}{|\mathbb{A}|}\sum_{\mathbf{a}\in\mathbb{A}}
-  T\!\left(\{\mathbf{a}^\top f_\theta(\mathbf{x}_n)\}_{n=1}^N\right)
-\]
-$\mathbb{A}=\{\mathbf{a}_1,\ldots,\mathbf{a}_M\}$: tập hướng ngẫu nhiên trên $\mathbb{S}^{K-1}$.\\
-$T$ được chọn là Epps-Pulley.
-\end{accentbox}
-
-\vspace{1em}
-\emph{Chú thích: dùng average thay vì max $\rightarrow$ gradient dense.}
-
-\column{0.46\textwidth}
-\vspace{0.3em}
-
-\textbf{PyTorch — 50 dòng:}
-
-\vspace{0.2em}
-\begin{mdframed}[
-  topline=false,bottomline=false,rightline=false,
-  linewidth=2pt,linecolor=mprimary!50,
-  backgroundcolor=mdark!5,
-  innerleftmargin=6pt,innerrightmargin=4pt,
-  innertopmargin=4pt,innerbottommargin=4pt
-]
-\tiny\ttfamily
-\begin{lstlisting}[language=Python,basicstyle=\tiny\ttfamily]
-def SIGReg(x, global_step, M=1024):
-    g = torch.Generator(device=x.device)
-    g.manual_seed(global_step)  # sync GPUs
-    A = torch.randn(x.size(1), M, generator=g)
-    A /= A.norm(p=2, dim=0)    # unit vectors
-    t = torch.linspace(-5, 5, 17)
-    phi = torch.exp(-0.5 * t**2)
-    x_t = (x @ A).unsqueeze(-1) * t
-    ecf_r = x_t.cos().mean(0)
-    ecf_i = x_t.sin().mean(0)
-    err = (ecf_r-phi).square() + ecf_i.square()
-    return (err * phi).mean() * x.size(0)
-\end{lstlisting}
+  T\!\left(\{\mathbf{a}^\top f_\theta(\mathbf{x}_n)\}\right)$\\[7pt]
+{\footnotesize\color{mgray} $\mathbb{A}$: $M$ hướng trên $\mathbb{S}^{K-1}$ $\cdot$ $T$ = Epps-Pulley $\cdot$ average}
 \end{mdframed}
+\end{center}
 
-\end{columns}
+\vspace{0.9em}
+% 3) Ba tính chất — chip keyword bo góc
+\begin{center}
+\begin{tikzpicture}[
+    chip/.style={draw=mgood!45, fill=mlightsage, rounded corners=8pt,
+                 minimum width=3.5cm, minimum height=1.45cm, align=center, inner sep=6pt}]
+  \node[chip] (c1) at (0,0)    {\footnotesize\textbf{\color{mgood!55!black}Ý nghĩa}\\[4pt] embedding $\to \mathcal{N}(0,I)$};
+  \node[chip] (c2) at (4.15,0) {\footnotesize\textbf{\color{mgood!55!black}Ổn định}\\[4pt] $\nabla$ chặn bởi $4\sigma^2/N$};
+  \node[chip] (c3) at (8.3,0)  {\footnotesize\textbf{\color{mgood!55!black}Rẻ}\\[4pt] $\mathcal{O}(N)\,\cdot\,$DDP-friendly};
+\end{tikzpicture}
+\end{center}
+\vfill
+
 \end{frame}
 
 
@@ -1601,12 +1489,8 @@ def SIGReg(x, global_step, M=1024):
 \end{center}
 
 \vspace{-0.3em}
-\begin{columns}[c]
-\column{0.60\textwidth}
-
-\vspace{-0.8em}
 \begin{center}
-\hspace*{-0.8em}\resizebox{1.05\linewidth}{!}{
+\resizebox{0.72\linewidth}{!}{
 \begin{tikzpicture}[
     every node/.style={font=\small},
     viewbox/.style={pbox, minimum width=1.6cm, minimum height=0.6cm, font=\scriptsize, align=center},
@@ -1652,26 +1536,6 @@ def SIGReg(x, global_step, M=1024):
 \end{tikzpicture}
 }
 \end{center}
-
-\column{0.38\textwidth}
-
-\vspace{0.2em}
-\resizebox{\linewidth}{!}{%
-\footnotesize
-\begin{tabular}{@{}lccc@{}}
-\toprule
- & DINO & I-JEPA & \textbf{LeJEPA} \\
-\midrule
-Lý thuyết         & \textcolor{mbad}{\xmark} & \textcolor{mbad}{\xmark} & \textcolor{mgood}{\textbf{\cmark}} \\
-\# hyperparams    & $\geq$7 & $\geq$5 & \textbf{1\ ($\lambda$)} \\
-Architecture      & ViT  & ViT   & \textbf{Any} \\
-Stop-gradient     & cần  & cần   & \textbf{không} \\
-Teacher-student   & cần  & cần   & \textbf{không} \\
-Core code (lines) & 1000+ & 500+ & \textbf{$\approx$50} \\
-\bottomrule
-\end{tabular}}
-
-\end{columns}
 
 \takeaway{1 loss · 1 hyperparameter · 0 heuristic · lý thuyết từ first principles}
 
@@ -1733,6 +1597,7 @@ Core code (lines) & 1000+ & 500+ & \textbf{$\approx$50} \\
 % \end{frame}
 
 
+\iffalse % ─── [HIDDEN] frame "λ: Nút Điều Chỉnh Duy Nhất" ─────────────────────
 % ─── [BATCH 3] Lambda tradeoff ────────────────────────────────────────────────
 \begin{frame}{$\lambda$: Nút Điều Chỉnh Duy Nhất}
 
@@ -1808,8 +1673,10 @@ Core code (lines) & 1000+ & 500+ & \textbf{$\approx$50} \\
 
 \end{columns}
 \end{frame}
+\fi % ─── [HIDDEN] hết frame "λ: Nút Điều Chỉnh Duy Nhất" ────────────────────
 
 
+\iffalse % ─── [HIDDEN] frame "LeJEPA Generalizes VICReg" ──────────────────────
 % ─── [BATCH 3] LeJEPA vs prior + VICReg relation ─────────────────────────────
 \begin{frame}{LeJEPA Generalizes VICReg — Và Giải Thích Tại Sao VICReg Bị Hạn Chế}
 
@@ -1861,6 +1728,7 @@ $\Rightarrow$ Phải chắp vá bằng các heuristic phụ để tránh sụp �
 
 \end{columns}
 \end{frame}
+\fi % ─── [HIDDEN] hết frame "LeJEPA Generalizes VICReg" ─────────────────────
 
 
 % ─── SECTION DIVIDER ──────────────────────────────────────────────────────────
@@ -2098,8 +1966,8 @@ $\Rightarrow$ Phải chắp vá bằng các heuristic phụ để tránh sụp �
 \begin{columns}[T]
 \column{0.52\textwidth}
 \scriptsize
-\textbf{Epps-Pulley} — top1 (\%), đủ 27 cấu hình:\\[0.2em]
-\begin{tabular}{@{}llccc@{}}
+\hspace*{0.8cm}\textbf{Epps-Pulley} — top1 (\%), đủ 27 cấu hình:\\[0.2em]
+\hspace*{0.8cm}\begin{tabular}{@{}llccc@{}}
 \toprule
 integ. & slices & \multicolumn{3}{c}{\texttt{n\_points}} \\
 \cmidrule(lr){3-5}
@@ -2118,7 +1986,7 @@ $[-5,5]$ & 512  & 57.6 & 54.9 & 55.1 \\
 \end{tabular}
 
 \vspace{0.4em}
-\textbf{Số view} ($V$): \; 4:\,\textbf{72.8} \; 6:\,65.7 \; 8:\,60.6 \; 10:\,57.1
+\hspace*{0.8cm}\textbf{Số view} ($V$): \; 4:\,\textbf{72.8} \; 6:\,65.7 \; 8:\,60.6 \; 10:\,57.1
 
 \column{0.46\textwidth}
 \centering
@@ -2126,7 +1994,7 @@ $[-5,5]$ & 512  & 57.6 & 54.9 & 55.1 \\
 \includegraphics[width=0.60\linewidth]{B_views_heatmap.pdf}
 \end{columns}
 
-\takeaway{Chỉ \texttt{num\_slices} là đòn bẩy thật — nhiều lát cắt cho ước lượng SIGReg mịn hơn; \texttt{n\_points}/$t_{\max}$ gần trung tính, cho thấy SIGReg ổn định với lưới tích phân (đúng như paper)}
+\takeaway{Chỉ \texttt{num\_slices} là đòn bẩy thật; \texttt{n\_points}/$t_{\max}$ gần như trung tính.}
 
 \end{frame}
 
@@ -2161,7 +2029,7 @@ Aggregator    & cls \textbf{59.5} $\approx$ cls\_mean $>$ mean 55.8 \\
 \end{itemize}
 \end{columns}
 
-\takeaway{Collapse có ranh giới rõ theo thiết kế — chỉ xảy ra khi áp SIGReg sai chỗ (embedding) hoặc projector không đủ phi tuyến; đặt đúng thì SIGReg tự chống collapse, khỏi cần predictor}
+\takeaway{Đặt SIGReg đúng chỗ + projector phi tuyến $\Rightarrow$ tự chống collapse, khỏi cần predictor.}
 
 \end{frame}
 
@@ -2355,44 +2223,41 @@ $\Rightarrow$ Tự động phân tách cấu trúc mà không cần bất kỳ a
 % ─── CLIMB 1: Research question ──────────────────────────────────────────────
 \begin{frame}{Câu hỏi nghiên cứu: headroom còn nằm ở đâu?}
 
+\vfill
+% Bối cảnh — 1 dòng, căn giữa
+\begin{center}
+{\footnotesize\color{mgray}\textbf{Bối cảnh:} pretrain \kw{LeJEPA} train \emph{toàn bộ} backbone; freeze chỉ ở khâu đánh giá (\kw{frozen-linear eval}: đóng băng backbone, chỉ train linear probe) — baseline đã rất mạnh.}
+\end{center}
+
+\vspace{0.7em}
+% Hai thẻ giả thuyết song song
 \begin{columns}[T]
-\column{0.52\textwidth}
+\column{0.47\textwidth}
+\begin{mdframed}[roundcorner=8pt, linewidth=1.2pt, linecolor=mprimary!55,
+    backgroundcolor=mlight, innertopmargin=8pt, innerbottommargin=8pt,
+    innerleftmargin=11pt, innerrightmargin=11pt]
+{\footnotesize\color{mgray}Giả thuyết 1}\hfill{\footnotesize\color{mgray}baseline $\approx$ \textbf{\color{mprimary}89.5\%}}\\[5pt]
+{\bfseries\color{mprimary}Objective / representation head}\\[5pt]
+{\footnotesize Thêm tín hiệu hình học hoặc đổi projector $\Rightarrow$ cải thiện SIGReg.}
+\end{mdframed}
 
-\begin{primarybox}
-\footnotesize
-\textbf{Bối cảnh:} Sau pretrain \kw{LeJEPA}, backbone được freeze trong bước \kw{frozen-linear eval}; chỉ train probe tuyến tính và baseline trên Imagenette vẫn rất mạnh.
-\end{primarybox}
-
-\vspace{0.6em}
-\footnotesize
-\textbf{\color{mprimary}Hai giả thuyết còn lại:}
-\begin{itemize}\itemsep3pt
-  \item \textbf{Objective / representation head:} thêm tín hiệu hình học hoặc đổi projector có thể cải thiện SIGReg.
-  \item \textbf{Training geometry / optimizer / inductive bias:} mục tiêu có thể ổn, nhưng dynamics hoặc stem của ViT còn là nút nghẽn.
-\end{itemize}
-
-\column{0.46\textwidth}
-\begin{accentbox}
-\footnotesize
-\textbf{Giao thức đánh giá:}\\[0.25em]
-\scriptsize
-\kw{Backbone}: frozen encoder.\\[0.15em]
-\kw{Feature}: concat CLS từ 2 block cuối + LayerNorm.\\[0.15em]
-\kw{Probe}: linear classifier với AdamW.\\[0.15em]
-\kw{Metric}: top1 và $\Delta$ so với \textbf{baseline cùng setup}.
-\end{accentbox}
-
-\vspace{0.55em}
-\begin{goodbox}
-\centering\footnotesize
-\textbf{Mốc tham chiếu:}\\[0.2em]
-\kw{Objective/head}: \textbf{89.54\%}\\
-\kw{Optimizer/training}: \textbf{89.49\%}
-\end{goodbox}
-
+\column{0.47\textwidth}
+\begin{mdframed}[roundcorner=8pt, linewidth=1.2pt, linecolor=mgood!60,
+    backgroundcolor=mlightsage, innertopmargin=8pt, innerbottommargin=8pt,
+    innerleftmargin=11pt, innerrightmargin=11pt]
+{\footnotesize\color{mgray}Giả thuyết 2}\hfill{\footnotesize\color{mgray}baseline $\approx$ \textbf{\color{mgood!60!black}89.5\%}}\\[5pt]
+{\bfseries\color{mgood!60!black}Optimizer / training geometry}\\[5pt]
+{\footnotesize Dynamics hoặc stem của ViT còn là nút nghẽn, không phải mục tiêu.}
+\end{mdframed}
 \end{columns}
 
-\takeaway{Câu hỏi không phải ``đã thử bao nhiêu'', mà là headroom nằm ở mục tiêu, dynamics huấn luyện, hay inductive bias của backbone}
+\vspace{0.6em}
+% Giao thức eval — dải fine-print
+\begin{center}
+{\scriptsize\color{mgray}\textbf{Eval:} frozen encoder $\cdot$ concat CLS 2 block cuối + LayerNorm $\cdot$ linear probe (AdamW) $\cdot$ top1 \& $\Delta$ so với baseline cùng setup.}
+\end{center}
+
+\vfill
 
 \end{frame}
 
@@ -2411,24 +2276,18 @@ $\Rightarrow$ Tự động phân tách cấu trúc mà không cần bất kỳ a
 \column{0.42\textwidth}
 \footnotesize
 
-\textbf{\color{mprimary}Đọc kết quả:}\\[0.25em]
+\textbf{\color{mprimary}Đọc kết quả:}\\[0.45em]
 \scriptsize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{@{}p{1.55cm}p{3.25cm}@{}}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{@{}p{1.9cm}p{3.0cm}@{}}
 \toprule
-\textbf{Can thiệp} & \textbf{Diễn giải} \\
+\textbf{Can thiệp} & \textbf{Vì sao} \\
 \midrule
-uniformity & 88.88\%: gần baseline nhưng thấp hơn, nên tín hiệu spread toàn cục chưa đủ. \\
-DynTanh & 59.24\%: thay chuẩn hóa projector làm hỏng interface với SIGReg. \\
-coding-rate & 26.73\%: log-det/full-rank volume quá mạnh, dẫn đến collapse. \\
+uniformity  & gần baseline, spread chưa đủ \\
+DynTanh     & hỏng interface projector–SIGReg \\
+coding-rate & log-det quá mạnh $\to$ collapse \\
 \bottomrule
 \end{tabular}
-
-\vspace{0.6em}
-\begin{insightbox}
-\scriptsize
-\textbf{Insight:} Các can thiệp trực tiếp vào \kw{geometry} không tạo \kw{headroom rõ}; càng mạnh tay càng dễ phá cân bằng của baseline.
-\end{insightbox}
 
 \end{columns}
 
@@ -2440,11 +2299,10 @@ coding-rate & 26.73\%: log-det/full-rank volume quá mạnh, dẫn đến collap
 % ─── CLIMB 3: Insight from direction 1 ───────────────────────────────────────
 \begin{frame}{Insight hướng 1: SIGReg + MLP projector là điểm cân bằng}
 
-\begin{columns}[T]
-\column{0.47\textwidth}
-\centering
-\vspace{0.95cm}
-\resizebox{\linewidth}{!}{%
+\vfill
+% Diagram hero — căn giữa
+\begin{center}
+\resizebox{0.56\linewidth}{!}{%
 \begin{tikzpicture}[
   node distance=0.58cm,
   part/.style={draw=mprimary!55, fill=mlight, rounded corners=3pt,
@@ -2470,35 +2328,26 @@ coding-rate & 26.73\%: log-det/full-rank volume quá mạnh, dẫn đến collap
   \draw[mbad!55, dashed, ->, thick] (norm.south) -- (proj.north);
 \end{tikzpicture}
 }
+\end{center}
 
-\column{0.51\textwidth}
-\footnotesize
-\begin{goodbox}
-\scriptsize
-\textbf{Điểm cân bằng hiện tại}\\[0.2em]
-Baseline nối \kw{invariance} với \kw{SIGReg} qua \kw{projector MLP} đủ capacity. Đây không chỉ là chi tiết kỹ thuật; nó là interface phân phối.
-\end{goodbox}
+\vspace{0.7em}
+% 3 chip finding
+\begin{center}
+\resizebox{0.82\linewidth}{!}{%
+\begin{tikzpicture}[
+    neu/.style={draw=maccent!70, fill=mlightgold, rounded corners=7pt,
+                text width=3.2cm, minimum height=1.15cm, align=center, inner sep=6pt},
+    bad/.style={draw=mbad!55, fill=mlightred, rounded corners=7pt,
+                text width=3.2cm, minimum height=1.15cm, align=center, inner sep=6pt}]
+  \node[neu] (c1) at (0,0)   {\scriptsize\textbf{\color{maccent!75!black}Uniformity $\approx$ baseline}\\[2pt] thêm spread chưa tạo lợi thế};
+  \node[bad] (c2) at (4.1,0) {\scriptsize\textbf{\color{mbad!75!black}Coding-rate collapse}\\[2pt] geometry phụ xung đột SIGReg};
+  \node[bad] (c3) at (8.2,0) {\scriptsize\textbf{\color{mbad!75!black}DynTanh thất bại}\\[2pt] normalization không bỏ được};
+\end{tikzpicture}
+}
+\end{center}
+\vfill
 
-\vspace{0.45em}
-\begin{accentbox}
-\scriptsize
-\textbf{Vì sao kết quả âm vẫn hữu ích}\\[0.2em]
-\begin{itemize}\itemsep2pt
-  \item \textbf{Uniformity} gần baseline: thêm spread nhẹ chưa tạo lợi thế.
-  \item \textbf{Coding-rate collapse}: auxiliary geometry có thể xung đột với SIGReg.
-  \item \textbf{DynTanh thất bại}: projector normalization không phải phần có thể bỏ tùy ý.
-\end{itemize}
-\end{accentbox}
-
-\vspace{0.45em}
-\begin{insightbox}
-\scriptsize
-\textbf{Kết luận hướng 1:} Muốn cải thiện \kw{objective}, cần thiết kế cùng \kw{projector}; không gắn thêm loss như một thành phần độc lập.
-\end{insightbox}
-
-\end{columns}
-
-\takeaway{Bài học chính: LeJEPA không chỉ là loss; SIGReg, invariance, và projector MLP tạo thành một cân bằng khá mong manh}
+\takeaway{Objective và projector phải co-design — cân bằng mong manh, không bolt-on loss như thành phần rời.}
 
 \end{frame}
 
@@ -2506,42 +2355,31 @@ Baseline nối \kw{invariance} với \kw{SIGReg} qua \kw{projector MLP} đủ ca
 % ─── CLIMB 4: Optimizer and training geometry ────────────────────────────────
 \begin{frame}{Hướng 2: Optimizer và training geometry}
 
-\begin{columns}[T]
-\column{0.58\textwidth}
-\centering
-\includegraphics[width=\linewidth]{fig_climb_optbars.pdf}
+\vfill
+% Leaderboard — bảng màu (thay bar chart)
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.28}
+\begin{tabular}{@{}l r l@{}}
+\toprule
+\textbf{Method} & \textbf{$\Delta$pp} & \textbf{Nhóm cơ chế} \\
+\midrule
+\rowcolor{mgood!24} SAM           & $+0.23$ & flat-minima / schedule \\
+\rowcolor{mgood!13} stoch-depth   & $+0.01$ & flat-minima / schedule \\
+\rowcolor{mgood!5}  PCGrad        & $-0.05$ & gradient geometry \\
+\rowcolor{mbad!5}   SWA           & $-0.38$ & flat-minima / schedule \\
+\rowcolor{mbad!8}   QK-Norm       & $-0.40$ & attention \\
+\rowcolor{mbad!11}  deep-sup      & $-0.55$ & depth \\
+\rowcolor{mbad!15}  Schedule-Free & $-0.77$ & optimizer replacement \\
+\rowcolor{mbad!27}  LLRD          & $-3.33$ & optimizer replacement \\
+\rowcolor{mbad!35}  Muon          & $-3.75$ & optimizer replacement \\
+\bottomrule
+\end{tabular}\\[0.4em]
+{\scriptsize\color{mgray} $\Delta$ frozen top1 so với baseline \textbf{89.49\%}; conv-stem tách riêng. \; \textcolor{mgood!60!black}{$\blacksquare$}\,gần baseline \; \textcolor{mbad!60!black}{$\blacksquare$}\,sụp mạnh.}
+\end{center}
+\vfill
 
-\vspace{0.15em}
-{\scriptsize\color{mgray} Frozen top1 delta so với baseline 89.49\%; conv-stem được tách khỏi chart này.}
-
-\column{0.40\textwidth}
-\footnotesize
-
-\begin{primarybox}
-\scriptsize
-\textbf{Cụm gần baseline}\\[0.15em]
-\textbf{SAM} (+0.23pp), \textbf{stoch-depth} (+0.01pp), \textbf{PCGrad} (-0.05pp): sát baseline, chưa là thắng lợi rõ.
-\end{primarybox}
-
-\vspace{0.22em}
-\begin{accentbox}
-\scriptsize
-\textbf{Nhóm cơ chế}\\[0.15em]
-\kw{Flat minima / schedule}: SAM, SWA, stoch-depth.\\
-\kw{Optimizer replacement}: Muon, Schedule-Free, LLRD.\\
-\kw{Gradient geometry}: PCGrad.\\
-\kw{Attention / depth}: QK-Norm, deep supervision.
-\end{accentbox}
-
-\vspace{0.22em}
-\begin{badbox}
-\scriptsize
-\textbf{Muon} (-3.75pp) và \textbf{LLRD} (-3.33pp) làm xấu frozen features rõ rệt.
-\end{badbox}
-
-\end{columns}
-
-\takeaway{Trên fixed ViT-S, các can thiệp dynamics không mở ra headroom ổn định; baseline AdamW + cosine vẫn là neo rất mạnh}
+\takeaway{Trên fixed ViT-S, các can thiệp dynamics không mở ra headroom ổn định; baseline AdamW + cosine vẫn là neo rất mạnh.}
 
 \end{frame}
 
@@ -2549,46 +2387,51 @@ Baseline nối \kw{invariance} với \kw{SIGReg} qua \kw{projector MLP} đủ ca
 % ─── CLIMB 5: Conv-stem architecture co-design ───────────────────────────────
 \begin{frame}{Conv-stem: architecture co-design riêng}
 
-\begin{columns}[T]
-\column{0.52\textwidth}
-\centering
-\includegraphics[width=\linewidth]{fig_climb_convstem.pdf}
+\vfill
+% Can thiệp: swap patchify → conv-stem
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\footnotesize},
+   b/.style={draw=mprimary!45, fill=mlight, rounded corners=4pt, minimum height=0.75cm,
+             text width=2.0cm, align=center, inner sep=4pt},
+   hl/.style={draw=mgood!65, fill=mlightsage, rounded corners=4pt, minimum height=0.75cm,
+              text width=2.0cm, align=center, inner sep=4pt, font=\footnotesize\bfseries},
+   ar/.style={-{Latex[length=2.2mm]}, thick, mgray}]
+  \node[b] (p) {stride-16 patchify};
+  \node[hl, right=0.75cm of p] (s) {4-conv stem};
+  \node[b, right=0.75cm of s] (v) {same ViT body};
+  \draw[ar] (p) -- (s);
+  \draw[ar] (s) -- (v);
+\end{tikzpicture}
+\end{center}
 
-\vspace{0.15em}
-{\scriptsize\color{mgray} Thay patchify stride-16 bằng stem 4 conv; ViT body và CLS readout giữ tương thích.}
+\vspace{0.6em}
+% Hero number
+\begin{center}
+{\fontsize{46}{50}\selectfont\bfseries\color{mgood!58!black}$\uparrow$\,+2.59\,pp}\\[10pt]
+{\large\color{mprimary} Patchify \textbf{89.49\%}\;\; $\longrightarrow$\;\; Conv-stem \textbf{\color{mgood!58!black}92.08\%}}
+\end{center}
 
-\column{0.46\textwidth}
-\footnotesize
+\vspace{0.7em}
+% Caveat chip
+\begin{center}
+\begin{tikzpicture}
+  \node[draw=mbad!55, fill=mlightred, rounded corners=7pt, inner sep=7pt,
+        text width=0.80\linewidth, align=center, font=\footnotesize]
+   {\textbf{\color{mbad!75!black}Lưu ý:} cải thiện đến từ \emph{backbone inductive bias} — chưa phải bằng chứng objective LeJEPA tốt hơn.};
+\end{tikzpicture}
+\end{center}
 
-\begin{goodbox}
-\scriptsize
-\textbf{Kết quả rõ nhất}\\[0.15em]
-\kw{Patchify baseline}: \textbf{89.49\%}\\
-\kw{Conv-stem}: \textbf{92.08\%}\\
-$\Delta$: \textbf{+2.59pp}
-\end{goodbox}
+\vspace{0.4em}
+{\centering\scriptsize\color{mgray} Nguồn: Xiao et al., \emph{Early Convolutions Help Transformers See Better}, NeurIPS 2021 \citep{xiao2021early}. Thay patchify stride-16 bằng stem 4 conv; ViT body \& CLS giữ tương thích.\par}
+\vfill
 
-\vspace{0.45em}
-\begin{primarybox}
-\scriptsize
-\textbf{Nguồn ý tưởng:} Xiao et al., \emph{Early Convolutions Help Transformers See Better}, NeurIPS 2021 \citep{xiao2021early}.\\[0.2em]
-\kw{Early convs} thêm locality / translation bias trước transformer blocks.
-\end{primarybox}
-
-\vspace{0.45em}
-\begin{badbox}
-\scriptsize
-\textbf{Giới hạn diễn giải:} Đây là cải thiện về \emph{backbone inductive bias}, chưa phải bằng chứng rằng objective LeJEPA tốt hơn.
-\end{badbox}
-
-\end{columns}
-
-\takeaway{Conv-stem cho thấy headroom đáng kể đến từ kiến trúc đầu vào; vì vậy kết quả này nên được báo cáo như architecture co-design, không gộp với objective hay optimizer}
+\takeaway{Headroom thật sự nằm ở kiến trúc đầu vào — không phải ở objective hay optimizer.}
 
 \end{frame}
 
 
 % ─── CLIMB 6: Synthesis ──────────────────────────────────────────────────────
+\iffalse % ─── [HIDDEN] frame "Tổng hợp" ─────────────────────────────────────────
 \begin{frame}{Tổng hợp: LeJEPA objective đã rất khó cải thiện trên fixed ViT-S}
 
 \begin{columns}[T]
@@ -2633,63 +2476,38 @@ $\Delta$: \textbf{+2.59pp}
 \takeaway{Bức tranh hiện tại: objective LeJEPA đã khó cải thiện trên fixed ViT-S; headroom đáng theo đuổi nằm ở co-design kiến trúc và kiểm chứng mạnh hơn}
 
 \end{frame}
+\fi % ─── [HIDDEN] hết frame "Tổng hợp" ─────────────────────────────────────
 
 % ═══ HẾT phần Nghiên cứu mở rộng ═══
 
 
 % ─── Conclusion ───────────────────────────────────────────────────────────────
 \begin{frame}[plain]
-\begin{center}
-\vspace{0.7cm}
-{\Large\bfseries\color{mprimary} LeJEPA — Từ Heuristic Đến Lý Thuyết}
+\begin{tikzpicture}[remember picture, overlay]
+  % Nền tối full-bleed
+  \fill[mdark] (current page.south west) rectangle (current page.north east);
 
-\vspace{0.5cm}
-\begin{tikzpicture}[every node/.style={font=\small}, scale=0.88]
-  \node[rbox, minimum width=2.8cm, minimum height=1.1cm, align=center]
-    (old) at (0,0)
-    {\textbf{Prior SSL}\\\small chắp vá thực nghiệm};
+  % Wordmark lệch trái-trên
+  \node[anchor=north west, align=left, inner sep=0]
+    at ([xshift=1.5cm, yshift=-1.9cm]current page.north west) {%
+    {\bfseries\fontsize{42}{50}\selectfont\color{white}LeJEPA}\\[11pt]
+    \textcolor{maccent}{\rule{2.8cm}{1.5pt}}\\[11pt]
+    {\large\color{white!68}\addfontfeatures{LetterSpace=2.5}Từ heuristic đến lý thuyết}%
+  };
 
-  \node[darkbox, minimum width=2.8cm, minimum height=1.1cm, align=center]
-    (new) at (6.5,0)
-    {\textbf{LeJEPA}\\\small từ nguyên lý nền tảng};
+  % Quote neo góc dưới-trái
+  \node[anchor=south west, align=left, inner sep=0, text width=9.5cm]
+    at ([xshift=1.5cm, yshift=1.9cm]current page.south west) {%
+    {\itshape\large\color{white!82}``If 2024 was the year of scaling laws,\\[3pt]
+    2025 may be the year we rediscover structure.''}%
+  };
 
-  \draw[->, very thick, mprimary, line width=2pt] (old) -- (new)
-    node[midway, above=3pt, font=\small, mprimary]
-      {Định lý + SIGReg};
+  % Q & A góc dưới-phải
+  \node[anchor=south east, inner sep=0]
+    at ([xshift=-1.6cm, yshift=1.9cm]current page.south east) {%
+    {\LARGE\bfseries\color{maccent}\addfontfeatures{LetterSpace=5.0}Q \& A}%
+  };
 \end{tikzpicture}
-
-\vspace{0.55cm}
-\begin{columns}[c]
-\column{0.05\textwidth}
-\column{0.90\textwidth}
-\begin{itemize}\small
-  \item[\textcolor{mgood}{\textbf{\cmark}}]
-    \textbf{Lý thuyết:} Isotropic Gaussian là unique minimizer cho worst-case downstream risk
-  \item[\textcolor{mgood}{\textbf{\cmark}}]
-    \textbf{Phương pháp:} SIGReg — $\mathcal{O}(N)$, differentiable, bounded gradient
-  \item[\textcolor{mgood}{\textbf{\cmark}}]
-    \textbf{Thực nghiệm:} Đạt SOTA trên 60+ architectures, đánh bại DINOv2 in-domain
-  \item[\textcolor{mgood}{\textbf{\cmark}}]
-    \textbf{Tối giản:} Chỉ 1 hyperparameter $\lambda$, ${\approx}50$ dòng code, không cần stop-gradient
-\end{itemize}
-\column{0.05\textwidth}
-\end{columns}
-
-\vspace{0.45cm}
-\begin{mdframed}[
-  linecolor=maccent, linewidth=1.5pt,
-  backgroundcolor=mlightgold,
-  innertopmargin=6pt, innerbottommargin=6pt,
-  roundcorner=3pt, skipabove=0pt, skipbelow=0pt
-]
-\centering\itshape\small\color{mprimary}
-``If 2024 was the year of scaling laws,
-2025 may be the year we rediscover structure.''
-\end{mdframed}
-
-\vspace{0.35cm}
-{\large\bfseries\color{mprimary} Q \& A}
-\end{center}
 \end{frame}
 % ─── Glossary ─────────────────────────────────────────────────────────────────
 \begin{frame}[allowframebreaks]{Phụ Lục: Bảng Tra Cứu Thuật Ngữ}
