@@ -1957,6 +1957,40 @@ $\Rightarrow$ Phải chắp vá bằng các heuristic phụ để tránh sụp �
 % \end{frame}
 
 
+% ─── Reproduce: ViT-B/16 5 epoch trên IN-1K ──────────────────────────────────
+\begin{frame}{Reproduce — LeJEPA ViT-B/16, 5 epoch pretrain trên ImageNet-1K}
+
+% Bối cảnh — 1 dòng, căn giữa
+\begin{center}
+{\footnotesize\color{mgray}\textbf{Setup:} \kw{ViT-B/16} \emph{from scratch}, IN-1K, \textbf{5 epoch}, $\lambda=0.05$, 1024 slices, 2+4 views, AdamW/bf16.}
+\end{center}
+
+\vspace{0.5em}
+\begin{center}
+\small
+\textbf{Linear probe} — top1 (\%), frozen backbone, 8 dataset transfer (few-shot 1/10 trung bình 3 seed; \emph{all} = full train, 1 lần):\\[0.5em]
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}l rrrrrrrr >{\columncolor{mlight}\bfseries}r@{}}
+\toprule
+shots & DTD & Aircraft & Cars & CIFAR-10 & CIFAR-100 & Flowers & Food & Pets & avg. \\
+\midrule
+1   & 18.4 &  4.0 &  2.4 & 26.5 & 10.8 & 31.0 &  6.1 & 11.8 & 13.9 \\
+10  & 40.6 & 11.0 &  9.0 & 52.3 & 32.3 & 68.5 & 22.3 & 30.7 & 33.3 \\
+all & 58.2 & 26.0 & 19.5 & 82.8 & 63.3 & 83.2 & 56.9 & 50.0 & 55.0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.4em}
+\begin{center}
+{\footnotesize\color{mgray}\textbf{\color{mgood!60!black}Đọc:} coarse (Flowers, CIFAR) học sớm; fine-grained (Aircraft, Cars) cần pretrain dài hơn.}
+\end{center}
+
+\takeaway{5 epoch scratch trên IN-1K $\Rightarrow$ 55\% avg linear probe — pipeline ổn định đúng như paper.}
+
+\end{frame}
+
+
 % ─── Ablation A: siêu tham số của mục tiêu học ───────────────────────────────
 \begin{frame}{Ablation A — Siêu tham số của mục tiêu học (SIGReg \& multi-view)}
 
