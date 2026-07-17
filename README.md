@@ -1,157 +1,193 @@
-# LeJEPA
-**Lean Joint-Embedding Predictive Architecture (LeJEPA): Provable and Scalable Self-Supervised Learning Without the Heuristics**
-[GitHub Repository](https://github.com/rbalestr-lab/lejepa)  
-[arXiv:2511.08544](https://arxiv.org/abs/2511.08544)
+# LeJEPA — study fork
+
+A coursework/research fork of **LeJEPA** used to (a) reproduce the method, (b) run a
+component/hyperparameter ablation of **SIGReg**, and (c) try to climb a small
+benchmark (Imagenette) with new objectives.
+
+> **This is not the official repository.** LeJEPA is the work of Randall Balestriero
+> and Yann LeCun. All credit for the method belongs to them.
+>
+> | | |
+> |---|---|
+> | 📄 Paper | [LeJEPA: Provable and Scalable Self-Supervised Learning Without the Heuristics](https://arxiv.org/abs/2511.08544) (arXiv:2511.08544) |
+> | 🏠 Official repo | **[rbalestr-lab/lejepa](https://github.com/rbalestr-lab/lejepa)** ← go here for the method itself |
+> | 🧰 Training harness | [galilai-group/stable-pretraining](https://github.com/galilai-group/stable-pretraining) (vendored under `stable-pretraining/`) |
+> | ⚖️ License | CC BY-NC 4.0, inherited from upstream |
+>
+> `lejepa/`, `stable-pretraining/`, `docs/MINIMAL.md` and the demo assets in `eval/`
+> come from upstream. **Upstream's ImageNet-1K benchmark tables are deliberately not
+> reproduced here** — none of those numbers were produced by this fork, and repeating
+> them in this README would only invite them to be read as ours. See the
+> [official repo](https://github.com/rbalestr-lab/lejepa) and the paper for those.
+
 ---
 
-Rush to our [minimal working example](MINIMAL.md) to see a full-fledge working example (ViT, inet).
+## What LeJEPA is, in one block
 
-## Demo
-
-<img src="eval/output1.gif" controls width="400">
-<img src="eval/output2.gif" controls width="400">
-<img src="eval/output3.gif" controls width="400">
-<table>
-  <tr>
-    <td><img src="eval/n01818515_919_original.png" width="200"/></td>
-    <td><img src="eval/n01818515_919_pca.png" width="200"/></td>
-  </tr>
-  <tr>
-    <td><img src="eval/n01818515_14304_original.png" width="200"/></td>
-    <td><img src="eval/n01818515_14304_pca.png" width="200"/></td>
-  </tr>
-</table>
-
-| shots | model                  | params | pretrain | epochs | DTD      | aircr.   | cars     | cifar10  | cifar100 | flowers102 | food     | pets     | avg.    |
-|-------|------------------------|--------|----------|--------|----------|----------|----------|----------|----------|------------|----------|----------|---------|
-| 1     | LeJEPA ViT-L           | 304M   | IN-1K    | 100    | **33.21**| 9.37     | 3.40     | 51.65    | 27.01    | 48.53      | 17.14    | 46.11    | 29.55   |
-| 1     | LeJEPA ConvNeXtV2-H    | 660M   | IN-1K    | 100    | 32.15    | 8.07     | 4.28     | 50.95    | **31.48**| **48.74**  | **17.95**| **58.98**| **31.58**|
-| 1     | I-JEPA ViT-H           | 632M   | IN-1K    | 300    | 27.71    | **9.86** | **4.33** | **56.52**| 30.58    | 44.69      | 14.53    | 53.38    | 30.20   |
-| 10    | LeJEPA ViT-L           | 304M   | IN-1K    | 100    | **64.72**| **35.25**| 22.25    | 85.15    | 59.77    | **92.53**  | **50.90**| 77.00    | **60.95**|
-| 10    | LeJEPA ConvNeXtV2-H    | 660M   | IN-1K    | 100    | 61.84    | 30.67    | **24.46**| 85.74    | 63.29    | 91.78      | 49.32    | 78.53    | 60.70   |
-| 10    | I-JEPA ViT-H           | 632M   | IN-1K    | 300    | 57.68    | 33.82    | 21.96    | **88.77**| **66.42**| 88.24      | 43.97    | **83.23**| 60.51   |
-| all   | LeJEPA ViT-L           | 304M   | IN-1K    | 100    | **78.30**| 57.01    | **57.28**| 96.50    | 83.71    | **91.21**  | **82.05**| 89.74    | **79.48**|
-| all   | LeJEPA ConvNeXtV2-H    | 660M   | IN-1K    | 100    | 76.60    | 52.99    | 54.88    | 96.15    | 81.34    | 91.11      | 77.64    | 89.76    | 77.56   |
-| all   | I-JEPA ViT-H           | 632M   | IN-1K    | 300    | 73.32    | **56.61**| 54.47    | **97.54**| **86.42**| 86.47      | 81.02    | **92.11**| 78.50   |
-
-## Overview
-LeJEPA is a lean, scalable, and theoretically grounded framework for self-supervised representation learning, based on Joint-Embedding Predictive Architectures (JEPAs). LeJEPA introduces **Sketched Isotropic Gaussian Regularization (SIGReg)**, a novel objective that constrains learned embeddings to an optimal isotropic Gaussian distribution, minimizing downstream prediction risk.
-**Key Features:**
-- Single trade-off hyperparameter
-- Linear time and memory complexity
-- Stable training across architectures and domains
-- Heuristics-free implementation (no stop-gradient, teacher–student, or schedulers)
-- Distributed training-friendly codebase (~50 lines of core code)
-- State-of-the-art results across 10+ datasets and 60+ architectures
----
-
-## GOTO hyperparameters
-
-
-Our data augmentation strategy follows a multi-crop approach inspired by DINO, where we generate multiple views of each image at different scales to encourage the model to learn both global semantic information and local fine-grained features.
-
-### Data augmentation and views
-
-Each training image is augmented to produce **2 global views** and **6 local views** with different spatial scales but the same set of color and geometric transformations:
-| **Global Views** | **Local Views** |
-|------------------|-----------------|
-| **RandomResizedCrop**<br>- Resolution: 224x224<br>- Scale: (0.3, 1.0)<br>- Covers 30-100% of the image | **RandomResizedCrop**<br>- Resolution: 98x98<br>- Scale: (0.05, 0.3)<br>- Covers 5-30% of the image |
-| **RandomHorizontalFlip** (p=0.5) | **RandomHorizontalFlip** (p=0.5) |
-| **ColorJitter** (p=0.8)<br>- Brightness: 0.4<br>- Contrast: 0.4<br>- Saturation: 0.2<br>- Hue: 0.1 | **ColorJitter** (p=0.8)<br>- Brightness: 0.4<br>- Contrast: 0.4<br>- Saturation: 0.2<br>- Hue: 0.1 |
-| **RandomGrayscale** (p=0.2) | **RandomGrayscale** (p=0.2) |
-| **GaussianBlur** (p=0.5) | **GaussianBlur** (p=0.5) |
-| **RandomSolarize** (p=0.2, threshold=128) | **RandomSolarize** (p=0.2, threshold=128) |
-| **Normalization** (mean, std) | **Normalization** (mean, std) |
-
-
-The key difference between global and local views is the **cropping scale**: global views capture larger portions of the image to learn high-level semantics, while local views focus on smaller regions to learn fine-grained local patterns. All other augmentations are applied identically to both view types to ensure consistency in the learned representations.
-### Training Configuration
-We use the **AdamW optimizer** for all models and datasets with the following hyperparameters:
-- **Learning Rate**: `5e-4` (good starting point)
-- **Weight Decay**: 
-  - `5e-2` for Vision Transformers (ViT)
-  - `5e-4` for ResNets
-- **Precision**: All training is performed using **bfloat16 (bf16)** mixed precision
-- **Learning Rate Schedule**: Linear warmup with cosine annealing decay
-  - Final learning rate: `initial_lr / 1000`
-## Linear Probe Evaluation
-For linear probe evaluation, we use the following configuration across all models (ours and baselines):
-- **Feature Extraction**: Concatenation of the **CLS token from the last two layers**
-  - For ViT models without CLS token, we average all patch tokens (standard practice)
-- **Normalization**: We apply **LayerNorm** or **BatchNorm** on the concatenated CLS tokens
-  - Following DINO, we found this improves linear probe performance in some settings
-  - No clear difference observed between LayerNorm and BatchNorm, so we used LayerNorm consistently
-- **Optimizer**: **AdamW** (no significant difference found with SGD)
-- **Weight Decay**: `1e-6` (very small)
-- **Learning Rate Schedule**: Same as pre-training (linear warmup with cosine annealing)
-
-
-## Installation
-LeJEPA is built on [PyTorch](https://pytorch.org/) and standard scientific Python libraries (e.g., NumPy). For rapid experimentation, we provide a pretraining skeleton script using `stable_pretraining`, a PyTorch Lightning wrapper. The core SIGReg loss can be integrated into any pretraining codebase.
-**Requirements:**
-- Python ≥ 3.8
-- PyTorch ≥ 1.10
-- NumPy
-- (Optional) `stable_pretraining` for provided training scripts
-**Install via pip:**
-```bash
-pip install lejepa
+```
+LeJEPA_loss = λ · SIGReg(proj) + (1 − λ) · Invariance(proj)
 ```
 
-## Quick Start: Using SIGReg
+- **Invariance** — multi-view projections must agree: `(proj.mean(0) - proj).square().mean()`
+- **SIGReg** — *Sketched Isotropic Gaussian Regularization*: pushes embeddings toward
+  `N(0, I)` by applying a univariate Epps–Pulley normality test across random 1-D
+  slices of the embedding space (Cramér–Wold).
 
-LeJEPA provides a variety of univariate and multivariate statistical tests for regularizing embeddings. Here is a minimal example using the SIGReg loss:
-```
+`λ` is the single trade-off hyperparameter (~`0.01–0.1`). No stop-gradient, no
+teacher–student, no schedulers.
+
+```python
 import lejepa
 
-# Choose a univariate test (Epps-Pulley in this example)
 univariate_test = lejepa.univariate.EppsPulley(num_points=17)
-
-# Create the multivariate slicing test
 loss_fn = lejepa.multivariate.SlicingUnivariateTest(
-    univariate_test=univariate_test, 
-    num_slices=1024
+    univariate_test=univariate_test, num_slices=1024
 )
-
-# Compute the loss (embeddings: [num_samples, num_dims])
-loss = loss_fn(embeddings)
+loss = loss_fn(embeddings)   # embeddings: [num_samples, num_dims]
 loss.backward()
 ```
 
+See [`docs/MINIMAL.md`](docs/MINIMAL.md) for a ~130-line end-to-end example.
 
-## Citation
-If you use LeJEPA in your research, please cite:
+---
+
+## What this fork adds
+
+Everything below is **ours**. The numbers are measured in this repo on **Imagenette**
+(the 10-class ImageNet subset), with a frozen `vit_small_patch16_224` and the paper's
+linear-probe recipe (concat CLS of the last two layers + LayerNorm, AdamW lr `1e-3`,
+wd `1e-6`).
+
+### 1. Benchmark-climb track — `climb_bench/`
+
+Batches of ideas, each: ideate → plan → implement as single-variable variants →
+evaluate with the paper-spec probe → write up. Measured at 100-epoch pretrain:
+
+| arm | top-1 | Δ vs baseline |
+|---|---:|---:|
+| **conv-stem** (architecture co-design) | **0.9208** | **+2.6 pp** |
+| SAM | 0.8972 | +0.2 |
+| stochastic-depth schedule | 0.8950 | +0.0 |
+| **baseline LeJEPA ViT-S** | **0.8949** | — |
+| PCGrad | 0.8944 | −0.1 |
+| SWA | 0.8911 | −0.4 |
+| QK-Norm | 0.8909 | −0.4 |
+| deep supervision | 0.8894 | −0.6 |
+| schedule-free AdamW | 0.8872 | −0.8 |
+| LLRD | 0.8616 | −3.3 |
+| Muon | 0.8574 | −3.8 |
+
+The honest summary: **the optimizer axis is a dead end** — every optimizer variant
+lands within noise of, or well below, plain AdamW. The one real win came from changing
+the *architecture*, not the objective. Write-ups per batch in `climb_bench/tracker/`.
+
+Two methodology findings worth more than the table:
+
+- **Online ranking ≠ paper recipe.** The in-training probe used to rank ideas (single
+  CLS, no LN, lr 0.03) does **not** preserve ordering under the paper's recipe. Ideas
+  that looked good online died on re-evaluation. From batch-7 on, training drops the
+  online probe entirely and evaluates only with `viz/eval-frozen-paperspec.py`.
+- **Cheap CPU gates beat expensive GPU runs.** `climb_bench/batch7/test_statistics.py`
+  descends a candidate objective on a free `z` and checks — with an independent
+  yardstick the objective never sees — whether it converges to `N(0,I)` or collapses.
+  ~1 minute of CPU killed one idea outright and caught a fatal hyperparameter choice
+  that would otherwise have cost ~15 GPU-hours to discover.
+  See `climb_bench/tracker/batch7-analysis.md`.
+
+### 2. SIGReg ablation study — `ablation_results/`
+
+62 jobs across 8 ablations (aggregation, drop-path, Epps–Pulley quadrature, predictor,
+projector depth, SIGReg target, patch masking, views). Structural findings:
+
+| knob | result |
+|---|---|
+| `projector_arch` | `Linear` **0.2343** (collapse) < `MLP2` 0.5713 < `MLP` 0.5946 < `MLP4` **0.6126** — more projector capacity helps monotonically |
+| `sigreg_target` | `proj` 0.5946 vs `embed` **0.2371** (collapse) — SIGReg must act on the projection |
+| `predictor` | not needed |
+| `num_slices` | more slices → better |
+
+> ⚠️ **These ablation numbers are internally comparable only.** That pipeline is
+> under-fit: its training transform has `RandomResizedCrop` but none of the
+> photometric augmentation the project baseline uses, so its anchor is **0.5946**
+> against the project baseline's **0.8949**. Deltas and structural conclusions hold;
+> absolute values are **not** comparable to the table above, or to the paper.
+> `CLAUDE.md` records the limitation and the fix.
+
+> ⚠️ **Not comparable to paper Table 5 either.** Local `data/imagenet10` has ~28k
+> train images, ≈2.2× the paper's inet10 (13k).
+
+### 3. Slides — `slides/`
+
+Vietnamese presentation deck covering the paper and both tracks. Build with
+`xelatex → bibtex → xelatex → xelatex` — it loads `fontspec`, so `pdflatex` will not
+work. Assets in `slides/figures/`, planning docs in `slides/planning/`.
+
+---
+
+## Layout
 
 ```
+lejepa/                 core SIGReg library (UPSTREAM) — univariate + multivariate tests
+stable-pretraining/     PyTorch Lightning harness (UPSTREAM, vendored)
+docs/                   upstream docs (MINIMAL.md) + this fork's plans
+eval/                   upstream demo assets
+
+climb_bench/            <- ours: the benchmark-climb research track
+  ideation/               idea batches + implementation plans
+  batch1/ batch2/ batch7/ runners: exp<x>.py + _common.py + _variants.py
+  viz/                    eval + plots (eval-frozen-paperspec.py = the paper recipe)
+  tracker/                findings, one analysis note per batch
+ablation_results/       <- ours: 62-job SIGReg ablation + figures
+ablation_raw/           <- ours: raw Kaggle output
+scripts/ablations/      <- ours: sweep specs, collection, plots
+slides/                 <- ours: the deck
+refs/                   third-party repos cloned for reference (gitignored)
+```
+
+## Install
+
+```bash
+pip install lejepa                            # core library only (upstream, on PyPI)
+
+pip install -e .                              # or from this source
+cd stable-pretraining && pip install -e .     # training harness, needed by the scripts
+pip install -r requirements.txt               # full experiment environment
+```
+
+## Run
+
+```bash
+pytest tests/                                 # core library tests
+
+python climb_bench/batch7/test_statistics.py  # CPU objective gate, ~1 min
+
+python scripts/ablations.py list              # ablation sweeps
+python scripts/ablations.py render epps --smoke
+```
+
+Full pretraining runs on **Kaggle** (pinned wheels); the jupytext orchestrators are
+`climb_bench/batch<N>/run-batch<N>.py`. The local conda env ships torchvision 0.20.1
+while the data pipeline needs 0.26 — smoke-test at the model/loss level locally, train
+on Kaggle.
+
+Read [`CLAUDE.md`](CLAUDE.md) before contributing. It is the working map of this fork:
+conventions, known-stale traps, and what has already been tried and killed.
+
+## Citation
+
+Cite the original authors, not this fork:
+
+```bibtex
 @misc{balestriero2025lejepaprovablescalableselfsupervised,
-      title={LeJEPA: Provable and Scalable Self-Supervised Learning Without the Heuristics}, 
+      title={LeJEPA: Provable and Scalable Self-Supervised Learning Without the Heuristics},
       author={Randall Balestriero and Yann LeCun},
       year={2025},
       eprint={2511.08544},
       archivePrefix={arXiv},
       primaryClass={cs.LG},
-      url={https://arxiv.org/abs/2511.08544}, 
+      url={https://arxiv.org/abs/2511.08544},
 }
 ```
 
-## Contact & Contributions
-We welcome issues, feature requests, and pull requests!
-For questions or collaborations, please contact rbalestr@brown.edu
-
-## RunPod Setup
-
-```bash
-# Set secrets as environment variables (NEVER commit tokens!)
-export HF_TOKEN="your_hf_token_here"
-export RUNPOD_API_KEY="your_runpod_api_key_here"
-
-# Cài tool
-pip install -q huggingface_hub
-
-# Tải toàn bộ dataset vào network volume
-huggingface-cli download ILSVRC/imagenet-1k \
-  --repo-type dataset \
-  --token $HF_TOKEN \
-  --local-dir /workspace/imagenet-hf \
-  --local-dir-use-symlinks False
-```
+Questions about **LeJEPA itself** → the [official repo](https://github.com/rbalestr-lab/lejepa)
+or rbalestr@brown.edu. Questions about **this fork's experiments** → open an issue here.
