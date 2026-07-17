@@ -9,3 +9,7 @@ __pycache__/
 ckpt_raw/*
 
 ckpt/*
+
+# Third-party repos cloned for reference only (see climb_bench/ideation/plan-batch-7.md §2).
+# Read-only citations, never imported at runtime — do not commit (~36 MB).
+refs/

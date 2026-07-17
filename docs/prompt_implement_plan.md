@@ -4,7 +4,7 @@ You are implementing a slide-section redesign in the repository:
 
 `/media/mlinh/Kingston/projects/ML/lab-3_LeJEPA/lejepa-MLProject`
 
-Read `plan_climb.md` first. It is the source of truth for the research story, evidence, exclusions, and slide order.
+Read `docs/plan_climb.md` first. It is the source of truth for the research story, evidence, exclusions, and slide order.
 
 ## Non-Negotiable Requirements
 
@@ -279,8 +279,8 @@ Do not change:
 
 ## Final Acceptance Checklist
 
-- `plan_climb.md` exists and documents the full blueprint.
-- `prompt_implement_plan.md` exists and can be handed to another coding agent.
+- `docs/plan_climb.md` exists and documents the full blueprint.
+- `docs/prompt_implement_plan.md` exists and can be handed to another coding agent.
 - The eventual slide implementation uses two research directions plus separate conv-stem track.
 - Every claim is evidence-backed.
 - The story prioritizes insight over process.
