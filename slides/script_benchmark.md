@@ -25,11 +25,11 @@ Chuyển sang phần thực nghiệm. Đầu tiên, nhóm tái lập lại pipel
 ### A2. Câu OVERVIEW cho cả A, B, C (nói trước khi vào Ablation A)
 
 **Settings baseline của ablation:**
-- Dữ liệu: Imagenette (imagenet10) — cùng tập với phần leo benchmark, ~28k ảnh train / ~11.8k val, 10 lớp, in-domain (pretrain và eval cùng tập).
+- Dữ liệu: Imagenette (imagenet10)
+
 - Backbone: ViT-S/16 · 100 epoch · batch 512 · AdamW lr 5e-4, wd 0.05 · bf16.
 - Mục tiêu: Epps-Pulley 1000 slice, t_max 3.0, 17 điểm; λ = 0.05; projector MLP (phi tuyến) dim 512; không predictor, không teacher-student; 8 view (2 global 224 + 6 local 96).
 - Eval: đúng recipe paper — frozen backbone, concat CLS 2 block cuối + LayerNorm, linear probe AdamW lr 1e-3 wd 1e-6, 100 epoch.
-- Vì sao under-fit (điểm phải nói): pipeline ablation chỉ có RandomResizedCrop, thiếu toàn bộ photometric aug (flip / color-jitter / grayscale / blur / solarize) mà baseline leo-benchmark dùng → anchor top1 ≈ 59.5% so với 89.5% của baseline đầy đủ trên *cùng* tập. Do đó con số tuyệt đối KHÔNG so được với paper; chỉ đọc Δ nội bộ giữa các cấu hình.
 
 Nhóm chạy 8 ablation, gộp thành A/B/C. **Không phủ hết bảng của paper** (register token thì môi trường timm không hỗ trợ; batch size / embedding-dim thì chưa chạy).
 
