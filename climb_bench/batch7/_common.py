@@ -1,8 +1,13 @@
 """Shared runner for batch-7 LeJEPA experiments on Imagenette.
 
-Forked from ``climb_bench/batch2/_common.py``. Transforms, dataset, forward and the
-OnlineProbe/OnlineKNN/RankMe callback stack are byte-identical to batch-1/2 so
-rankings stay apples-to-apples across batches.
+Forked from ``climb_bench/batch2/_common.py``. Transforms, dataset and forward are
+byte-identical to batch-1/2, so the data pipeline stays comparable across batches.
+
+NO ONLINE PROBE / kNN (see ``_callbacks``). batch-7 trains lean and evaluates only
+with the paper recipe, ``viz/eval-frozen-paperspec.py``. The in-training probe used
+by earlier batches is not that recipe, and batch-2 showed its ranking does not
+survive it. Consequence: best-ckpt selection moves to eval time, which is why
+``--ckpt_every_n_epochs`` exists and why the periodic checkpoints are weights-only.
 
 DELIBERATELY REMOVED vs batch-2: the optimizer-variant machinery (Muon,
 schedule-free, SAM, PCGrad, SWA, stochastic-depth scheduling) and its ``_vendor``
@@ -32,7 +37,6 @@ os.environ.setdefault("SPT_LIGHT_IMPORT", "0")
 import lightning as pl
 import torch
 import torch.nn as nn
-import torchmetrics
 
 import stable_pretraining as spt
 from stable_pretraining.data import transforms
@@ -145,6 +149,10 @@ def base_parser(description: str = "LeJEPA batch-7 experiment") -> argparse.Argu
     p.add_argument("--all_views", type=int, default=8)
     p.add_argument("--precision", default="16-mixed")
     p.add_argument("--drop_path_rate", type=float, default=0.1)
+    p.add_argument("--ckpt_every_n_epochs", type=int, default=20,
+                   help="With no online probe, best-ckpt is chosen by evaluating "
+                        "these with viz/eval-frozen-paperspec.py, so this cadence "
+                        "sets how finely the overfit peak can be located.")
     p.add_argument("--data_local_path", default=None)
     p.add_argument("--run_name", default=None)
     p.add_argument("--wandb_entity", default="stable-ssl")
@@ -222,33 +230,49 @@ def build_optim(model: nn.Module, args, total_steps: int) -> dict:
 
 
 def _callbacks(module, model, args, ckpt_dir, tag, btag):
-    # Identical to batch-1/2 so cross-batch rankings stay comparable. Do not tune
-    # probe settings per-exp (plan §5).
+    """Lean training callbacks — NO online probe / kNN.
+
+    batch-1/2/3 ranked ideas with an in-training ``OnlineProbe`` + ``OnlineKNN``.
+    batch-7 does not, for two reasons:
+
+      1. That probe is NOT the paper recipe (single CLS, no LN, lr 0.03), and
+         batch-2 already demonstrated its ranking does not survive the paper recipe
+         (`viz/eval-frozen-paperspec.py`: concat CLS last-2 + LN, AdamW lr1e-3
+         wd1e-6). Ranking on it costs training time to produce a number we then
+         refuse to trust.
+      2. It trains a probe head and maintains a 10k-embedding kNN queue every step.
+
+    So evaluation moves entirely to `viz/eval-frozen-paperspec.py`, run afterwards on
+    saved checkpoints (`viz/run-eval-paperspec.py`, PLANS["batch_7"]).
+
+    CONSEQUENCE — checkpoint cadence is now load-bearing. The online probe was also
+    how best-ckpt was chosen, and the baseline demonstrably overfits (probe peaks
+    then decays ~2.4pp; best-ckpt selection is worth +2.4pp free). With no online
+    probe, the peak can only be found by evaluating several checkpoints, so we save
+    every ``--ckpt_every_n_epochs`` instead of twice per run.
+
+    To keep that affordable the periodic checkpoints are ``save_weights_only`` (the
+    eval only needs weights; a full Lightning ckpt also carries AdamW state, ~3x the
+    size). ``last.ckpt`` keeps full state so a Kaggle session can still resume.
+    """
     return [
-        spt.callbacks.OnlineProbe(
-            module, name="linear_probe", input="embedding", target="label",
-            probe=nn.Linear(model.embed_dim, 10), loss=nn.CrossEntropyLoss(),
-            metrics={
-                "top1": torchmetrics.classification.MulticlassAccuracy(10),
-                "top5": torchmetrics.classification.MulticlassAccuracy(10, top_k=5),
-            },
-            optimizer={"type": "AdamW", "lr": 0.03, "weight_decay": 1e-6},
-        ),
-        spt.callbacks.OnlineKNN(
-            name="knn_probe", input="embedding", target="label",
-            queue_length=10000,
-            metrics={"top1": torchmetrics.classification.MulticlassAccuracy(10)},
-            input_dim=model.embed_dim, k=20,
-        ),
-        # RankMe is load-bearing this batch, not decorative: exp1/exp3 both have
-        # collapse regimes (tracker/batch7-analysis.md). A good probe number with a
-        # collapsing RankMe is a failed run.
+        # RankMe is KEPT deliberately. It is the only in-training signal that exp1 /
+        # exp3 have not collapsed, and both have MEASURED collapse regimes
+        # (tracker/batch7-analysis.md: fm_b at t-band [0.5,0.9] -> std 0.161;
+        # klscore with aux_lr_mult < 1 -> ||z|| inflation). It costs a 1000-sample
+        # queue and one SVD per val epoch. Without it, a collapsed run is
+        # indistinguishable from a good one until the post-hoc eval, i.e. after
+        # paying for the whole run.
         spt.callbacks.RankMe(name="rankme", target="embedding", queue_length=1000,
                              target_shape=model.embed_dim),
+        # Periodic, weights-only -> the eval sweep that replaces best-ckpt selection.
         pl.pytorch.callbacks.ModelCheckpoint(
             dirpath=ckpt_dir, filename=f"{tag}-{btag}-{{epoch:03d}}",
-            save_top_k=-1, every_n_epochs=max(args.max_epochs // 2, 1), save_last=True,
+            save_top_k=-1, every_n_epochs=args.ckpt_every_n_epochs,
+            save_weights_only=True, save_last=False,
         ),
+        # Full state, for resuming across Kaggle's session limit.
+        pl.pytorch.callbacks.ModelCheckpoint(dirpath=ckpt_dir, save_top_k=0, save_last=True),
         pl.pytorch.callbacks.LearningRateMonitor(logging_interval="step"),
     ]
 

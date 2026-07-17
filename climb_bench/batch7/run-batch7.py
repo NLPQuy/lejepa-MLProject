@@ -220,11 +220,29 @@ for i in range(torch.cuda.device_count()):
 
 # %% [markdown]
 # ---
-# ## Zip results
+# ## Evaluation — paper-spec frozen probe ONLY
 #
-# NB the online probe is NOT the paper recipe (single CLS, no LN, lr 0.03). Use it to
-# KILL losers only; re-run `viz/eval-frozen-paperspec.py` on survivors before quoting
-# any number as paper-comparable.
+# batch-7 trains lean: there is **no online probe / kNN**. Earlier batches ranked
+# ideas with an in-training probe that is not the paper recipe (single CLS, no LN,
+# lr 0.03) and whose ranking batch-2 showed does not survive the paper recipe — so it
+# cost training time to produce a number we then refused to trust. All evaluation is
+# `viz/eval-frozen-paperspec.py` (concat CLS last-2 + LN, AdamW lr1e-3 wd1e-6).
+#
+# **This shifts best-ckpt selection to eval time.** The baseline overfits (peak then
+# ~2.4pp decay), and the online probe used to be how the peak was found. Training now
+# saves a weights-only ckpt every `--ckpt_every_n_epochs` (default 20) and the eval
+# sweeps them: `PLANS["batch_7"]` in `run-eval-paperspec.py` evaluates epochs
+# {60, 80, 100} per exp; each exp's score is its BEST epoch, not its last.
+#
+# `last.ckpt` keeps full optimizer state for resuming across Kaggle's session limit;
+# the periodic ones are weights-only (~3x smaller — 8 exps x several epochs of full
+# AdamW state would not fit in /kaggle/working).
+#
+# Run this as a SEPARATE Kaggle notebook (`viz/run-eval-paperspec.py`, set
+# `BATCH = "batch_7"`) with the checkpoints uploaded as the `lejepa-ckpts` dataset.
 
-# %% Zip checkpoints
-# # !cd /kaggle/working && zip -qr batch7-results.zip checkpoints -x "*.ckpt" && echo "zipped"
+# %% Zip checkpoints for the eval notebook
+# # !cd /kaggle/working && zip -qr batch7-ckpts.zip checkpoints && echo "zipped"
+
+# %% Or eval in-place, if this notebook still has the checkpoints
+# # !cd {SOURCE}/climb_bench/viz && BATCH=batch_7 python run-eval-paperspec.py

@@ -57,6 +57,28 @@ PLANS = {
         "muon_100":         ("exp3-muon-vits",         "*epoch=099.ckpt", ""),
     },
 }
+
+# batch-7 trains with NO online probe/kNN (see climb_bench/batch7/_common.py), so
+# best-ckpt selection happens HERE rather than during training: sweep the periodic
+# weights-only checkpoints and take each exp's best epoch. That is why batch_7 has
+# several tags per exp while batch_1/2 have one.
+_B7_EXPS = {
+    "baseline":    "exp_baseline-vits",
+    "klscore":     "exp1-klscore-vits",
+    "adversarial": "exp2-adversarial-vits",
+    "m1random":    "exp2-ctrl-m1random-vits",   # control for adversarial: M=1 RANDOM slice
+    "fmsigreg":    "exp3-fmsigreg-bot-vits",
+    "fminv":       "exp4-fminv-vits",
+    "etf":         "exp5-etf-vits",
+    "rlhard":      "exp7-rlcrop-hard-vits",
+}
+_B7_EPOCHS = [59, 79, 99]   # trim/extend; must exist per --ckpt_every_n_epochs
+PLANS["batch_7"] = {
+    f"{name}_ep{ep + 1:03d}": (folder, f"*epoch={ep:03d}.ckpt", "")
+    for name, folder in _B7_EXPS.items()
+    for ep in _B7_EPOCHS
+}
+
 PLAN = PLANS[BATCH]
 TAGS = list(PLAN)   # eval all; trim this list to skip some
 
