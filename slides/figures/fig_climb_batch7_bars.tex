@@ -1,0 +1,49 @@
+\documentclass[border=2pt]{standalone}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\definecolor{mprimary}{HTML}{2C3E6B}
+\definecolor{maccent}{HTML}{C8A951}
+\definecolor{mgood}{HTML}{5B8C6B}
+\definecolor{mbad}{HTML}{B85450}
+\definecolor{mgray}{HTML}{9E9E9E}
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+    width=10.2cm, height=5.9cm,
+    clip=false,
+    ybar, bar width=0.5cm,
+    ylabel={Frozen linear top1 (\%)},
+    ymin=0, ymax=104,
+    ymajorgrids=true,
+    grid style={mgray!20},
+    axis x line*=bottom,
+    axis y line*=left,
+    symbolic x coords={Baseline,ETF,{RL-crop},{FM-inv},{FM-SIGReg},{KL-score}},
+    xtick={Baseline,ETF,{RL-crop},{FM-inv},{FM-SIGReg},{KL-score}},
+    xticklabel style={font=\footnotesize, align=center, rotate=18, anchor=east},
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+    nodes near coords,
+    point meta=explicit symbolic,
+    nodes near coords style={font=\footnotesize\bfseries, yshift=2pt},
+    enlarge x limits=0.19]
+  % control group (objective untouched) -> sage
+  \addplot[draw=none, fill=mprimary] coordinates {(Baseline,89.49) [89.5]};
+  \addplot[draw=none, fill=mgood]    coordinates {(ETF,89.02) [89.0]};
+  \addplot[draw=none, fill=mgood]    coordinates {({RL-crop},87.20) [87.2]};
+  % objective-swap group -> terracotta
+  \addplot[draw=none, fill=mbad]     coordinates {({FM-inv},58.42) [58.4]};
+  \addplot[draw=none, fill=mbad]     coordinates {({FM-SIGReg},18.68) [18.7]};
+  \addplot[draw=none, fill=mbad]     coordinates {({KL-score},17.68) [17.7]};
+  % baseline anchor
+  \draw[mprimary, thick, dashed] (axis cs:Baseline,89.49) -- (axis cs:{KL-score},89.49);
+  \node[font=\scriptsize, mprimary, anchor=east] at (axis cs:{KL-score},93.5) {baseline 89.5\%};
+  % random floor
+  \draw[mbad!55, dashed] (axis cs:Baseline,10) -- (axis cs:{KL-score},10);
+  \node[font=\scriptsize, mbad!70!black, anchor=west] at (axis cs:Baseline,14) {$\approx$ random 10\%};
+  % collapse annotation over the swap cluster
+  \node[font=\scriptsize\bfseries, mbad, align=center] at (axis cs:{FM-SIGReg},30) {collapse};
+\end{axis}
+\end{tikzpicture}
+\end{document}

@@ -33,7 +33,7 @@
 # (extracted ckpt tree), (3) a dataset holding `data/imagenet10`.
 
 # %% Config
-BATCH = "batch_2"   # <-- set me: batch_1 | batch_2 | ...
+BATCH = "batch_7"   # <-- set me: batch_1 | batch_2 | ...
 
 # tag -> (exp folder name, ckpt filename glob, extra eval flags)
 PLANS = {
@@ -67,10 +67,11 @@ _B7_EXPS = {
     "klscore":     "exp1-klscore-vits",
     "adversarial": "exp2-adversarial-vits",
     "m1random":    "exp2-ctrl-m1random-vits",   # control for adversarial: M=1 RANDOM slice
-    "fmsigreg":    "exp3-fmsigreg-bot-vits",
+    "fmsigreg":    "exp3-fmb-ot-vits",   # FM-SIGReg form B (corrected); file prefix exp3-fmsigreg-bot-vits, but DIR (glob key) is exp3-fmb-ot-vits
+    "fmsigreg_a":  "exp3-fma-ot-vits",   # FM-SIGReg form A (control, expected to collapse); file prefix exp3-fmsigreg-aot-vits, DIR is exp3-fma-ot-vits
     "fminv":       "exp4-fminv-vits",
     "etf":         "exp5-etf-vits",
-    "rlhard":      "exp7-rlcrop-hard-vits",
+    "rlhard":      "exp7-rl-hard-vits",   # NB: file prefix is exp7-rlcrop-hard-vits, but the DIR (glob key) is exp7-rl-hard-vits
 }
 _B7_EPOCHS = [59, 79, 99]   # trim/extend; must exist per --ckpt_every_n_epochs
 PLANS["batch_7"] = {
