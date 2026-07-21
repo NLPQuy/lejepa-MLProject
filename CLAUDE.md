@@ -2,6 +2,52 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository. It incorporates Andrej Karpathy's behavioral guidelines to reduce common LLM coding mistakes.
 
+## Fast Q&A Mode (nguyên tắc trả lời nhanh)
+
+**Khi câu hỏi chỉ là tra cứu / hỏi-đáp về repo này ("X ở đâu?", "cái Y là gì?", "chạy Z thế nào?", "tham số nào?") — trả lời NGAY, ngắn gọn, không suy nghĩ dài dòng.**
+- Ưu tiên trả lời thẳng từ chỉ mục dưới đây; chỉ mở file/`grep` khi index không đủ hoặc cần con số/chi tiết chính xác.
+- 1–3 câu hoặc một bảng nhỏ là đủ. Không mở đầu rào đón, không liệt kê phương án không dùng đến.
+- Kèm đường dẫn file clickable (`path:line`) để người đọc tự nhảy tới.
+- Không xác minh lại điều index/CLAUDE.md đã khẳng định trừ khi sắp **sửa** nó hoặc nghi ngờ đã cũ.
+- Chế độ nhanh **chỉ** áp dụng cho hỏi-đáp/tra cứu. Khi **viết/sửa code** thì quay lại đầy đủ Karpathy Guidelines bên dưới (think-before-coding, verify).
+
+## Chỉ mục CLAUDE.md (mục lục tra cứu)
+
+| Mục | Nội dung tra nhanh |
+|-----|--------------------|
+| [Karpathy Guidelines](#karpathy-guidelines-for-claude) | 4 quy tắc hành vi khi code: think-before, simplicity, surgical, goal-driven |
+| [Overview](#overview) | LeJEPA = SIGReg (arXiv:2511.08544); 4 thành phần repo: `lejepa/`, `stable-pretraining/`, `train_eval_vit_b.py`, `scripts/` |
+| [Installation](#installation) | `pip install -e .`; harness: `cd stable-pretraining && pip install -e .` |
+| [Running Tests](#running-tests) | `pytest tests/` (chỉ `lejepa/`); `stable-pretraining/` có pytest.ini riêng |
+| [Architecture › Core idea](#core-idea) | Loss = `λ·SIGReg + (1−λ)·Invariance`; λ ≈ 0.01–0.1 |
+| [`lejepa/` package](#lejepa-package) | `univariate` (EppsPulley + bạn bè) · `multivariate` (SlicingUnivariateTest, BHEP…) |
+| [Dual EppsPulley](#dual-eppspulley-implementations) | 2 bản độc lập: `lejepa.univariate` vs `stable_pretraining.methods.lejepa` |
+| [`stable-pretraining/`](#stable-pretraining-package) | Bảng module: Module, Manager, data/, backbone/, callbacks/, methods/lejepa.py |
+| [LeJEPA model API](#lejepa-model-api-train-vs-eval) | Train: `global_views=/local_views=` · Eval: `images=` → `.embedding` |
+| [Training entry points](#training-entry-points) | Minimal · ablation runner · Kaggle `train_eval_vit_b.py` |
+| [Key Hyperparameters](#key-hyperparameters) | λ, lr, weight_decay, num_slices, n_points, V, precision, sigreg_target |
+| [Research track: `climb_bench/`](#research-track-climb_bench) | Pipeline 6 bước Imagenette; batch-7 bỏ online probe; leobench |
+| [SIGReg ablation study (PAUSED)](#sigreg-ablation-study-hyperparameters--components--status--follow-ups-paused) | Đã chạy/lên slides; pipeline under-fit; follow-up: fix aug trước |
+
+## Tra "X ở đâu?" (file → vai trò)
+
+| Cần gì | Ở đâu |
+|--------|-------|
+| Class model LeJEPA (backbone+projector+loss) | `stable-pretraining/stable_pretraining/methods/lejepa.py` |
+| EppsPulley bản thư viện | `lejepa/univariate/` (`epps_pulley.py`) |
+| Slicing wrapper cho embedding cao chiều | `lejepa/multivariate/` (`SlicingUnivariateTest`) |
+| Chạy ablation (render/list/summarize) | `scripts/ablations.py` + `scripts/ablations/specs.py::BASE_OVERRIDES` |
+| Runner train ablation local | `scripts/train_lejepa_ablation.py` (self-patch sys.path) |
+| Baseline trainer climb_bench | `climb_bench/batch1/_common.py`; batch-7: `climb_bench/batch7/_common.py` |
+| Variant classes đúng (đã verify Phase-0) | `climb_bench/batch7/_variants.py` (KLScoreSIGReg, FMSIGRegB) |
+| ⚠️ Variant file cũ (frozen, 2/5 SAI) | `stable_pretraining/methods/lejepa_variants.py` — **đừng copy từ đây** |
+| Phase-0 gate (test objective ~1 phút CPU) | `climb_bench/batch7/test_statistics.py` |
+| Eval paper-spec frozen probe | `climb_bench/viz/eval-frozen-paperspec.py`; runner Kaggle: `run-eval-paperspec.py` |
+| Viz kết quả (curves/bars) | `climb_bench/viz/viz_metrics.py`, `viz_paperspec.py` |
+| Findings mỗi batch | `climb_bench/tracker/batch<N>-analysis.md` |
+| Slides chính (build xelatex) | `slides/slides_main.tex`; hình ở `slides/figures/` |
+| Kết quả ablation đã gộp | `ablation_results/` (+ `ablation_summary.{csv,md}`) |
+
 ## Karpathy Guidelines for Claude
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 

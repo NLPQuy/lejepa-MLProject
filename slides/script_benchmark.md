@@ -31,9 +31,13 @@ Chuyển sang phần thực nghiệm. Đầu tiên, nhóm tái lập lại pipel
 - Mục tiêu: Epps-Pulley 1000 slice, t_max 3.0, 17 điểm; λ = 0.05; projector MLP (phi tuyến) dim 512; không predictor, không teacher-student; 8 view (2 global 224 + 6 local 96).
 - Eval: đúng recipe paper — frozen backbone, concat CLS 2 block cuối + LayerNorm, linear probe AdamW lr 1e-3 wd 1e-6, 100 epoch.
 
-Nhóm chạy 8 ablation, gộp thành A/B/C. **Không phủ hết bảng của paper** (register token thì môi trường timm không hỗ trợ; batch size / embedding-dim thì chưa chạy).
+Nhóm chạy 8 ablation, gộp thành A/B/C. Do **giới hạn tài nguyên**, nhóm không chạy hết bảng ablation của paper — register token thì timm trong môi trường này không hỗ trợ, batch size và embedding-dim thì chưa chạy.
 
-Lặp lại một tập con các nút của paper (Epps-Pulley, views, predictor, projector) và mở rộng thêm vài nút paper chưa đụng. 
+**Nhưng những cái bỏ qua đều là các nút mà paper chỉ dùng để chứng minh "nút này không quan trọng".** Còn 8 ablation đã chạy thì **phủ trọn những kết luận cốt lõi mà paper deliver**:
+- **Siêu tham số nội tại của SIGReg có thật sự trung tính không** → Epps-Pulley (integration range, quadrature points, slices) và số view.
+- **Các nguyên tắc thiết kế** → SIGReg đặt ở đâu, projector có cần phi tuyến không, có cần predictor không, gộp token thế nào.
+
+Ngoài ra nhóm còn **mở rộng thêm vài nút paper chưa đụng**: patch-masking, drop-path, aggregator. 
 
 
 
@@ -79,6 +83,10 @@ Và cách gộp token cũng đơn giản: dùng CLS token một mình đã tốt
 
 Câu hỏi cuối trong loạt ablation này: tỉ lệ patch-masking nào là tối ưu, và LeJEPA có nhạy với stochastic depth không? — **hai nút này paper KHÔNG ablate; đây là phần nhóm mở rộng thêm.**"
 
+Patch masking — ngẫu nhiên che/bỏ đi một tỉ lệ patch token trước khi đưa vào ViT (vd ratio=0.3 = giấu 30% số patch), ép model đoán nội dung ảnh từ phần còn lại.
+
+Stochastic depth (drop-path) — ngẫu nhiên bỏ qua nguyên một residual block lúc train (vd rate=0.1 = mỗi block có 10% khả năng bị nhảy cóc), khiến mạng train với độ sâu hiệu dụng ngẫu nhiên.
+
 Kết quả khá bất ngờ — cả hai kỹ thuật đều đạt đỉnh khi **tắt hoàn toàn**. Patch-mask ratio bằng 0 cho kết quả tốt nhất, càng tăng tỉ lệ mask thì top1 càng giảm nhẹ. Drop-path cũng vậy: rate 0 là tốt nhất, tăng dần rate thì hiệu năng giảm dần, thấp nhất khi drop-path ở mức cao.
 
 Lý do nằm ở quy mô dữ liệu: trong chế độ low-data như Imagenette, mô hình chưa hề rơi vào tình trạng overfit, nên các kỹ thuật regularization vốn được thiết kế để chống overfit lại chỉ làm mất thông tin một cách vô ích.
@@ -96,7 +104,9 @@ Sang phần cuối: đây là phần nghiên cứu mở rộng của riêng nhó
 
 Câu hỏi đặt ra là: còn dư địa cải thiện ở đâu?
 
-Nhóm đặt song song hai giả thuyết, cả hai cùng xuất phát từ baseline 89.5% đó. Giả thuyết thứ nhất là cải thiện nằm ở objective hoặc representation head — thêm tín hiệu hình học, hoặc đổi cách thiết kế projector, có thể giúp SIGReg tốt hơn. Giả thuyết thứ hai là nút nghẽn thực ra không nằm ở mục tiêu huấn luyện, mà ở dynamics của optimizer hoặc ở phần stem đầu vào của ViT.
+Nhóm đặt song song hai giả thuyết, cả hai cùng xuất phát từ baseline 89.5% đó. Giả thuyết thứ nhất là cải thiện nằm ở objective hoặc representation head — thêm tín hiệu hình học, hoặc đổi cách thiết kế projector, có thể giúp SIGReg tốt hơn.
+
+Giả thuyết thứ hai là nút nghẽn thực ra không nằm ở mục tiêu huấn luyện, mà ở dynamics của optimizer hoặc ở phần stem đầu vào của ViT.
 
 Baseline: ViT-S - 100 epochs 
 
@@ -107,7 +117,7 @@ Tất cả kết quả sau đây đều dùng chung một giao thức đánh gi�
 
 ---
 
-### B2. Frame "Hướng 1: Objective và representation head"
+### B2. Frame "Hướng 1: Objective và projection head"
 
 Hướng 1 — nhóm thử thêm tín hiệu hình học vào mục tiêu: một số **uniformity loss**, đổi normalization bằng **DynTanh**, và thêm **coding-rate** (log-det)."
 - DynTanh là...
@@ -115,6 +125,18 @@ Hướng 1 — nhóm thử thêm tín hiệu hình học vào mục tiêu: một
 - uniformity loss là ...
 **Đọc kết quả:**
 "Kết quả: **không idea nào vượt baseline rõ ràng.**
+
+Uniformity (Wang & Isola) — chuẩn hóa các vector về mặt cầu đơn vị rồi phạt khi chúng nằm chụm lại (log E[exp(−t·‖zᵢ−zⱼ‖²)]), tức đẩy các điểm ra xa nhau cho trải đều trên mặt cầu.
+
+Coding-rate (MCR2) — đo "thể tích" mà biểu diễn chiếm trong không gian bằng log-det của ma trận hiệp phương sai (0.5·logdet(I + d/ε²·Cov(Z))), rồi cộng dấu âm của nó vào loss để ép model trải rộng, chiếm nhiều chiều nhất có thể.
+
+Cả hai đều là cách chống collapse bằng hình học — một cái đẩy điểm ra xa trên mặt cầu, một cái phình thể tích của đám mây điểm — và đó chính là lý do chúng thất bại: SIGReg vốn đã ép phân phối về N(0,I), tức đã làm sẵn cả hai việc đó rồi. Uniformity thành thừa (≈ baseline), còn coding-rate thì log-det quá mạnh, lấn át SIGReg và gây collapse.
+
+DynTanh (Dynamic Tanh) — một lớp normalization "giả" không dùng thống kê batch, chỉ bóp giá trị qua hàm tanh với biên độ học được: γ · tanh(α · x) + β, dùng để thay thẳng BatchNorm/LayerNorm (Zhu et al., CVPR 2025).
+
+Ý tưởng: thay vì chuẩn hóa bằng cách đo mean/variance của batch rồi chia (như BatchNorm), thì cứ ép giá trị vào khoảng bão hòa của tanh — α học độ dốc, γ/β học lại thang đo. Rẻ hơn, không phụ thuộc batch.
+
+Trong LeJEPA nó thất bại đúng vì lý do đó: SIGReg cần phân phối đầu vào đã được chuẩn hóa thật sự (mean 0, var 1) — thứ mà BatchNorm cung cấp miễn phí. tanh chỉ bóp giá trị chứ không chuẩn hóa, nên interface projector–SIGReg bị hỏng → hội tụ chậm ~8 lần và không bao giờ đuổi kịp baseline.
 
 `[chuyển slide]`
 
